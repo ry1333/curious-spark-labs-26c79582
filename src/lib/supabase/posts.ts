@@ -109,53 +109,87 @@ export function postToFeedItem(post: PostWithReactions): FeedItem {
  * Fetch feed items with pagination (compatible with existing API)
  */
 export async function fetchFeedPage(page = 0, pageSize = 5): Promise<{ items: FeedItem[]; hasMore: boolean }> {
-  const { items, hasMore } = await fetchPosts(page, pageSize);
-  const feedItems = items.map(postToFeedItem);
-  return { items: feedItems, hasMore };
+  try {
+    const { items, hasMore } = await fetchPosts(page, pageSize);
+    const feedItems = items.map(postToFeedItem);
+    return { items: feedItems, hasMore };
+  } catch (error) {
+    console.error('Error fetching from Supabase, falling back to mock data:', error);
+    // Fallback to mock data if Supabase fails
+    return fetchMockFeedPage(page, pageSize);
+  }
+}
+
+/**
+ * Mock data fallback for when Supabase is not configured
+ */
+function fetchMockFeedPage(page = 0, pageSize = 5): Promise<{ items: FeedItem[]; hasMore: boolean }> {
+  let counter = page * pageSize;
+  const captions = ['Minimal drop', 'Tech-house groove', 'EDM pop hook', 'Deep house vibe', 'Bassline roller', 'Crunchy clap', 'Shimmer lead'];
+
+  const items = Array.from({ length: pageSize }, () => {
+    counter += 1;
+    const id = String(counter);
+    return {
+      id,
+      src: '/loops/demo_loop.mp3',
+      user: `@demo${id}`,
+      caption: captions[counter % captions.length] || 'New drop',
+      loves: Math.floor(Math.random() * 100),
+      has_loved: false
+    };
+  });
+  return Promise.resolve({ items, hasMore: counter < 20 }); // Limit mock data to 20 items
 }
 
 /**
  * Toggle love reaction on a post
  */
 export async function toggleLove(postId: string): Promise<boolean> {
-  const { data: { user } } = await supabase.auth.getUser();
+  try {
+    const { data: { user } } = await supabase.auth.getUser();
 
-  if (!user) {
-    throw new Error('User must be authenticated to react to posts');
-  }
+    if (!user) {
+      throw new Error('User must be authenticated to react to posts');
+    }
 
-  // Check if user has already loved this post
-  const { data: existingReaction } = await supabase
-    .from('reactions')
-    .select('id')
-    .eq('post_id', postId)
-    .eq('user_id', user.id)
-    .eq('type', 'love')
-    .single();
-
-  if (existingReaction) {
-    // Remove the love
-    const { error } = await supabase
+    // Check if user has already loved this post
+    const { data: existingReaction } = await supabase
       .from('reactions')
-      .delete()
+      .select('id')
       .eq('post_id', postId)
       .eq('user_id', user.id)
-      .eq('type', 'love');
+      .eq('type', 'love')
+      .single();
 
-    if (error) throw error;
-    return false; // Love removed
-  } else {
-    // Add the love
-    const { error } = await supabase
-      .from('reactions')
-      .insert({
-        post_id: postId,
-        user_id: user.id,
-        type: 'love',
-      });
+    if (existingReaction) {
+      // Remove the love
+      const { error } = await supabase
+        .from('reactions')
+        .delete()
+        .eq('post_id', postId)
+        .eq('user_id', user.id)
+        .eq('type', 'love');
 
-    if (error) throw error;
-    return true; // Love added
+      if (error) throw error;
+      return false; // Love removed
+    } else {
+      // Add the love
+      const { error } = await supabase
+        .from('reactions')
+        .insert({
+          post_id: postId,
+          user_id: user.id,
+          type: 'love',
+        });
+
+      if (error) throw error;
+      return true; // Love added
+    }
+  } catch (error) {
+    console.warn('Could not toggle love - Supabase not configured or user not authenticated:', error);
+    // Return false to indicate no change when Supabase is not available
+    throw error; // Re-throw so UI can show error message
   }
 }
 
