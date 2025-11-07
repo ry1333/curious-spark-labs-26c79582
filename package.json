@@ -10,7 +10,8 @@
     "typecheck": "tsc --noEmit",
     "test:e2e": "playwright test",
     "analyze": "vite build",
-    "postbuild": "cp dist/index.html dist/404.html || true"
+    "postbuild": "cp dist/index.html dist/404.html || true",
+    "build:dev": "vite build --mode development"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",

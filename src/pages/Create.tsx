@@ -1,8 +1,11 @@
 import React, { useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { composeFromLoops } from '../lib/audio/compose'
 import { MAX_SECONDS } from '../lib/constraints'
 
 export default function Create() {
+  const [searchParams] = useSearchParams();
+  const remix = searchParams.get('remix');
   const [url, setUrl] = useState<string | null>(null)
   const [duration, setDuration] = useState<number | null>(null)
   const [error, setError] = useState<string | null>(null)
@@ -20,8 +23,8 @@ export default function Create() {
 
   const tooLong = (duration ?? 0) > MAX_SECONDS
 
-  return (
-    <div className="p-6 space-y-4">
+  return (<div className="p-6 space-y-4">
+      {remix && <div className="rounded-xl border bg-yellow-50 text-yellow-900 px-3 py-2">Remixing post #{remix}</div>}
       <h1 className="text-2xl font-bold">Make a 30–40s Drop</h1>
       <button data-testid="generate" className="rounded-xl bg-black text-white px-4 py-2" onClick={handleGenerate}>
         Generate

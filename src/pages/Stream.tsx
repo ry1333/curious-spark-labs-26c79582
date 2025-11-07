@@ -1,10 +1,12 @@
 import { useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useSnapAutoplay } from '../hooks/useSnapAutoplay'
 import { useInfiniteFeed } from '../hooks/useInfiniteFeed'
 import { fetchFeedPage } from '../lib/api'
 import ActionRail from '../components/ActionRail'
 
 export default function Stream() {
+  const nav = useNavigate()
   const feedRef = useRef<HTMLDivElement | null>(null)
   const { items, loading, hasMore, sentinelRef } = useInfiniteFeed(fetchFeedPage)
   useSnapAutoplay(feedRef.current)
@@ -22,7 +24,7 @@ export default function Stream() {
               <audio controls className="w-full" src={p.src} preload="metadata" />
             </div>
           </div>
-          <ActionRail onRemix={() => { /* route to /create later */ }} />
+          <ActionRail onRemix={() => nav(`/create?remix=${p.id}`)} />
         </section>
       ))}
       <div ref={sentinelRef} className="h-10" />

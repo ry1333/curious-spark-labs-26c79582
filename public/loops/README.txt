@@ -1,1 +1,1 @@
-Put an MP3 here named demo_loop.mp3 for Create page preview.
+FFmpeg missing; add your own MP3 at public/loops/demo_loop.mp3
