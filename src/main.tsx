@@ -3,21 +3,19 @@ import ReactDOM from 'react-dom/client'
 import { BrowserRouter, HashRouter, Routes, Route, Navigate } from 'react-router-dom'
 import AppShell from './AppShell'
 import Stream from './pages/Stream'
+import DJ from './pages/DJ'
 import Create from './pages/Create'
 import Learn from './pages/Learn'
 import Profile from './pages/Profile'
 import AuthPage from './pages/Auth'
-import RequireAuth from './components/RequireAuth'
 import './index.css'
-
-if (!import.meta.env.DEV && !location.hash) {
-  // On static hosts (Lovable), default to the Stream page
-  location.replace('#/stream');
-}
 
 function Router({ children }: { children: React.ReactNode }) {
   return import.meta.env.DEV ? <BrowserRouter>{children}</BrowserRouter> : <HashRouter>{children}</HashRouter>
 }
+
+// Default to stream in prod
+if (!import.meta.env.DEV && !location.hash) { location.replace('#/stream') }
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
@@ -26,11 +24,12 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         <Route element={<AppShell />}>
           <Route index element={<Stream />} />
           <Route path="/stream" element={<Stream />} />
-          <Route path="/create" element={<RequireAuth><Create /></RequireAuth>} />
+          <Route path="/create" element={<DJ />} />
+          <Route path="/compose" element={<Create />} />
           <Route path="/learn" element={<Learn />} />
-          <Route path="/profile" element={<RequireAuth><Profile /></RequireAuth>} />
-          <Route path="*" element={<Navigate to="/stream" replace />} />
+          <Route path="/profile" element={<Profile />} />
           <Route path="/auth" element={<AuthPage />} />
+          <Route path="*" element={<Navigate to="/stream" replace />} />
         </Route>
       </Routes>
     </Router>
