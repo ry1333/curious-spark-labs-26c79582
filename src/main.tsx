@@ -6,6 +6,8 @@ import Stream from './pages/Stream'
 import Create from './pages/Create'
 import Learn from './pages/Learn'
 import Profile from './pages/Profile'
+import AuthPage from './pages/Auth'
+import RequireAuth from './components/RequireAuth'
 import './index.css'
 
 if (!import.meta.env.DEV && !location.hash) {
@@ -24,10 +26,11 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         <Route element={<AppShell />}>
           <Route index element={<Stream />} />
           <Route path="/stream" element={<Stream />} />
-          <Route path="/create" element={<Create />} />
+          <Route path="/create" element={<RequireAuth><Create /></RequireAuth>} />
           <Route path="/learn" element={<Learn />} />
-          <Route path="/profile" element={<Profile />} />
+          <Route path="/profile" element={<RequireAuth><Profile /></RequireAuth>} />
           <Route path="*" element={<Navigate to="/stream" replace />} />
+          <Route path="/auth" element={<AuthPage />} />
         </Route>
       </Routes>
     </Router>
