@@ -8,6 +8,11 @@ import Learn from './pages/Learn'
 import Profile from './pages/Profile'
 import './index.css'
 
+if (!import.meta.env.DEV && !location.hash) {
+  // On static hosts (Lovable), default to the Stream page
+  location.replace('#/stream');
+}
+
 function Router({ children }: { children: React.ReactNode }) {
   return import.meta.env.DEV ? <BrowserRouter>{children}</BrowserRouter> : <HashRouter>{children}</HashRouter>
 }
