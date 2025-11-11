@@ -21,8 +21,12 @@ export type Database = {
           display_name: string | null
           avatar_url: string | null
           bio: string | null
-          skill_level: string | null
-          interests: string[] | null
+          location: string | null
+          experience_level: string | null
+          favorite_genres: string[] | null
+          goals: string[] | null
+          social_links: Record<string, string> | null
+          onboarding_completed: boolean
           created_at: string
           updated_at: string
         }
@@ -32,8 +36,12 @@ export type Database = {
           display_name?: string | null
           avatar_url?: string | null
           bio?: string | null
-          skill_level?: string | null
-          interests?: string[] | null
+          location?: string | null
+          experience_level?: string | null
+          favorite_genres?: string[] | null
+          goals?: string[] | null
+          social_links?: Record<string, string> | null
+          onboarding_completed?: boolean
           created_at?: string
           updated_at?: string
         }
@@ -43,8 +51,12 @@ export type Database = {
           display_name?: string | null
           avatar_url?: string | null
           bio?: string | null
-          skill_level?: string | null
-          interests?: string[] | null
+          location?: string | null
+          experience_level?: string | null
+          favorite_genres?: string[] | null
+          goals?: string[] | null
+          social_links?: Record<string, string> | null
+          onboarding_completed?: boolean
           created_at?: string
           updated_at?: string
         }
