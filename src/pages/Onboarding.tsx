@@ -115,9 +115,17 @@ export default function Onboarding() {
   async function handleComplete() {
     setLoading(true)
 
+    // Safety timeout to ensure loading state doesn't get stuck forever
+    const safetyTimeout = setTimeout(() => {
+      console.error('Safety timeout reached - forcing loading state to false')
+      setLoading(false)
+      toast.error('Request timed out. Please try again.')
+    }, 15000) // 15 second timeout
+
     // Double-check authentication before proceeding
     const { data: { session } } = await supabase.auth.getSession()
     if (!session) {
+      clearTimeout(safetyTimeout)
       toast.error('Session expired. Please sign in again.')
       nav('/auth', { replace: true })
       setLoading(false)
@@ -135,13 +143,15 @@ export default function Onboarding() {
         onboarding_completed: true
       })
 
-      // Retry logic with exponential backoff
+      // Retry logic with shorter delays
       let retries = 0
-      const maxRetries = 3
+      const maxRetries = 2
       let lastError: any = null
 
-      while (retries < maxRetries) {
+      while (retries <= maxRetries) {
         try {
+          console.log(`Profile creation attempt ${retries + 1}/${maxRetries + 1}`)
+
           await createProfile({
             username: username.toLowerCase(),
             display_name: displayName || username,
@@ -153,7 +163,12 @@ export default function Onboarding() {
           })
 
           // Success!
+          console.log('Profile created successfully!')
+          clearTimeout(safetyTimeout)
           toast.success('Welcome to RMXR!')
+
+          // Small delay before navigation to ensure data is saved
+          await new Promise(resolve => setTimeout(resolve, 500))
           nav('/profile', { replace: true })
           setLoading(false)
           return
@@ -161,26 +176,32 @@ export default function Onboarding() {
         } catch (error: any) {
           lastError = error
           console.error(`Attempt ${retries + 1} failed:`, error)
+          console.error('Error details:', error.message, error.code, error.details)
 
-          // If it's an auth error, don't retry
+          // If it's an auth error, check session
           if (error.message?.includes('authenticated')) {
-            // Wait a bit and check session again
-            await new Promise(resolve => setTimeout(resolve, 1000))
+            console.log('Auth error detected, checking session...')
+            await new Promise(resolve => setTimeout(resolve, 500))
             const { data: { session } } = await supabase.auth.getSession()
 
             if (!session) {
+              console.error('No session found after auth error')
+              clearTimeout(safetyTimeout)
               toast.error('Session expired. Please sign in again.')
               nav('/auth', { replace: true })
               setLoading(false)
               return
             }
+            console.log('Session exists, will retry...')
           }
 
           retries++
 
-          // Wait before retry (exponential backoff: 1s, 2s, 4s)
-          if (retries < maxRetries) {
-            await new Promise(resolve => setTimeout(resolve, Math.pow(2, retries) * 1000))
+          // Wait before retry (500ms, 1s)
+          if (retries <= maxRetries) {
+            const delay = retries * 500
+            console.log(`Waiting ${delay}ms before retry...`)
+            await new Promise(resolve => setTimeout(resolve, delay))
           }
         }
       }
@@ -203,6 +224,7 @@ export default function Onboarding() {
       toast.error('An unexpected error occurred. Please try again.')
     }
 
+    clearTimeout(safetyTimeout)
     setLoading(false)
   }
 
