@@ -31,8 +31,8 @@ export default function DualWaveform({ deckA, deckB, progressA, progressB }: Pro
         drawWaveform(ctx, deckB.buffer, 0, height / 2, width, height / 2, '#ef4444', progressB)
       }
 
-      // Draw center playhead
-      ctx.strokeStyle = '#ffffff'
+      // Draw center playhead (magenta)
+      ctx.strokeStyle = '#E11D84' // var(--accent)
       ctx.lineWidth = 2
       ctx.beginPath()
       ctx.moveTo(width / 2, 0)

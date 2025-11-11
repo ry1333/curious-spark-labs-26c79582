@@ -56,10 +56,10 @@ export default function LibraryBrowser({ onLoadA, onLoadB }: Props) {
   }
 
   return (
-    <div className="h-full flex flex-col bg-zinc-950/60">
+    <div className="h-full flex flex-col bg-surface">
       {/* Library Header */}
-      <div className="px-6 py-3 border-b border-zinc-800/60 flex items-center gap-4">
-        <div className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Library</div>
+      <div className="px-6 py-3 border-b border-rmxrborder flex items-center gap-4">
+        <div className="text-[10px] font-bold text-muted uppercase tracking-widest">Library</div>
 
         {/* Search */}
         <div className="flex-1 max-w-md">
@@ -68,7 +68,7 @@ export default function LibraryBrowser({ onLoadA, onLoadB }: Props) {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search tracks..."
-            className="w-full bg-black/50 border border-zinc-800/60 rounded-lg px-4 py-2 text-sm text-white placeholder:text-zinc-600 focus:outline-none focus:border-zinc-700"
+            className="w-full bg-bg border border-rmxrborder rounded-lg px-4 py-2 text-sm text-rmxrtext placeholder:text-muted focus:outline-none focus:border-accent transition-colors"
           />
         </div>
       </div>
@@ -76,16 +76,16 @@ export default function LibraryBrowser({ onLoadA, onLoadB }: Props) {
       {/* Content Area */}
       <div className="flex-1 flex overflow-hidden">
         {/* Left: Genre Filter - Narrower */}
-        <div className="w-24 border-r border-zinc-800/60 bg-zinc-950/80 p-3 space-y-1 overflow-y-auto">
-          <div className="text-[9px] text-zinc-600 uppercase tracking-wider mb-2">Genre</div>
+        <div className="w-24 border-r border-rmxrborder bg-surface2 p-3 space-y-1 overflow-y-auto">
+          <div className="text-[9px] text-muted uppercase tracking-wider mb-2">Genre</div>
           {genres.map(genre => (
             <button
               key={genre}
               onClick={() => setSelectedGenre(genre)}
               className={`w-full text-left px-2 py-1.5 rounded-md text-[11px] transition-all ${
                 selectedGenre === genre
-                  ? 'bg-purple-900/30 text-purple-400 font-semibold'
-                  : 'text-zinc-500 hover:text-zinc-300 hover:bg-zinc-900/50'
+                  ? 'bg-accent/20 text-accent-400 font-semibold'
+                  : 'text-muted hover:text-rmxrtext hover:bg-surface'
               }`}
             >
               {genre}
@@ -96,8 +96,8 @@ export default function LibraryBrowser({ onLoadA, onLoadB }: Props) {
         {/* Center: Track List */}
         <div className="flex-1 overflow-y-auto">
           <table className="w-full">
-            <thead className="sticky top-0 bg-zinc-950/95 border-b border-zinc-800/60 backdrop-blur-sm">
-              <tr className="text-[10px] text-zinc-600 uppercase tracking-wider">
+            <thead className="sticky top-0 bg-surface2 border-b border-rmxrborder">
+              <tr className="text-[10px] text-muted uppercase tracking-wider">
                 <th className="text-left px-6 py-3 font-semibold">Track</th>
                 <th className="text-left px-4 py-3 font-semibold">Artist</th>
                 <th className="text-center px-4 py-3 font-semibold">BPM</th>
@@ -108,31 +108,31 @@ export default function LibraryBrowser({ onLoadA, onLoadB }: Props) {
             <tbody>
               {filteredTracks.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="text-center py-16 text-zinc-600 text-sm">
+                  <td colSpan={5} className="text-center py-16 text-muted text-sm">
                     No tracks found
                   </td>
                 </tr>
               ) : (
                 filteredTracks.map(track => (
-                  <tr key={track.id} className="group border-b border-zinc-900/50 hover:bg-zinc-900/30 transition-colors">
-                    <td className="px-6 py-3 text-sm text-zinc-300">{track.name}</td>
-                    <td className="px-4 py-3 text-sm text-zinc-500">{track.artist}</td>
-                    <td className="px-4 py-3 text-sm text-center font-mono text-zinc-400">{track.bpm}</td>
-                    <td className="px-4 py-3 text-sm text-center font-mono text-zinc-400">{track.key}</td>
+                  <tr key={track.id} className="lib-row border-b border-rmxrborder/50 hover:bg-surface2 transition-colors">
+                    <td className="px-6 py-3 text-sm text-rmxrtext">{track.name}</td>
+                    <td className="px-4 py-3 text-sm text-muted">{track.artist}</td>
+                    <td className="px-4 py-3 text-sm text-center font-mono text-muted">{track.bpm}</td>
+                    <td className="px-4 py-3 text-sm text-center font-mono text-muted">{track.key}</td>
                     <td className="px-6 py-3">
                       {/* Hover-only action chips */}
-                      <div className="flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <div className="actions flex items-center justify-center gap-2">
                         <button
                           onClick={() => handleLoadTrack(track, 'A')}
                           title="Load to Deck A"
-                          className="px-3 py-1 rounded-md bg-orange-900/30 hover:bg-orange-900/50 text-orange-400 text-[11px] font-semibold transition-all border border-orange-800/30"
+                          className="px-3 py-1 rounded-md border border-rmxrborder hover:border-accent bg-surface hover:bg-surface2 text-rmxrtext hover:text-accent-400 text-[11px] font-semibold transition-all"
                         >
                           → A
                         </button>
                         <button
                           onClick={() => handleLoadTrack(track, 'B')}
                           title="Load to Deck B"
-                          className="px-3 py-1 rounded-md bg-red-900/30 hover:bg-red-900/50 text-red-400 text-[11px] font-semibold transition-all border border-red-800/30"
+                          className="px-3 py-1 rounded-md border border-rmxrborder hover:border-accent bg-surface hover:bg-surface2 text-rmxrtext hover:text-accent-400 text-[11px] font-semibold transition-all"
                         >
                           → B
                         </button>
@@ -146,10 +146,10 @@ export default function LibraryBrowser({ onLoadA, onLoadB }: Props) {
         </div>
       </div>
 
-      {/* Info Footer - Simplified */}
-      <div className="px-6 py-2 border-t border-zinc-800/60 bg-zinc-950/80 text-[10px] text-zinc-600 flex items-center justify-between">
+      {/* Info Footer */}
+      <div className="px-6 py-2 border-t border-rmxrborder bg-surface2 text-[10px] text-muted flex items-center justify-between">
         <span>{filteredTracks.length} tracks</span>
-        <span className="text-zinc-700">Hover row to load</span>
+        <span>Hover row to load</span>
       </div>
     </div>
   )
