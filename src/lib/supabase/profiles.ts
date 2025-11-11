@@ -167,7 +167,7 @@ export async function uploadAvatar(file: File): Promise<string> {
     throw new Error('User must be authenticated to upload avatar')
   }
 
-  const fileExt = file.name.split('.').pop()
+  const fileExt = file.name.split('.').pop() || 'jpg'
   const fileName = `${user.id}-${Date.now()}.${fileExt}`
   const filePath = `avatars/${fileName}`
 

@@ -7,7 +7,13 @@ export function useAuth() {
 
   useEffect(() => {
     if (!supabase) { setLoading(false); return }
-    supabase.auth.getUser().then(({ data }) => { setUser(data.user ?? null); setLoading(false) })
+    supabase.auth.getUser()
+      .then(({ data }) => { setUser(data.user ?? null); setLoading(false) })
+      .catch((error) => {
+        console.error('Error getting user:', error)
+        setUser(null)
+        setLoading(false)
+      })
     const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => setUser(session?.user ?? null))
     return () => sub?.subscription?.unsubscribe?.()
   }, [])

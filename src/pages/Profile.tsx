@@ -63,7 +63,7 @@ export default function Profile() {
             />
           ) : (
             <div className="h-24 w-24 rounded-full bg-neutral-800 border border-white/10 flex items-center justify-center text-4xl">
-              {profile.display_name?.[0]?.toUpperCase() || profile.username[0].toUpperCase()}
+              {profile.display_name?.[0]?.toUpperCase() || profile.username?.[0]?.toUpperCase() || '?'}
             </div>
           )}
           <div className="absolute -bottom-1 -right-1 h-8 w-8 rounded-full bg-green-500 border-4 border-neutral-900" />

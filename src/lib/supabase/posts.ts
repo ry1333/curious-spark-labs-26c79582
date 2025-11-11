@@ -20,12 +20,17 @@ export type PostWithReactions = Post & {
     shares: number;
   };
   user_has_loved: boolean;
+  profile?: {
+    username: string | null;
+    avatar_url: string | null;
+  };
 };
 
 export type FeedItem = {
   id: string;
   src: string;
   user: string;
+  avatar_url?: string;
   caption: string;
   thumbnail_url?: string;
   bpm?: number;
@@ -68,9 +73,20 @@ export async function fetchPosts(page = 0, pageSize = 10): Promise<{ items: Post
     .select('post_id, type, user_id')
     .in('post_id', postIds);
 
-  // Transform posts to include reaction counts
+  // Fetch user profiles for all post authors
+  const userIds = [...new Set(posts.map((p: Post) => p.user_id))];
+  const { data: profiles } = await supabase
+    .from('profiles')
+    .select('id, username, avatar_url')
+    .in('id', userIds);
+
+  // Create a map for quick profile lookup
+  const profileMap = new Map(profiles?.map(p => [p.id, p]) || []);
+
+  // Transform posts to include reaction counts and profile data
   const postsWithReactions: PostWithReactions[] = posts.map((post: Post) => {
     const postReactions = reactions?.filter((r) => r.post_id === post.id) || [];
+    const profile = profileMap.get(post.user_id);
 
     return {
       ...post,
@@ -81,6 +97,10 @@ export async function fetchPosts(page = 0, pageSize = 10): Promise<{ items: Post
         shares: postReactions.filter((r) => r.type === 'share').length,
       },
       user_has_loved: postReactions.some((r) => r.type === 'love' && r.user_id === currentUserId),
+      profile: profile ? {
+        username: profile.username,
+        avatar_url: profile.avatar_url
+      } : undefined,
     };
   });
 
@@ -96,7 +116,8 @@ export function postToFeedItem(post: PostWithReactions): FeedItem {
   return {
     id: post.id,
     src: post.audio_url,
-    user: `@user${post.user_id.slice(0, 8)}`, // TODO: Replace with actual username when users table is added
+    user: post.profile?.username ? `@${post.profile.username}` : `@user${post.user_id.slice(0, 8)}`,
+    avatar_url: post.profile?.avatar_url || undefined,
     caption: post.style || 'New drop',
     bpm: post.bpm || undefined,
     key: post.key || undefined,
