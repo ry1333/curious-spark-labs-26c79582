@@ -2,15 +2,12 @@ import { supabase } from '@/integrations/supabase/client'
 
 export type Profile = {
   id: string
-  username: string
-  display_name?: string
-  avatar_url?: string
-  bio?: string
-  location?: string
-  experience_level?: 'beginner' | 'intermediate' | 'pro'
-  favorite_genres?: string[]
-  goals?: string[]
-  social_links?: Record<string, string>
+  username: string | null
+  display_name: string | null
+  avatar_url: string | null
+  bio: string | null
+  skill_level: string | null
+  interests: string[] | null
   onboarding_completed: boolean
   created_at: string
   updated_at: string
@@ -21,11 +18,8 @@ export type ProfileUpdate = {
   display_name?: string
   avatar_url?: string
   bio?: string
-  location?: string
-  experience_level?: 'beginner' | 'intermediate' | 'pro'
-  favorite_genres?: string[]
-  goals?: string[]
-  social_links?: Record<string, string>
+  skill_level?: string
+  interests?: string[]
   onboarding_completed?: boolean
 }
 

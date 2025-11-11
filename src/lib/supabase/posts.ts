@@ -6,8 +6,8 @@ export type Post = {
   audio_url: string;
   bpm: number | null;
   key: string | null;
-  style: string | null;
-  parent_post_id: string | null;
+  style: string;
+  thumbnail_url: string | null;
   challenge_id: string | null;
   created_at: string;
 };
@@ -27,6 +27,7 @@ export type FeedItem = {
   src: string;
   user: string;
   caption: string;
+  thumbnail_url?: string;
   bpm?: number;
   key?: string;
   style?: string;
@@ -201,7 +202,7 @@ export async function createPost(data: {
   bpm?: number;
   key?: string;
   style?: string;
-  parent_post_id?: string;
+  thumbnail_url?: string;
   challenge_id?: string;
 }): Promise<Post> {
   const { data: { user } } = await supabase.auth.getUser();
@@ -217,8 +218,8 @@ export async function createPost(data: {
       audio_url: data.audio_url,
       bpm: data.bpm,
       key: data.key,
-      style: data.style,
-      parent_post_id: data.parent_post_id,
+      style: data.style || 'New drop',
+      thumbnail_url: data.thumbnail_url,
       challenge_id: data.challenge_id,
     })
     .select()
