@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Play, Pause, SkipBack, FolderOpen } from 'lucide-react'
 import DeckHeader from './DeckHeader'
 import XYFxPad from './XYFxPad'
 import LoopCluster from './LoopCluster'
@@ -120,30 +121,31 @@ export default function DeckControls({
             onClick={onPlay}
             disabled={!deck.buffer}
             title="Play"
-            className="w-14 h-14 rounded-xl bg-accent hover:bg-accent-500 disabled:opacity-30 disabled:cursor-not-allowed text-white font-bold text-xl flex items-center justify-center transition-all hover:scale-105 active:scale-95 shadow-[0_4px_16px_rgba(225,29,132,0.4),0_2px_8px_rgba(0,0,0,0.3)]"
+            className="w-14 h-14 rounded-xl bg-accent hover:bg-accent-500 disabled:opacity-30 disabled:cursor-not-allowed text-white font-bold flex items-center justify-center transition-all hover:scale-105 active:scale-95 shadow-[0_4px_16px_rgba(225,29,132,0.4),0_2px_8px_rgba(0,0,0,0.3)]"
           >
-            ▶
+            <Play className="w-6 h-6 fill-white" />
           </button>
           <button
             onClick={onPause}
             title="Pause"
-            className="w-12 h-12 rounded-lg border-2 border-white/10 hover:border-accent hover:bg-black/40 text-rmxrtext hover:text-accent-400 font-bold text-lg flex items-center justify-center transition-all hover:scale-105 active:scale-95 shadow-[0_2px_8px_rgba(0,0,0,0.3)]"
+            className="w-12 h-12 rounded-lg border-2 border-white/10 hover:border-accent hover:bg-black/40 text-rmxrtext hover:text-accent-400 font-bold flex items-center justify-center transition-all hover:scale-105 active:scale-95 shadow-[0_2px_8px_rgba(0,0,0,0.3)]"
           >
-            ⏸
+            <Pause className="w-5 h-5" />
           </button>
           <button
             onClick={onCue}
             title="Cue (Return to start)"
-            className="w-12 h-12 rounded-lg border-2 border-white/10 hover:border-accent hover:bg-black/40 text-rmxrtext hover:text-accent-400 font-bold text-lg flex items-center justify-center transition-all hover:scale-105 active:scale-95 shadow-[0_2px_8px_rgba(0,0,0,0.3)]"
+            className="w-12 h-12 rounded-lg border-2 border-white/10 hover:border-accent hover:bg-black/40 text-rmxrtext hover:text-accent-400 font-bold flex items-center justify-center transition-all hover:scale-105 active:scale-95 shadow-[0_2px_8px_rgba(0,0,0,0.3)]"
           >
-            ⏮
+            <SkipBack className="w-5 h-5" />
           </button>
         </div>
 
         {/* Load Button */}
         <label className="block">
-          <div className="w-full border border-white/10 hover:border-accent hover:bg-black/40 bg-black/20 text-rmxrtext hover:text-accent-400 font-semibold py-3 rounded-xl transition-all cursor-pointer text-center text-sm shadow-[0_2px_8px_rgba(0,0,0,0.3)]">
-            📁 Load Track
+          <div className="w-full border border-white/10 hover:border-accent hover:bg-black/40 bg-black/20 text-rmxrtext hover:text-accent-400 font-semibold py-3 rounded-xl transition-all cursor-pointer text-sm shadow-[0_2px_8px_rgba(0,0,0,0.3)] flex items-center justify-center gap-2">
+            <FolderOpen className="w-5 h-5" />
+            <span>Load Track</span>
           </div>
           <input
             type="file"

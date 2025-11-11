@@ -14,7 +14,162 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      profiles: {
+        Row: {
+          id: string
+          username: string | null
+          display_name: string | null
+          avatar_url: string | null
+          bio: string | null
+          skill_level: string | null
+          interests: string[] | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id: string
+          username?: string | null
+          display_name?: string | null
+          avatar_url?: string | null
+          bio?: string | null
+          skill_level?: string | null
+          interests?: string[] | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          username?: string | null
+          display_name?: string | null
+          avatar_url?: string | null
+          bio?: string | null
+          skill_level?: string | null
+          interests?: string[] | null
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      posts: {
+        Row: {
+          id: string
+          user_id: string
+          audio_url: string
+          bpm: number | null
+          style: string
+          key: string | null
+          challenge_id: string | null
+          created_at: string
+          thumbnail_url: string | null
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          audio_url: string
+          bpm?: number | null
+          style?: string
+          key?: string | null
+          challenge_id?: string | null
+          created_at?: string
+          thumbnail_url?: string | null
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          audio_url?: string
+          bpm?: number | null
+          style?: string
+          key?: string | null
+          challenge_id?: string | null
+          created_at?: string
+          thumbnail_url?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "posts_challenge_id_fkey"
+            columns: ["challenge_id"]
+            isOneToOne: false
+            referencedRelation: "challenges"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "posts_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      reactions: {
+        Row: {
+          id: string
+          post_id: string
+          user_id: string
+          type: 'love' | 'comment' | 'save' | 'share'
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          post_id: string
+          user_id: string
+          type: 'love' | 'comment' | 'save' | 'share'
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          post_id?: string
+          user_id?: string
+          type?: 'love' | 'comment' | 'save' | 'share'
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reactions_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "posts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reactions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      challenges: {
+        Row: {
+          id: string
+          slug: string
+          title: string
+          description: string | null
+          difficulty: string | null
+          ends_at: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          slug: string
+          title: string
+          description?: string | null
+          difficulty?: string | null
+          ends_at?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          slug?: string
+          title?: string
+          description?: string | null
+          difficulty?: string | null
+          ends_at?: string | null
+          created_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

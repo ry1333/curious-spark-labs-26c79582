@@ -76,12 +76,13 @@ export default function DeckHeader({ title, currentTime, duration, buffer, progr
       </div>
 
       {/* Mini Waveform */}
-      <div className="flex-1 h-full flex items-center cursor-pointer" onClick={handleClick}>
+      <div className="flex-1 h-full flex items-center">
         <canvas
           ref={canvasRef}
           width={800}
           height={32}
-          className="w-full h-8"
+          className="w-full h-8 cursor-pointer"
+          onClick={handleClick}
         />
       </div>
 
