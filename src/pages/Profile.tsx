@@ -78,9 +78,9 @@ export default function Profile() {
           {profile.bio && (
             <p className="text-sm md:text-base opacity-60 mt-2 max-w-2xl">{profile.bio}</p>
           )}
-          {profile.favorite_genres && profile.favorite_genres.length > 0 && (
+          {profile.interests && profile.interests.length > 0 && (
             <div className="flex flex-wrap gap-2 mt-3">
-              {profile.favorite_genres.slice(0, 5).map((genre) => (
+              {profile.interests.slice(0, 5).map((genre) => (
                 <span
                   key={genre}
                   className="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-white/80 text-xs font-medium"
@@ -90,13 +90,13 @@ export default function Profile() {
               ))}
             </div>
           )}
-          {profile.experience_level && (
+          {profile.skill_level && (
             <div className="mt-3">
               <span className="px-3 py-1 rounded-full bg-white/10 border border-white/20 text-white text-xs font-semibold capitalize">
-                {profile.experience_level === 'beginner' && '🌱 '}
-                {profile.experience_level === 'intermediate' && '🎧 '}
-                {profile.experience_level === 'pro' && '⭐ '}
-                {profile.experience_level}
+                {profile.skill_level === 'beginner' && '🌱 '}
+                {profile.skill_level === 'intermediate' && '🎧 '}
+                {profile.skill_level === 'pro' && '⭐ '}
+                {profile.skill_level}
               </span>
             </div>
           )}

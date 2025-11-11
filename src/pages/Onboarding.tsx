@@ -136,9 +136,8 @@ export default function Onboarding() {
       console.log('Creating profile with data:', {
         username: username.toLowerCase(),
         display_name: displayName || username,
-        experience_level: experienceLevel,
-        favorite_genres: favoriteGenres,
-        goals,
+        skill_level: experienceLevel,
+        interests: favoriteGenres,
         bio: bio || undefined,
         onboarding_completed: true
       })
@@ -155,9 +154,8 @@ export default function Onboarding() {
           await createProfile({
             username: username.toLowerCase(),
             display_name: displayName || username,
-            experience_level: experienceLevel,
-            favorite_genres: favoriteGenres,
-            goals,
+            skill_level: experienceLevel,
+            interests: favoriteGenres,
             bio: bio || undefined,
             onboarding_completed: true
           })
