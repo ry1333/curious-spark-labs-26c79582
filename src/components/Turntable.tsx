@@ -12,7 +12,15 @@ type Props = {
 export default function Turntable({ label, deck, progress, demo, color = 'cyan' }: Props) {
   const [fileName, setFileName] = useState<string>('')
 
-  async function loadDemo() { await deck.loadFromUrl(demo); setFileName('demo_loop.mp3') }
+  async function loadDemo() {
+    try {
+      await deck.loadFromUrl(demo)
+      setFileName('demo_loop.mp3')
+    } catch (error) {
+      console.error('Failed to load demo:', error)
+      alert('Demo file not found. Please use the LOAD button to upload your own audio file.')
+    }
+  }
 
   async function loadFile(e: React.ChangeEvent<HTMLInputElement>) {
     const f = e.target.files?.[0]

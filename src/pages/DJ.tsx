@@ -148,6 +148,19 @@ export default function DJ() {
         </Link>
       </div>
 
+      {/* Getting Started Info */}
+      {!mixer.deckA.buffer && !mixer.deckB.buffer && (
+        <div className="rounded-xl border border-blue-500/30 bg-blue-500/10 p-6 text-center space-y-3">
+          <div className="text-3xl">🎵</div>
+          <h3 className="text-lg font-bold text-white">Ready to Mix?</h3>
+          <p className="text-white/70 text-sm">
+            Click the <strong>LOAD</strong> button on each deck to upload your audio files or videos (audio will be extracted).
+            <br />
+            Supported formats: MP3, WAV, OGG, M4A, MP4, WebM, and more!
+          </p>
+        </div>
+      )}
+
       {/* Turntables row */}
       <div className="grid lg:grid-cols-2 gap-6">
         <Turntable label="Deck A" deck={mixer.deckA} progress={aProg} demo="/loops/demo_loop.mp3" color="cyan" />
