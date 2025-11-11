@@ -28,18 +28,34 @@ export default function HorizontalSlider({
   // Calculate percentage (handle negative ranges)
   const range = max - min
   const normalizedValue = value - min
-  const percentage = (normalizedValue / range) * 100
-  const zeroPercentage = min < 0 ? ((-min) / range) * 100 : 0
+
+  // Prevent division by zero and validate calculations
+  const percentage = range > 0 && isFinite(normalizedValue)
+    ? (normalizedValue / range) * 100
+    : 50 // Default to middle if invalid
+
+  const zeroPercentage = min < 0 && range > 0
+    ? ((-min) / range) * 100
+    : 0
 
   const updateFromPosition = (clientX: number) => {
     if (!trackRef.current) return
 
     const rect = trackRef.current.getBoundingClientRect()
+
+    // Prevent division by zero
+    if (rect.width <= 0) return
+
     const x = Math.max(0, Math.min(rect.width, clientX - rect.left))
     const newPercentage = x / rect.width
     const newValue = min + (newPercentage * range)
     const steppedValue = Math.round(newValue / step) * step
-    onChange(Math.max(min, Math.min(max, steppedValue)))
+    const finalValue = Math.max(min, Math.min(max, steppedValue))
+
+    // Only call onChange with finite values
+    if (isFinite(finalValue)) {
+      onChange(finalValue)
+    }
   }
 
   const handlePointerDown = (e: React.PointerEvent) => {
@@ -69,6 +85,13 @@ export default function HorizontalSlider({
   }
 
   const formatValue = (val: number) => {
+    // Defensive check for NaN/Infinity
+    if (!isFinite(val)) {
+      if (unit === 'dB') return '0.0dB'
+      if (unit === 'Hz') return '20.0k Hz'
+      return `0${unit}`
+    }
+
     if (unit === 'dB') {
       return val > 0 ? `+${val.toFixed(1)}${unit}` : `${val.toFixed(1)}${unit}`
     }

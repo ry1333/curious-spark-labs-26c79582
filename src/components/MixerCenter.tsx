@@ -77,7 +77,9 @@ export default function MixerCenter({
               max={24}
               step={0.5}
               unit="dB"
-              onChange={(v) => setAEQ({ ...aEQ, high: v })}
+              onChange={(v) => {
+                if (isFinite(v)) setAEQ({ ...aEQ, high: v })
+              }}
               accentColor="magenta"
             />
             <HorizontalSlider
@@ -87,7 +89,9 @@ export default function MixerCenter({
               max={24}
               step={0.5}
               unit="dB"
-              onChange={(v) => setAEQ({ ...aEQ, mid: v })}
+              onChange={(v) => {
+                if (isFinite(v)) setAEQ({ ...aEQ, mid: v })
+              }}
               accentColor="magenta"
             />
             <HorizontalSlider
@@ -97,7 +101,9 @@ export default function MixerCenter({
               max={24}
               step={0.5}
               unit="dB"
-              onChange={(v) => setAEQ({ ...aEQ, low: v })}
+              onChange={(v) => {
+                if (isFinite(v)) setAEQ({ ...aEQ, low: v })
+              }}
               accentColor="magenta"
             />
           </div>
@@ -111,7 +117,9 @@ export default function MixerCenter({
               max={20000}
               step={100}
               unit="Hz"
-              onChange={setAFilter}
+              onChange={(v) => {
+                if (isFinite(v)) setAFilter(v)
+              }}
               accentColor="cyan"
             />
           </div>
@@ -130,7 +138,9 @@ export default function MixerCenter({
               max={24}
               step={0.5}
               unit="dB"
-              onChange={(v) => setBEQ({ ...bEQ, high: v })}
+              onChange={(v) => {
+                if (isFinite(v)) setBEQ({ ...bEQ, high: v })
+              }}
               accentColor="magenta"
             />
             <HorizontalSlider
@@ -140,7 +150,9 @@ export default function MixerCenter({
               max={24}
               step={0.5}
               unit="dB"
-              onChange={(v) => setBEQ({ ...bEQ, mid: v })}
+              onChange={(v) => {
+                if (isFinite(v)) setBEQ({ ...bEQ, mid: v })
+              }}
               accentColor="magenta"
             />
             <HorizontalSlider
@@ -150,7 +162,9 @@ export default function MixerCenter({
               max={24}
               step={0.5}
               unit="dB"
-              onChange={(v) => setBEQ({ ...bEQ, low: v })}
+              onChange={(v) => {
+                if (isFinite(v)) setBEQ({ ...bEQ, low: v })
+              }}
               accentColor="magenta"
             />
           </div>
@@ -164,7 +178,9 @@ export default function MixerCenter({
               max={20000}
               step={100}
               unit="Hz"
-              onChange={setBFilter}
+              onChange={(v) => {
+                if (isFinite(v)) setBFilter(v)
+              }}
               accentColor="cyan"
             />
           </div>
@@ -231,7 +247,9 @@ export default function MixerCenter({
           max={100}
           step={1}
           unit="%"
-          onChange={(v) => onMasterVolChange(v / 100)}
+          onChange={(v) => {
+            if (isFinite(v)) onMasterVolChange(v / 100)
+          }}
           accentColor="magenta"
         />
       </div>
