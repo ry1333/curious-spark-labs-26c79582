@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import HorizontalSlider from './ui/HorizontalSlider'
 
 type Props = {
   mixer: any
@@ -40,10 +41,10 @@ export default function MixerCenter({
   useEffect(() => { mixer.deckB.setFilterHz(bFilter) }, [bFilter, mixer])
 
   return (
-    <div className="rounded-2xl border border-rmxrborder bg-surface shadow-[0_0_0_1px_rgba(38,38,58,0.2)] p-8 space-y-8 h-full flex flex-col">
+    <div className="rounded-2xl border border-white/5 bg-gradient-to-b from-[#0a0a0f] to-[#1a1a24] shadow-[0_8px_32px_rgba(0,0,0,0.6)] p-8 space-y-8 h-full flex flex-col">
 
-      {/* BPM/SYNC Header - Mono font, tiny captions */}
-      <div className="bg-surface2 rounded-xl px-4 py-3 flex items-center justify-center gap-4">
+      {/* BPM/SYNC Header */}
+      <div className="bg-black/40 rounded-xl px-4 py-3 flex items-center justify-center gap-4 border border-white/5 shadow-[inset_0_2px_8px_rgba(0,0,0,0.4)]">
         <div className="text-center">
           <div className="text-2xl font-bold font-mono text-rmxrtext">{aBpm}</div>
           <div className="text-[9px] text-muted uppercase tracking-wider mt-1">BPM A</div>
@@ -51,7 +52,7 @@ export default function MixerCenter({
         <button
           onClick={onSync}
           disabled={!mixer.deckA.buffer || !mixer.deckB.buffer}
-          className="px-4 py-2 rounded-lg bg-surface border border-rmxrborder hover:border-accent hover:bg-surface2 disabled:opacity-30 disabled:cursor-not-allowed text-rmxrtext hover:text-accent-400 font-bold text-xs uppercase tracking-wider transition-all"
+          className="px-4 py-2 rounded-lg bg-surface border border-rmxrborder hover:border-accent hover:bg-surface2 disabled:opacity-30 disabled:cursor-not-allowed text-rmxrtext hover:text-accent-400 font-bold text-xs uppercase tracking-wider transition-all shadow-[0_2px_8px_rgba(0,0,0,0.3)]"
         >
           🔗 Sync
         </button>
@@ -61,85 +62,148 @@ export default function MixerCenter({
         </div>
       </div>
 
-      {/* EQ Strips Side-by-Side - No "DECK A/B" labels, just "EQ A" / "EQ B" */}
+      {/* EQ Strips Side-by-Side - Horizontal Sliders */}
       <div className="flex-1 grid grid-cols-2 gap-8">
         {/* Deck A EQ */}
-        <div className="space-y-4">
-          <div className="text-[10px] font-semibold text-muted uppercase tracking-wider text-center pb-2 border-b border-rmxrborder">
+        <div className="space-y-5">
+          <div className="text-[10px] font-semibold text-muted uppercase tracking-wider text-center pb-2 border-b border-white/10">
             EQ A
           </div>
-          <div className="space-y-3">
-            <EQKnob label="High" value={aEQ.high} onChange={(v) => setAEQ({ ...aEQ, high: v })} />
-            <EQKnob label="Mid" value={aEQ.mid} onChange={(v) => setAEQ({ ...aEQ, mid: v })} />
-            <EQKnob label="Low" value={aEQ.low} onChange={(v) => setAEQ({ ...aEQ, low: v })} />
+          <div className="space-y-4">
+            <HorizontalSlider
+              label="HIGH"
+              value={aEQ.high}
+              min={-24}
+              max={24}
+              step={0.5}
+              unit="dB"
+              onChange={(v) => setAEQ({ ...aEQ, high: v })}
+              accentColor="magenta"
+            />
+            <HorizontalSlider
+              label="MID"
+              value={aEQ.mid}
+              min={-24}
+              max={24}
+              step={0.5}
+              unit="dB"
+              onChange={(v) => setAEQ({ ...aEQ, mid: v })}
+              accentColor="magenta"
+            />
+            <HorizontalSlider
+              label="LOW"
+              value={aEQ.low}
+              min={-24}
+              max={24}
+              step={0.5}
+              unit="dB"
+              onChange={(v) => setAEQ({ ...aEQ, low: v })}
+              accentColor="magenta"
+            />
           </div>
 
           {/* Filter A */}
-          <div className="pt-4 space-y-2">
-            <div className="text-[9px] text-muted uppercase tracking-wider">Filter</div>
-            <input
-              type="range"
+          <div className="pt-4 space-y-3 border-t border-white/10">
+            <HorizontalSlider
+              label="FILTER"
+              value={aFilter}
               min={200}
               max={20000}
               step={100}
-              value={aFilter}
-              onChange={(e) => setAFilter(parseInt(e.target.value))}
-              className="w-full"
+              unit="Hz"
+              onChange={setAFilter}
+              accentColor="cyan"
             />
-            <div className="text-[10px] text-muted text-center font-mono">{(aFilter / 1000).toFixed(1)}k Hz</div>
           </div>
         </div>
 
         {/* Deck B EQ */}
-        <div className="space-y-4">
-          <div className="text-[10px] font-semibold text-muted uppercase tracking-wider text-center pb-2 border-b border-rmxrborder">
+        <div className="space-y-5">
+          <div className="text-[10px] font-semibold text-muted uppercase tracking-wider text-center pb-2 border-b border-white/10">
             EQ B
           </div>
-          <div className="space-y-3">
-            <EQKnob label="High" value={bEQ.high} onChange={(v) => setBEQ({ ...bEQ, high: v })} />
-            <EQKnob label="Mid" value={bEQ.mid} onChange={(v) => setBEQ({ ...bEQ, mid: v })} />
-            <EQKnob label="Low" value={bEQ.low} onChange={(v) => setBEQ({ ...bEQ, low: v })} />
+          <div className="space-y-4">
+            <HorizontalSlider
+              label="HIGH"
+              value={bEQ.high}
+              min={-24}
+              max={24}
+              step={0.5}
+              unit="dB"
+              onChange={(v) => setBEQ({ ...bEQ, high: v })}
+              accentColor="magenta"
+            />
+            <HorizontalSlider
+              label="MID"
+              value={bEQ.mid}
+              min={-24}
+              max={24}
+              step={0.5}
+              unit="dB"
+              onChange={(v) => setBEQ({ ...bEQ, mid: v })}
+              accentColor="magenta"
+            />
+            <HorizontalSlider
+              label="LOW"
+              value={bEQ.low}
+              min={-24}
+              max={24}
+              step={0.5}
+              unit="dB"
+              onChange={(v) => setBEQ({ ...bEQ, low: v })}
+              accentColor="magenta"
+            />
           </div>
 
           {/* Filter B */}
-          <div className="pt-4 space-y-2">
-            <div className="text-[9px] text-muted uppercase tracking-wider">Filter</div>
-            <input
-              type="range"
+          <div className="pt-4 space-y-3 border-t border-white/10">
+            <HorizontalSlider
+              label="FILTER"
+              value={bFilter}
               min={200}
               max={20000}
               step={100}
-              value={bFilter}
-              onChange={(e) => setBFilter(parseInt(e.target.value))}
-              className="w-full"
+              unit="Hz"
+              onChange={setBFilter}
+              accentColor="cyan"
             />
-            <div className="text-[10px] text-muted text-center font-mono">{(bFilter / 1000).toFixed(1)}k Hz</div>
           </div>
         </div>
       </div>
 
-      {/* Crossfader - Docked at Bottom, thin magenta fill */}
-      <div className="space-y-3 pt-6 border-t border-rmxrborder">
+      {/* Crossfader - Professional Dual-Rail Design */}
+      <div className="space-y-3 pt-6 border-t border-white/10">
         <div className="text-[10px] font-semibold text-muted uppercase tracking-wider text-center">Crossfader</div>
-        <div className="relative h-12 flex items-center">
-          {/* Track */}
-          <div className="absolute inset-x-0 h-3 rounded-full bg-surface2 border border-rmxrborder" />
+        <div className="relative h-16 flex items-center px-2">
+          {/* Dual Rail Track Background */}
+          <div className="absolute inset-x-2 h-4 flex gap-1">
+            <div className="flex-1 rounded-full bg-gradient-to-b from-zinc-700 via-zinc-600 to-zinc-700 shadow-[inset_0_2px_6px_rgba(0,0,0,0.6)] border border-zinc-800" />
+            <div className="flex-1 rounded-full bg-gradient-to-b from-zinc-700 via-zinc-600 to-zinc-700 shadow-[inset_0_2px_6px_rgba(0,0,0,0.6)] border border-zinc-800" />
+          </div>
 
           {/* Magenta fill showing position */}
           <div
-            className="absolute h-3 rounded-full transition-all duration-75 bg-accent"
+            className="absolute h-4 rounded-full transition-all duration-75 bg-accent opacity-40 shadow-[0_0_10px_rgba(225,29,132,0.4)]"
             style={{
-              left: `${Math.min((1 - crossfader), crossfader) * 100}%`,
-              right: `${Math.min((1 - crossfader), crossfader) * 100}%`,
-              opacity: 0.6
+              left: `calc(${Math.min((1 - crossfader), crossfader) * 100}% + 8px)`,
+              right: `calc(${Math.min((1 - crossfader), crossfader) * 100}% + 8px)`
             }}
           />
 
-          {/* Thumb */}
+          {/* Metallic Fader Thumb */}
           <div
-            className="absolute w-6 h-6 rounded-lg bg-accent border-2 border-bg shadow-lg pointer-events-none transition-all z-10"
-            style={{ left: `calc(${(1 - crossfader) * 100}% - 12px)` }}
-          />
+            className="absolute w-10 h-16 pointer-events-none transition-all z-10"
+            style={{ left: `calc(${(1 - crossfader) * 100}% - 20px)` }}
+          >
+            <div className="w-full h-full rounded-lg bg-gradient-to-br from-zinc-200 via-zinc-300 to-zinc-400 shadow-[0_4px_12px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.4),inset_0_-1px_0_rgba(0,0,0,0.4)] border border-zinc-500/50">
+              {/* Grip lines */}
+              <div className="flex flex-col items-center justify-center h-full gap-1.5 px-2">
+                <div className="w-full h-px bg-zinc-400/60" />
+                <div className="w-full h-px bg-zinc-400/60" />
+                <div className="w-full h-px bg-zinc-400/60" />
+              </div>
+            </div>
+          </div>
 
           {/* Input */}
           <input
@@ -152,57 +216,35 @@ export default function MixerCenter({
             className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20"
           />
         </div>
-        <div className="flex justify-between text-[10px] font-semibold">
-          <span className={`transition-all ${crossfader < 0.5 ? 'text-accent-400 scale-110' : 'text-muted'}`}>A</span>
-          <span className="text-muted font-mono text-[9px]">{Math.round((1-crossfader) * 100)}% / {Math.round(crossfader * 100)}%</span>
-          <span className={`transition-all ${crossfader > 0.5 ? 'text-accent-400 scale-110' : 'text-muted'}`}>B</span>
+        <div className="flex justify-between text-[10px] font-semibold font-mono">
+          <span className={`transition-all ${crossfader < 0.5 ? 'text-accent-400 scale-110' : 'text-muted'}`}>A {Math.round((1-crossfader) * 100)}%</span>
+          <span className={`transition-all ${crossfader > 0.5 ? 'text-accent-400 scale-110' : 'text-muted'}`}>B {Math.round(crossfader * 100)}%</span>
         </div>
       </div>
 
-      {/* Master Volume */}
-      <div className="space-y-2">
-        <div className="text-[9px] text-muted uppercase tracking-wider">Master</div>
-        <input
-          type="range"
+      {/* Master Volume - Horizontal Slider */}
+      <div className="space-y-3 pt-2">
+        <HorizontalSlider
+          label="MASTER"
+          value={masterVol * 100}
           min={0}
-          max={1}
-          step={0.01}
-          value={masterVol}
-          onChange={(e) => onMasterVolChange(parseFloat(e.target.value))}
-          className="w-full"
+          max={100}
+          step={1}
+          unit="%"
+          onChange={(v) => onMasterVolChange(v / 100)}
+          accentColor="magenta"
         />
-        <div className="text-center text-xs font-mono text-muted">{Math.round(masterVol * 100)}%</div>
       </div>
 
       {/* Recording Indicator */}
       {isRecording && (
-        <div className="rounded-lg border border-danger bg-danger/10 px-3 py-2 text-center animate-pulse">
+        <div className="rounded-lg border border-danger bg-danger/10 px-3 py-2 text-center animate-pulse shadow-[0_0_20px_rgba(239,68,68,0.3)]">
           <div className="text-danger font-bold text-[10px] uppercase tracking-wider flex items-center justify-center gap-2">
             <div className="w-2 h-2 bg-danger rounded-full animate-pulse" />
             Recording
           </div>
         </div>
       )}
-    </div>
-  )
-}
-
-function EQKnob({ label, value, onChange }: { label: string, value: number, onChange: (v: number) => void }) {
-  return (
-    <div className="flex items-center gap-3">
-      <div className="text-[10px] text-muted uppercase tracking-wider w-10">{label}</div>
-      <div className="flex-1">
-        <input
-          type="range"
-          min={-24}
-          max={24}
-          step={0.5}
-          value={value}
-          onChange={(e) => onChange(parseFloat(e.target.value))}
-          className="w-full"
-        />
-      </div>
-      <div className="text-[10px] font-mono text-muted w-10 text-right">{value > 0 ? '+' : ''}{value.toFixed(1)}</div>
     </div>
   )
 }

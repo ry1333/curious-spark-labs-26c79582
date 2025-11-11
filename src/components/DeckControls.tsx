@@ -2,6 +2,7 @@ import { useState } from 'react'
 import DeckHeader from './DeckHeader'
 import XYFxPad from './XYFxPad'
 import LoopCluster from './LoopCluster'
+import VerticalFader from './ui/VerticalFader'
 
 type Props = {
   label: string
@@ -62,7 +63,7 @@ export default function DeckControls({
   }
 
   return (
-    <div className={`rounded-2xl border border-rmxrborder bg-surface shadow-[0_0_0_1px_rgba(38,38,58,0.2)] overflow-hidden h-full flex flex-col ${playing ? 'deck--active' : ''}`}>
+    <div className={`rounded-2xl border border-white/5 bg-gradient-to-b from-[#0a0a0f] to-[#1a1a24] shadow-[0_8px_32px_rgba(0,0,0,0.6)] overflow-hidden h-full flex flex-col ${playing ? 'deck--active' : ''}`}>
       {/* Deck Header with mini waveform */}
       <DeckHeader
         title={fileName}
@@ -112,21 +113,21 @@ export default function DeckControls({
             onClick={onPlay}
             disabled={!deck.buffer}
             title="Play"
-            className="w-14 h-14 rounded-xl bg-accent hover:bg-accent-500 disabled:opacity-30 disabled:cursor-not-allowed text-white font-bold text-xl flex items-center justify-center transition-all hover:scale-105 active:scale-95 shadow-lg"
+            className="w-14 h-14 rounded-xl bg-accent hover:bg-accent-500 disabled:opacity-30 disabled:cursor-not-allowed text-white font-bold text-xl flex items-center justify-center transition-all hover:scale-105 active:scale-95 shadow-[0_4px_16px_rgba(225,29,132,0.4),0_2px_8px_rgba(0,0,0,0.3)]"
           >
             ▶
           </button>
           <button
             onClick={onPause}
             title="Pause"
-            className="w-12 h-12 rounded-lg border-2 border-rmxrborder hover:border-accent hover:bg-surface2 text-rmxrtext hover:text-accent-400 font-bold text-lg flex items-center justify-center transition-all hover:scale-105 active:scale-95"
+            className="w-12 h-12 rounded-lg border-2 border-white/10 hover:border-accent hover:bg-black/40 text-rmxrtext hover:text-accent-400 font-bold text-lg flex items-center justify-center transition-all hover:scale-105 active:scale-95 shadow-[0_2px_8px_rgba(0,0,0,0.3)]"
           >
             ⏸
           </button>
           <button
             onClick={onCue}
             title="Cue (Return to start)"
-            className="w-12 h-12 rounded-lg border-2 border-rmxrborder hover:border-accent hover:bg-surface2 text-rmxrtext hover:text-accent-400 font-bold text-lg flex items-center justify-center transition-all hover:scale-105 active:scale-95"
+            className="w-12 h-12 rounded-lg border-2 border-white/10 hover:border-accent hover:bg-black/40 text-rmxrtext hover:text-accent-400 font-bold text-lg flex items-center justify-center transition-all hover:scale-105 active:scale-95 shadow-[0_2px_8px_rgba(0,0,0,0.3)]"
           >
             ⏮
           </button>
@@ -134,7 +135,7 @@ export default function DeckControls({
 
         {/* Load Button */}
         <label className="block">
-          <div className="w-full border-2 border-rmxrborder hover:border-accent hover:bg-surface2 bg-surface text-rmxrtext hover:text-accent-400 font-semibold py-3 rounded-xl transition-all cursor-pointer text-center text-sm">
+          <div className="w-full border border-white/10 hover:border-accent hover:bg-black/40 bg-black/20 text-rmxrtext hover:text-accent-400 font-semibold py-3 rounded-xl transition-all cursor-pointer text-center text-sm shadow-[0_2px_8px_rgba(0,0,0,0.3)]">
             📁 Load Track
           </div>
           <input
@@ -154,30 +155,23 @@ export default function DeckControls({
               type="number"
               value={bpm}
               onChange={(e) => onBpmChange(parseFloat(e.target.value) || 0)}
-              className="w-full bg-bg border border-rmxrborder rounded-lg px-3 py-2 text-3xl font-bold font-mono text-center text-rmxrtext focus:outline-none focus:border-accent transition-colors"
+              className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-3xl font-bold font-mono text-center text-rmxrtext focus:outline-none focus:border-accent transition-colors shadow-[inset_0_2px_8px_rgba(0,0,0,0.4)]"
             />
           </div>
 
-          {/* Pitch - Uses CSS slider styles from index.css */}
-          <div className="space-y-2">
-            <div className="flex justify-between items-center">
-              <span className="text-[10px] uppercase text-muted font-semibold tracking-wider">Pitch</span>
-              <span className="text-sm font-mono text-accent-400 font-semibold">{pitch > 0 ? '+' : ''}{pitch.toFixed(1)}%</span>
-            </div>
-            <input
-              type="range"
+          {/* Pitch - Vertical Fader */}
+          <div className="flex justify-center">
+            <VerticalFader
+              value={pitch}
               min={-8}
               max={8}
               step={0.1}
-              value={pitch}
-              onChange={(e) => handlePitchChange(parseFloat(e.target.value))}
-              className="w-full"
+              onChange={handlePitchChange}
+              label="PITCH"
+              unit="%"
+              height={180}
+              accentColor="magenta"
             />
-            <div className="flex justify-between text-[9px] text-muted">
-              <span>-8%</span>
-              <span>0</span>
-              <span>+8%</span>
-            </div>
           </div>
         </div>
 
