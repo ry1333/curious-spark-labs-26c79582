@@ -89,63 +89,127 @@ export default function DeckControls({
           Deck {label}
         </div>
 
-        {/* Jog/Platter - Neutral, only active deck gets magenta glow */}
+        {/* Enhanced Vinyl Turntable - Responsive Size */}
         <div className="flex-1 flex items-center justify-center">
           <div className={`
-            relative w-56 h-56 rounded-full border-4 border-rmxrborder
-            bg-gradient-to-br from-surface2 to-bg
+            relative w-48 h-48 md:w-56 md:h-56 lg:w-64 lg:h-64 rounded-full
             ${playing ? 'animate-spin-slow' : ''}
-            transition-all duration-300
+            transition-all duration-500
           `}>
-            {/* Grooves - low-contrast gray */}
-            <div className="absolute inset-6 rounded-full border border-white/5" />
-            <div className="absolute inset-12 rounded-full border border-white/5" />
-            <div className="absolute inset-16 rounded-full border border-white/5" />
+            {/* Outer Glow Effect when playing */}
+            {playing && (
+              <div className="absolute -inset-4 rounded-full bg-gradient-to-br from-accent/20 via-purple-500/10 to-transparent blur-xl animate-pulse" />
+            )}
 
-            {/* Center */}
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-14 h-14 rounded-full bg-bg border-2 border-rmxrborder flex items-center justify-center">
-                {fileName && (
-                  <div className="text-[8px] text-center text-muted px-2 truncate max-w-[48px]">
-                    {fileName.split('.')[0].substring(0, 8)}
-                  </div>
-                )}
+            {/* Vinyl Record */}
+            <div className={`
+              relative w-full h-full rounded-full
+              bg-gradient-to-br from-gray-900 via-gray-800 to-black
+              border-4 ${playing ? 'border-accent/50 shadow-[0_0_30px_rgba(225,29,132,0.5)]' : 'border-white/10'}
+              transition-all duration-300
+            `}>
+              {/* Vinyl grooves - multiple rings */}
+              <div className="absolute inset-4 rounded-full border border-white/5" />
+              <div className="absolute inset-7 rounded-full border border-white/5" />
+              <div className="absolute inset-10 rounded-full border border-white/5" />
+              <div className="absolute inset-[3.25rem] rounded-full border border-white/5" />
+              <div className="absolute inset-14 rounded-full border border-white/5" />
+              <div className="absolute inset-[3.75rem] rounded-full border border-white/5" />
+              <div className="absolute inset-16 rounded-full border border-white/5" />
+              <div className="absolute inset-[4.25rem] rounded-full border border-white/5" />
+              <div className="absolute inset-[4.5rem] rounded-full border border-white/5" />
+
+              {/* Center label area */}
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className={`
+                  w-20 h-20 rounded-full
+                  bg-gradient-to-br from-gray-700 via-gray-800 to-gray-900
+                  border-2 ${playing ? 'border-accent/80' : 'border-white/20'}
+                  flex items-center justify-center
+                  shadow-[inset_0_2px_8px_rgba(0,0,0,0.8)]
+                  transition-all duration-300
+                `}>
+                  {/* Spindle hole */}
+                  <div className="w-4 h-4 rounded-full bg-black border border-white/30" />
+                </div>
               </div>
+
+              {/* Tonearm indicator dot (rotates with vinyl) */}
+              <div className="absolute top-8 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-accent shadow-[0_0_8px_rgba(225,29,132,0.8)]" />
+
+              {/* Track name label on vinyl */}
+              {fileName && (
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                  <div className="text-[10px] text-center text-white/60 px-3 max-w-[100px] truncate font-semibold tracking-wider">
+                    {fileName.split('.')[0].substring(0, 12)}
+                  </div>
+                </div>
+              )}
             </div>
+
+            {/* Playback indicator LED */}
+            {playing && (
+              <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-3 h-3 rounded-full bg-accent shadow-[0_0_12px_rgba(225,29,132,1)] animate-pulse" />
+            )}
           </div>
         </div>
 
-        {/* Transport Controls - Play filled, others stroked */}
-        <div className="flex items-center justify-center gap-2">
+        {/* Enhanced Transport Controls */}
+        <div className="flex items-center justify-center gap-3">
           <button
             onClick={onPlay}
             disabled={!deck.buffer}
             title="Play"
-            className="w-14 h-14 rounded-xl bg-accent hover:bg-accent-500 disabled:opacity-30 disabled:cursor-not-allowed text-white font-bold flex items-center justify-center transition-all hover:scale-105 active:scale-95 shadow-[0_4px_16px_rgba(225,29,132,0.4),0_2px_8px_rgba(0,0,0,0.3)]"
+            className={`
+              relative w-16 h-16 rounded-xl
+              ${playing
+                ? 'bg-accent shadow-[0_0_25px_rgba(225,29,132,0.8),0_4px_16px_rgba(225,29,132,0.4)] animate-pulse'
+                : 'bg-accent hover:bg-accent-500 shadow-[0_4px_16px_rgba(225,29,132,0.4)]'
+              }
+              disabled:opacity-30 disabled:cursor-not-allowed
+              text-white font-bold flex items-center justify-center
+              transition-all hover:scale-110 active:scale-95
+            `}
           >
-            <Play className="w-6 h-6 fill-white" />
+            <Play className="w-7 h-7 fill-white drop-shadow-lg" />
+            {playing && (
+              <div className="absolute inset-0 rounded-xl border-2 border-white/50 animate-ping" />
+            )}
           </button>
           <button
             onClick={onPause}
             title="Pause"
-            className="w-12 h-12 rounded-lg border-2 border-white/10 hover:border-accent hover:bg-black/40 text-rmxrtext hover:text-accent-400 font-bold flex items-center justify-center transition-all hover:scale-105 active:scale-95 shadow-[0_2px_8px_rgba(0,0,0,0.3)]"
+            className="w-12 h-12 rounded-lg border-2 border-white/10 hover:border-accent hover:bg-black/40 text-rmxrtext hover:text-accent-400 font-bold flex items-center justify-center transition-all hover:scale-110 active:scale-95 shadow-[0_2px_8px_rgba(0,0,0,0.3)]"
           >
             <Pause className="w-5 h-5" />
           </button>
           <button
             onClick={onCue}
             title="Cue (Return to start)"
-            className="w-12 h-12 rounded-lg border-2 border-white/10 hover:border-accent hover:bg-black/40 text-rmxrtext hover:text-accent-400 font-bold flex items-center justify-center transition-all hover:scale-105 active:scale-95 shadow-[0_2px_8px_rgba(0,0,0,0.3)]"
+            className="w-12 h-12 rounded-lg border-2 border-white/10 hover:border-accent hover:bg-black/40 text-rmxrtext hover:text-accent-400 font-bold flex items-center justify-center transition-all hover:scale-110 active:scale-95 shadow-[0_2px_8px_rgba(0,0,0,0.3)]"
           >
             <SkipBack className="w-5 h-5" />
           </button>
         </div>
 
-        {/* Load Button */}
+        {/* Enhanced Load Button */}
         <label className="block">
-          <div className="w-full border border-white/10 hover:border-accent hover:bg-black/40 bg-black/20 text-rmxrtext hover:text-accent-400 font-semibold py-3 rounded-xl transition-all cursor-pointer text-sm shadow-[0_2px_8px_rgba(0,0,0,0.3)] flex items-center justify-center gap-2">
+          <div className={`
+            w-full border-2
+            ${fileName
+              ? 'border-accent/50 bg-accent/10 text-accent-400'
+              : 'border-white/10 bg-black/20 text-rmxrtext hover:border-accent hover:bg-black/40 hover:text-accent-400'
+            }
+            font-semibold py-3 rounded-xl transition-all cursor-pointer text-sm
+            shadow-[0_2px_8px_rgba(0,0,0,0.3)]
+            flex items-center justify-center gap-2
+            hover:scale-102 active:scale-98
+          `}>
             <FolderOpen className="w-5 h-5" />
-            <span>Load Track</span>
+            <span>{fileName ? 'Change Track' : 'Load Track'}</span>
+            {fileName && (
+              <div className="w-2 h-2 rounded-full bg-accent animate-pulse" />
+            )}
           </div>
           <input
             type="file"

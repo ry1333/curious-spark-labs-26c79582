@@ -257,9 +257,9 @@ export default function DJ() {
         />
       </div>
 
-      {/* MIXER BAND */}
-      <div className="flex-1 max-w-[1600px] mx-auto w-full px-8 py-8">
-        <div className="h-full grid grid-cols-[3fr_2fr_3fr] gap-10">
+      {/* MIXER BAND - Responsive Layout */}
+      <div className="flex-1 max-w-[1600px] mx-auto w-full px-4 md:px-8 py-4 md:py-8">
+        <div className="h-full grid grid-cols-1 lg:grid-cols-[3fr_2fr_3fr] gap-4 md:gap-6 lg:gap-10">
           {/* Left Deck (A) */}
           <DeckControls
             label="A"
@@ -305,8 +305,8 @@ export default function DJ() {
         </div>
       </div>
 
-      {/* LIBRARY BAND */}
-      <div className="h-64 border-t border-rmxrborder bg-surface">
+      {/* LIBRARY BAND - Responsive Height */}
+      <div className="h-48 md:h-64 border-t border-rmxrborder bg-surface">
         <LibraryBrowser
           onLoadA={handleALoad}
           onLoadB={handleBLoad}
