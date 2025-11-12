@@ -118,7 +118,7 @@ export async function createProfile(profile: ProfileUpdate): Promise<Profile> {
 
   const { data, error } = await supabase
     .from('profiles')
-    .insert({
+    .upsert({
       id: user.id,
       ...normalizedProfile
     })
@@ -126,7 +126,7 @@ export async function createProfile(profile: ProfileUpdate): Promise<Profile> {
     .single()
 
   if (error) {
-    console.error('Error creating profile:', error)
+    console.error('Error creating/updating profile:', error)
     throw error
   }
 
