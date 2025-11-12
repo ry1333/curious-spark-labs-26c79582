@@ -11,6 +11,7 @@ import Learn from './pages/Learn'
 import Profile from './pages/Profile'
 import AuthPage from './pages/Auth'
 import Onboarding from './pages/Onboarding'
+import Admin from './pages/Admin'
 import './index.css'
 
 function Router({ children }: { children: React.ReactNode }) {
@@ -44,6 +45,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
             <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
             <Route path="/auth" element={<AuthPage />} />
             <Route path="/onboarding" element={<ProtectedRoute><Onboarding /></ProtectedRoute>} />
+            <Route path="/admin" element={<ProtectedRoute><Admin /></ProtectedRoute>} />
             <Route path="*" element={<Navigate to="/stream" replace />} />
           </Route>
         </Routes>

@@ -6,6 +6,8 @@ import { fetchFeedPage } from '../lib/api'
 import { toggleLove } from '../lib/supabase/posts'
 import ActionRail from '../components/ActionRail'
 import CommentsModal from '../components/CommentsModal'
+import ReportModal from '../components/ReportModal'
+import VinylPlayer from '../components/VinylPlayer'
 import { toast } from 'sonner'
 
 export default function Stream() {
@@ -19,6 +21,9 @@ export default function Stream() {
 
   // Comments modal state
   const [commentsPostId, setCommentsPostId] = useState<string | null>(null)
+
+  // Report modal state
+  const [reportPostId, setReportPostId] = useState<string | null>(null)
 
   const handleLike = async (postId: string, currentLoves: number, currentHasLoved: boolean) => {
     // Optimistic update
@@ -107,54 +112,69 @@ export default function Stream() {
           const hasLoved = loveState[p.id]?.has_loved ?? p.has_loved ?? false
 
           return (
-            <section key={p.id} data-post className="h-screen snap-start relative flex items-end justify-center"
-              style={{background:'radial-gradient(1200px 600px at 50% 0%, rgba(255,255,255,0.03), transparent), radial-gradient(900px 400px at 50% 100%, rgba(255,255,255,0.02), transparent)'}}>
+            <section key={p.id} data-post className="h-screen snap-start relative flex items-end justify-center overflow-hidden"
+              style={{
+                background: 'radial-gradient(1200px 600px at 50% 0%, rgba(6, 182, 212, 0.08), transparent), radial-gradient(900px 400px at 50% 100%, rgba(168, 85, 247, 0.06), transparent), #000'
+              }}>
+
+              {/* Animated Background Mesh */}
+              <div className="absolute inset-0 opacity-30 pointer-events-none">
+                <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-cyan-500/20 rounded-full blur-3xl animate-pulse-slow" />
+                <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-pulse-slow" style={{ animationDelay: '1s' }} />
+              </div>
 
               {/* User Info & Caption */}
-              <div className="absolute left-4 bottom-32 md:bottom-10 space-y-3 pointer-events-none max-w-[60%]">
-                <div className="flex items-center gap-3">
-                  {p.avatar_url ? (
-                    <img
-                      src={p.avatar_url}
-                      alt={p.user}
-                      className="w-10 h-10 rounded-full border-2 border-white/20"
-                    />
-                  ) : (
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-cyan-500 to-purple-500 flex items-center justify-center text-white font-bold text-sm">
-                      {p.user.charAt(1).toUpperCase()}
+              <div className="absolute left-4 bottom-32 md:bottom-10 space-y-3 max-w-[60%] z-10">
+                <div className="rounded-2xl bg-black/40 backdrop-blur-md border border-white/10 p-4 shadow-xl pointer-events-auto">
+                  <div className="flex items-center gap-3 mb-2">
+                    {p.avatar_url ? (
+                      <img
+                        src={p.avatar_url}
+                        alt={p.user}
+                        className="w-12 h-12 rounded-full border-2 border-white/30 shadow-lg"
+                      />
+                    ) : (
+                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-cyan-500 to-purple-500 flex items-center justify-center text-white font-bold shadow-lg">
+                        {p.user.charAt(1).toUpperCase()}
+                      </div>
+                    )}
+                    <div className="font-bold text-lg text-white drop-shadow-lg">
+                      @{p.user}
                     </div>
-                  )}
-                  <div className="font-bold text-lg text-white">
-                    {p.user}
                   </div>
-                </div>
-                <div className="opacity-80 text-sm leading-relaxed">{p.caption}</div>
+                  {p.caption && (
+                    <div className="text-white/90 text-sm leading-relaxed mb-3">{p.caption}</div>
+                  )}
 
-                {/* Tags Row */}
-                <div className="flex flex-wrap gap-2">
-                  {p.bpm && (
-                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-white/70 text-xs font-medium">
-                      ⚡ {p.bpm} BPM
-                    </div>
-                  )}
-                  {p.key && (
-                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-white/70 text-xs font-medium">
-                      🎹 {p.key}
-                    </div>
-                  )}
-                  {p.style && (
-                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-white/70 text-xs font-medium">
-                      🎨 {p.style}
-                    </div>
-                  )}
+                  {/* Tags Row */}
+                  <div className="flex flex-wrap gap-2">
+                    {p.bpm && (
+                      <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-cyan-500/20 border border-cyan-400/30 text-cyan-300 text-xs font-semibold shadow-sm">
+                        ⚡ {p.bpm} BPM
+                      </div>
+                    )}
+                    {p.key && (
+                      <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-purple-500/20 border border-purple-400/30 text-purple-300 text-xs font-semibold shadow-sm">
+                        🎹 {p.key}
+                      </div>
+                    )}
+                    {p.style && (
+                      <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-pink-500/20 border border-pink-400/30 text-pink-300 text-xs font-semibold shadow-sm">
+                        🎨 {p.style}
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
 
-              {/* Audio Player */}
-              <div className="w-full max-w-md mx-auto mb-28 md:mb-10 px-4">
-                <div className="rounded-2xl border border-white/10 bg-neutral-900/80 backdrop-blur-xl p-5 shadow-2xl">
-                  <audio controls className="w-full [&::-webkit-media-controls-panel]:bg-neutral-800 [&::-webkit-media-controls-current-time-display]:text-white [&::-webkit-media-controls-time-remaining-display]:text-white" src={p.src} preload="metadata" />
-                </div>
+              {/* Vinyl Player */}
+              <div className="w-full max-w-md mx-auto mb-28 md:mb-10 px-6">
+                <VinylPlayer
+                  audioUrl={p.src}
+                  bpm={p.bpm}
+                  musicalKey={p.key}
+                  style={p.style}
+                />
               </div>
 
               {/* Action Rail */}
@@ -163,6 +183,7 @@ export default function Stream() {
                 onLike={() => handleLike(p.id, loves, hasLoved)}
                 onShare={() => handleShare(p.id)}
                 onComment={() => handleComment(p.id)}
+                onReport={() => setReportPostId(p.id)}
                 loves={loves}
                 hasLoved={hasLoved}
                 comments={p.comments ?? 0}
@@ -181,6 +202,15 @@ export default function Stream() {
           postId={commentsPostId}
           isOpen={!!commentsPostId}
           onClose={() => setCommentsPostId(null)}
+        />
+      )}
+
+      {/* Report Modal */}
+      {reportPostId && (
+        <ReportModal
+          target={{ type: 'post', id: reportPostId }}
+          isOpen={!!reportPostId}
+          onClose={() => setReportPostId(null)}
         />
       )}
     </div>

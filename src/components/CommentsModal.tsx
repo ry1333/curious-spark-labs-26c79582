@@ -42,9 +42,8 @@ export default function CommentsModal({ postId, isOpen, onClose }: Props) {
     try {
       const comment = await createComment(postId, newComment)
 
-      // Optimistically add the comment to the list
-      // In a real app, we'd fetch the user profile, but for now we'll just add it
-      await loadComments() // Reload to get the full comment with profile
+      // Reload to get the full comment with profile
+      await loadComments()
 
       setNewComment('')
       toast.success('Comment posted!')
