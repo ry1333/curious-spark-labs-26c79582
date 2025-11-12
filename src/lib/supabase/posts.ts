@@ -1,4 +1,5 @@
 import { supabase } from '@/integrations/supabase/client';
+import { getCommentCounts } from './comments';
 
 export type Post = {
   id: string;
@@ -7,7 +8,9 @@ export type Post = {
   bpm: number | null;
   key: string | null;
   style: string;
+  caption: string | null;
   thumbnail_url: string | null;
+  parent_post_id: string | null;
   challenge_id: string | null;
   created_at: string;
 };
@@ -83,6 +86,9 @@ export async function fetchPosts(page = 0, pageSize = 10): Promise<{ items: Post
   // Create a map for quick profile lookup
   const profileMap = new Map(profiles?.map(p => [p.id, p]) || []);
 
+  // Fetch comment counts for all posts
+  const commentCounts = await getCommentCounts(postIds);
+
   // Transform posts to include reaction counts and profile data
   const postsWithReactions: PostWithReactions[] = posts.map((post: Post) => {
     const postReactions = reactions?.filter((r) => r.post_id === post.id) || [];
@@ -92,7 +98,7 @@ export async function fetchPosts(page = 0, pageSize = 10): Promise<{ items: Post
       ...post,
       reactions: {
         loves: postReactions.filter((r) => r.type === 'love').length,
-        comments: postReactions.filter((r) => r.type === 'comment').length,
+        comments: commentCounts.get(post.id) || 0,
         saves: postReactions.filter((r) => r.type === 'save').length,
         shares: postReactions.filter((r) => r.type === 'share').length,
       },
@@ -223,7 +229,9 @@ export async function createPost(data: {
   bpm?: number;
   key?: string;
   style?: string;
+  caption?: string;
   thumbnail_url?: string;
+  parent_post_id?: string;
   challenge_id?: string;
 }): Promise<Post> {
   const { data: { user } } = await supabase.auth.getUser();
@@ -240,7 +248,9 @@ export async function createPost(data: {
       bpm: data.bpm,
       key: data.key,
       style: data.style || 'New drop',
+      caption: data.caption || null,
       thumbnail_url: data.thumbnail_url,
+      parent_post_id: data.parent_post_id || null,
       challenge_id: data.challenge_id,
     })
     .select()
@@ -277,16 +287,95 @@ export async function getPost(postId: string): Promise<PostWithReactions | null>
     .select('type, user_id')
     .eq('post_id', postId);
 
+  // Fetch comment count
+  const commentCounts = await getCommentCounts([postId]);
+
   const postReactions = reactions || [];
 
   return {
     ...post,
     reactions: {
       loves: postReactions.filter((r) => r.type === 'love').length,
-      comments: postReactions.filter((r) => r.type === 'comment').length,
+      comments: commentCounts.get(postId) || 0,
       saves: postReactions.filter((r) => r.type === 'save').length,
       shares: postReactions.filter((r) => r.type === 'share').length,
     },
     user_has_loved: postReactions.some((r) => r.type === 'love' && r.user_id === currentUserId),
   };
+}
+
+/**
+ * Get posts by user ID
+ */
+export async function getUserPosts(userId: string, page = 0, pageSize = 10): Promise<{ items: PostWithReactions[]; hasMore: boolean }> {
+  const from = page * pageSize;
+  const to = from + pageSize - 1;
+
+  const { data: posts, error, count } = await supabase
+    .from('posts')
+    .select('*', { count: 'exact' })
+    .eq('user_id', userId)
+    .order('created_at', { ascending: false })
+    .range(from, to);
+
+  if (error) {
+    console.error('Error fetching user posts:', error);
+    throw error;
+  }
+
+  if (!posts) {
+    return { items: [], hasMore: false };
+  }
+
+  // Get current user ID
+  const { data: { user } } = await supabase.auth.getUser();
+  const currentUserId = user?.id;
+
+  // Fetch reactions for all posts
+  const postIds = posts.map((p: Post) => p.id);
+  const { data: reactions } = await supabase
+    .from('reactions')
+    .select('post_id, type, user_id')
+    .in('post_id', postIds);
+
+  // Fetch user profile
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('id, username, avatar_url')
+    .eq('id', userId)
+    .single();
+
+  // Fetch comment counts
+  const commentCounts = await getCommentCounts(postIds);
+
+  // Transform posts
+  const postsWithReactions: PostWithReactions[] = posts.map((post: Post) => {
+    const postReactions = reactions?.filter((r) => r.post_id === post.id) || [];
+
+    return {
+      ...post,
+      reactions: {
+        loves: postReactions.filter((r) => r.type === 'love').length,
+        comments: commentCounts.get(post.id) || 0,
+        saves: postReactions.filter((r) => r.type === 'save').length,
+        shares: postReactions.filter((r) => r.type === 'share').length,
+      },
+      user_has_loved: postReactions.some((r) => r.type === 'love' && r.user_id === currentUserId),
+      profile: profile ? {
+        username: profile.username,
+        avatar_url: profile.avatar_url
+      } : undefined,
+    };
+  });
+
+  const hasMore = count ? (from + pageSize) < count : false;
+
+  return { items: postsWithReactions, hasMore };
+}
+
+/**
+ * Get parent post (for remixes/duets)
+ */
+export async function getParentPost(parentPostId: string): Promise<PostWithReactions | null> {
+  return getPost(parentPostId);
 }

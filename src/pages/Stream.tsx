@@ -5,6 +5,7 @@ import { useInfiniteFeed } from '../hooks/useInfiniteFeed'
 import { fetchFeedPage } from '../lib/api'
 import { toggleLove } from '../lib/supabase/posts'
 import ActionRail from '../components/ActionRail'
+import CommentsModal from '../components/CommentsModal'
 import { toast } from 'sonner'
 
 export default function Stream() {
@@ -15,6 +16,9 @@ export default function Stream() {
 
   // Track local love state for optimistic updates
   const [loveState, setLoveState] = useState<Record<string, { loves: number; has_loved: boolean }>>({})
+
+  // Comments modal state
+  const [commentsPostId, setCommentsPostId] = useState<string | null>(null)
 
   const handleLike = async (postId: string, currentLoves: number, currentHasLoved: boolean) => {
     // Optimistic update
@@ -69,8 +73,14 @@ export default function Stream() {
     }
   }
 
-  const handleComment = () => {
-    toast.info('Comments coming soon!')
+  const handleComment = (postId: string) => {
+    setCommentsPostId(postId)
+  }
+
+  const handleRemix = (postId: string) => {
+    // Navigate to create page with parent_post_id in URL
+    nav(`/create?remix=${postId}`)
+    toast.info('Remix this mix in the Create page!')
   }
 
   return (
@@ -149,10 +159,10 @@ export default function Stream() {
 
               {/* Action Rail */}
               <ActionRail
-                onRemix={() => nav(`/dj?remix=${p.id}`)}
+                onRemix={() => handleRemix(p.id)}
                 onLike={() => handleLike(p.id, loves, hasLoved)}
                 onShare={() => handleShare(p.id)}
-                onComment={handleComment}
+                onComment={() => handleComment(p.id)}
                 loves={loves}
                 hasLoved={hasLoved}
                 comments={p.comments ?? 0}
@@ -164,6 +174,15 @@ export default function Stream() {
       <div ref={sentinelRef} className="h-10" />
       {loading && <div className="pb-24 text-center opacity-70">Loading…</div>}
       {!hasMore && items.length > 0 && <div className="pb-24 text-center opacity-50">You're all caught up</div>}
+
+      {/* Comments Modal */}
+      {commentsPostId && (
+        <CommentsModal
+          postId={commentsPostId}
+          isOpen={!!commentsPostId}
+          onClose={() => setCommentsPostId(null)}
+        />
+      )}
     </div>
   )
 }
