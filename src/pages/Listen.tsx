@@ -7,9 +7,9 @@ import { useSnapAutoplay } from '../hooks/useSnapAutoplay'
 const posts = [
   {
     id: '1',
-    src: '/loops/demo_loop.mp3',
+    src: '/loops/deep_house_124.wav',
     user: '@demo1',
-    caption: 'Minimal drop',
+    caption: 'Deep house vibes',
     bpm: 124,
     genre: 'House',
     loves: 42,
@@ -17,7 +17,7 @@ const posts = [
   },
   {
     id: '2',
-    src: '/loops/demo_loop.mp3',
+    src: '/loops/tech_groove_128.wav',
     user: '@demo2',
     caption: 'Tech-house groove',
     bpm: 128,
@@ -27,10 +27,10 @@ const posts = [
   },
   {
     id: '3',
-    src: '/loops/demo_loop.mp3',
+    src: '/loops/edm_drop_128.wav',
     user: '@demo3',
-    caption: 'EDM pop hook',
-    bpm: 130,
+    caption: 'EDM drop energy',
+    bpm: 128,
     genre: 'EDM',
     loves: 89,
     comments: 12
