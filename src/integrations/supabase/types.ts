@@ -71,6 +71,8 @@ export type Database = {
           style: string
           key: string | null
           challenge_id: string | null
+          caption: string | null
+          parent_post_id: string | null
           created_at: string
           thumbnail_url: string | null
         }
@@ -82,6 +84,8 @@ export type Database = {
           style?: string
           key?: string | null
           challenge_id?: string | null
+          caption?: string | null
+          parent_post_id?: string | null
           created_at?: string
           thumbnail_url?: string | null
         }
@@ -93,6 +97,8 @@ export type Database = {
           style?: string
           key?: string | null
           challenge_id?: string | null
+          caption?: string | null
+          parent_post_id?: string | null
           created_at?: string
           thumbnail_url?: string | null
         }
@@ -181,6 +187,171 @@ export type Database = {
           created_at?: string
         }
         Relationships: []
+      }
+      comments: {
+        Row: {
+          id: string
+          post_id: string
+          user_id: string
+          content: string
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          post_id: string
+          user_id: string
+          content: string
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          post_id?: string
+          user_id?: string
+          content?: string
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "comments_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "posts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "comments_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      reports: {
+        Row: {
+          id: string
+          post_id: string
+          reporter_id: string
+          reason: string
+          description: string | null
+          status: string
+          reviewed_by: string | null
+          reviewed_at: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          post_id: string
+          reporter_id: string
+          reason: string
+          description?: string | null
+          status?: string
+          reviewed_by?: string | null
+          reviewed_at?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          post_id?: string
+          reporter_id?: string
+          reason?: string
+          description?: string | null
+          status?: string
+          reviewed_by?: string | null
+          reviewed_at?: string | null
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reports_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "posts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reports_reporter_id_fkey"
+            columns: ["reporter_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reports_reviewed_by_fkey"
+            columns: ["reviewed_by"]
+            isOneToOne: false
+            referencedRelation: "admin_users"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      blocked_users: {
+        Row: {
+          id: string
+          blocker_id: string
+          blocked_id: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          blocker_id: string
+          blocked_id: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          blocker_id?: string
+          blocked_id?: string
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "blocked_users_blocker_id_fkey"
+            columns: ["blocker_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "blocked_users_blocked_id_fkey"
+            columns: ["blocked_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      admin_users: {
+        Row: {
+          id: string
+          user_id: string
+          role: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          role?: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          role?: string
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "admin_users_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          }
+        ]
       }
     }
     Views: {

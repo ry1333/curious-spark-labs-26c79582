@@ -1,4 +1,6 @@
 import React, { Component, ReactNode } from 'react'
+import { AlertTriangle } from 'lucide-react'
+import { AnimatedIcon } from './AnimatedIcon'
 
 interface Props {
   children: ReactNode
@@ -26,10 +28,17 @@ export class ErrorBoundary extends Component<Props, State> {
   render() {
     if (this.state.hasError) {
       return (
-        <div className="min-h-screen bg-gradient-to-br from-black via-neutral-900 to-black text-white flex items-center justify-center p-6">
+        <div className="min-h-screen bg-gradient-to-br from-ink via-surface to-ink text-white flex items-center justify-center p-6">
           <div className="max-w-md w-full">
-            <div className="rounded-2xl border border-red-500/20 bg-red-950/20 p-8 text-center">
-              <div className="text-6xl mb-4">⚠️</div>
+            <div className="rounded-2xl border border-red-500/20 glass p-8 text-center">
+              <div className="flex justify-center mb-4">
+                <AnimatedIcon
+                  icon={AlertTriangle}
+                  size={64}
+                  className="text-red-400"
+                  animation="pulse"
+                />
+              </div>
               <h1 className="text-2xl font-bold text-white mb-2">
                 Something went wrong
               </h1>
@@ -47,14 +56,14 @@ export class ErrorBoundary extends Component<Props, State> {
 
               <button
                 onClick={() => window.location.href = '/'}
-                className="w-full rounded-xl bg-white hover:bg-white/90 px-6 py-3 text-black font-bold transition-all hover:scale-[1.02] active:scale-95"
+                className="w-full rounded-xl bg-gradient-to-r from-accentFrom to-accentTo hover:shadow-neon-cyan text-ink font-bold px-6 py-3 transition-all hover:scale-[1.02] active:scale-95"
               >
                 Return to Home
               </button>
 
               <button
                 onClick={() => window.location.reload()}
-                className="w-full mt-3 rounded-xl border border-white/20 hover:border-white/40 hover:bg-white/5 px-6 py-3 text-white/80 hover:text-white font-medium transition-all"
+                className="w-full mt-3 rounded-xl border border-line hover:border-line/50 hover:bg-white/5 px-6 py-3 text-muted hover:text-text font-medium transition-smooth"
               >
                 Reload Page
               </button>
