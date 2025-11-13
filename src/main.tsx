@@ -6,6 +6,7 @@ import ProtectedRoute from './components/ProtectedRoute'
 import AppShell from './AppShell'
 import Stream from './pages/Stream'
 import DJ from './pages/DJ'
+import DJStudio from './pages/DJStudio'
 import Create from './pages/Create'
 import Learn from './pages/Learn'
 import Profile from './pages/Profile'
@@ -38,7 +39,8 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
           <Route element={<AppShell />}>
             <Route index element={<Stream />} />
             <Route path="/stream" element={<Stream />} />
-            <Route path="/dj" element={<ProtectedRoute><DJ /></ProtectedRoute>} />
+            <Route path="/dj" element={<ProtectedRoute><DJStudio /></ProtectedRoute>} />
+            <Route path="/dj-old" element={<ProtectedRoute><DJ /></ProtectedRoute>} />
             <Route path="/create" element={<ProtectedRoute><Create /></ProtectedRoute>} />
             <Route path="/compose" element={<ProtectedRoute><Create /></ProtectedRoute>} />
             <Route path="/learn" element={<Learn />} />
