@@ -52,22 +52,33 @@ export default function DeckControls({
   }
 
   const handleXYChange = (x: number, y: number) => {
-    // x = mix/wet, y = filter frequency (exponential)
+    // x = mix/wet (0-1), y = filter frequency (0-1, exponential)
     // Validate inputs to prevent NaN/Infinity
     if (!isFinite(x) || !isFinite(y)) return
 
-    const filterFreq = 200 + (Math.pow(y, 2) * 19800)
+    // Exponential mapping: 200Hz to 20kHz
+    const MIN_HZ = 200
+    const MAX_HZ = 20000
+    const filterFreq = MIN_HZ * Math.pow(MAX_HZ / MIN_HZ, 1 - y)
 
     // Ensure filterFreq is finite and within valid range
     if (isFinite(filterFreq) && filterFreq >= 20 && filterFreq <= 20000) {
       deck.setFilterHz(filterFreq)
     }
-    // For now, just set filter. In full implementation, you'd have a wet/dry mix parameter
+    // x parameter reserved for future wet/dry mix control
   }
 
   const handleLoopToggle = () => {
-    setIsLoopActive(!isLoopActive)
-    // In full implementation, you'd tell the deck to enable/disable looping
+    const newLoopState = !isLoopActive
+    setIsLoopActive(newLoopState)
+    deck.setLoop(newLoopState, loopLength)
+  }
+
+  const handleLoopLengthChange = (length: number) => {
+    setLoopLength(length)
+    if (isLoopActive) {
+      deck.setLoop(true, length)
+    }
   }
 
   return (
@@ -255,7 +266,7 @@ export default function DeckControls({
         <LoopCluster
           loopLength={loopLength}
           isLoopActive={isLoopActive}
-          onLengthChange={setLoopLength}
+          onLengthChange={handleLoopLengthChange}
           onToggle={handleLoopToggle}
         />
       </div>

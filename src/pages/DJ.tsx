@@ -72,9 +72,8 @@ export default function DJ() {
       setAPlaying(mixer.deckA.playing);
       setBPlaying(mixer.deckB.playing);
 
-      // Update VU meter with master gain value (simple approach)
-      // In a full implementation, you'd use an AnalyserNode to get actual audio levels
-      setMasterLevel(masterVol * (aPlaying || bPlaying ? 0.7 : 0));
+      // Update VU meter with real audio analysis
+      setMasterLevel(mixer.getVULevel());
       raf.current = requestAnimationFrame(tick);
     };
     raf.current = requestAnimationFrame(tick);

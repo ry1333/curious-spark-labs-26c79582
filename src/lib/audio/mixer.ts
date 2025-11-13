@@ -28,6 +28,9 @@ export class Deck {
   pausedAt = 0
   playing = false
   bpm = 124
+  loopEnabled = false
+  loopStart = 0
+  loopEnd = 0
 
   constructor(ctx: AudioContext, master: GainNode) {
     this.ctx = ctx
@@ -54,6 +57,14 @@ export class Deck {
     const node = this.ctx.createBufferSource()
     node.buffer = this.buffer
     node.playbackRate.value = 1
+
+    // Apply loop settings if enabled
+    if (this.loopEnabled) {
+      node.loop = true
+      node.loopStart = this.loopStart
+      node.loopEnd = this.loopEnd
+    }
+
     node.connect(this.low)
     node.onended = () => { if (this.playing) this.stop(true) }
     this.src = node
@@ -133,6 +144,25 @@ export class Deck {
     this.pause()
     this.pausedAt = Math.min(Math.max(seconds, 0), this.buffer.duration)
     if (wasPlaying) this.play()
+  }
+
+  setLoop(enabled: boolean, lengthInBeats: number = 4) {
+    this.loopEnabled = enabled
+    if (enabled && this.buffer) {
+      const secondsPerBeat = 60 / this.bpm
+      const loopDuration = secondsPerBeat * lengthInBeats
+      this.loopStart = this.pausedAt
+      this.loopEnd = Math.min(this.loopStart + loopDuration, this.buffer.duration)
+
+      // If currently playing, apply loop to source node
+      if (this.src && this.playing) {
+        this.src.loop = true
+        this.src.loopStart = this.loopStart
+        this.src.loopEnd = this.loopEnd
+      }
+    } else if (this.src) {
+      this.src.loop = false
+    }
   }
 }
 
