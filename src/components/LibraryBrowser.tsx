@@ -19,16 +19,22 @@ export default function LibraryBrowser({ onLoadA, onLoadB }: Props) {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedGenre, setSelectedGenre] = useState<string>('All')
 
-  // Demo tracks/loops
+  // Demo tracks/loops - All 9 local tracks
   const tracks: Track[] = [
-    { id: '1', name: 'Deep House Loop', artist: 'RMXR', bpm: 124, key: 'Am', genre: 'House', url: '/loops/deep_house_124.wav' },
-    { id: '2', name: 'Tech Groove', artist: 'RMXR', bpm: 128, key: 'Dm', genre: 'Techno', url: '/loops/tech_groove_128.wav' },
-    { id: '3', name: 'Hip-Hop Beat', artist: 'RMXR', bpm: 90, key: 'C', genre: 'Hip-Hop', url: '/loops/hiphop_beat_90.wav' },
-    { id: '4', name: 'Lo-Fi Chill', artist: 'RMXR', bpm: 80, key: 'G', genre: 'Lo-Fi', url: '/loops/lofi_chill_80.wav' },
-    { id: '5', name: 'EDM Drop', artist: 'RMXR', bpm: 128, key: 'Em', genre: 'EDM', url: '/loops/edm_drop_128.wav' },
+    // WAV Demos
+    { id: '1', name: 'Deep House Loop', artist: 'Demo', bpm: 124, key: 'Am', genre: 'House', url: '/loops/deep_house_124.wav' },
+    { id: '2', name: 'Tech Groove', artist: 'Demo', bpm: 128, key: 'Em', genre: 'Techno', url: '/loops/tech_groove_128.wav' },
+    { id: '3', name: 'Hip-Hop Beat', artist: 'Demo', bpm: 90, key: 'Gm', genre: 'Hip-Hop', url: '/loops/hiphop_beat_90.wav' },
+    { id: '4', name: 'Lo-Fi Chill', artist: 'Demo', bpm: 80, key: 'Cm', genre: 'Lo-Fi', url: '/loops/lofi_chill_80.wav' },
+    { id: '5', name: 'EDM Drop', artist: 'Demo', bpm: 128, key: 'C', genre: 'EDM', url: '/loops/edm_drop_128.wav' },
+    // Bensound MP3s
+    { id: '6', name: 'Jazzy Frenchy', artist: 'Bensound', bpm: 120, key: 'Dm', genre: 'Jazz', url: '/loops/bensound_jazzy.mp3' },
+    { id: '7', name: 'Funky Suspense', artist: 'Bensound', bpm: 95, key: 'Em', genre: 'Funk', url: '/loops/bensound_funkysuspense.mp3' },
+    { id: '8', name: 'Groovy Hip Hop', artist: 'Bensound', bpm: 90, key: 'Am', genre: 'Hip-Hop', url: '/loops/bensound_groovy.mp3' },
+    { id: '9', name: 'Energy', artist: 'Bensound', bpm: 130, key: 'Gm', genre: 'EDM', url: '/loops/bensound_energy.mp3' },
   ]
 
-  const genres = ['All', 'House', 'Techno', 'Hip-Hop', 'Lo-Fi', 'EDM']
+  const genres = ['All', 'House', 'Techno', 'Hip-Hop', 'Lo-Fi', 'EDM', 'Jazz', 'Funk']
 
   const filteredTracks = tracks.filter(track => {
     const matchesSearch = track.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
