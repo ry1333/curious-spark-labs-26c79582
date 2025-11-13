@@ -23,8 +23,8 @@ export default function SidebarNav() {
         {/* Logo Header */}
         <div className="mb-8 flex items-center gap-2">
           <div className="relative">
-            <Disc3 className="w-8 h-8 text-accentFrom animate-vinyl-spin" strokeWidth={2} />
-            <div className="absolute inset-0 bg-accentFrom/20 blur-lg rounded-full animate-pulse-ring" />
+            <Disc3 className="w-8 h-8 text-cyan animate-vinyl-spin" strokeWidth={2} />
+            <div className="absolute inset-0 bg-cyan/20 blur-lg rounded-full animate-pulse-ring" />
           </div>
           <span className="font-bold text-2xl gradient-text tracking-tight">RMXR</span>
         </div>
@@ -34,7 +34,7 @@ export default function SidebarNav() {
           <div className="mb-6 pb-6 border-b border-line">
             <div className="flex items-center gap-3 p-2 rounded-xl glass hover:bg-white/10 transition-smooth cursor-pointer">
               <div className="relative">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-accentFrom to-accentTo flex items-center justify-center font-bold text-ink">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-cyan to-magenta flex items-center justify-center font-bold text-ink shadow-glow-cyan">
                   {user.email?.[0].toUpperCase()}
                 </div>
                 <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-400 border-2 border-surface" />
@@ -67,19 +67,19 @@ export default function SidebarNav() {
                   <>
                     {/* Active gradient background */}
                     {isActive && (
-                      <div className="absolute inset-0 bg-gradient-to-r from-accentFrom/10 to-accentTo/10 rounded-xl" />
+                      <div className="absolute inset-0 bg-gradient-to-r from-cyan/10 to-magenta/10 rounded-xl" />
                     )}
 
                     {/* Active gradient border */}
                     {isActive && (
-                      <div className="absolute bottom-0 left-4 right-4 h-0.5 bg-gradient-to-r from-accentFrom to-accentTo rounded-full" />
+                      <div className="absolute bottom-0 left-4 right-4 h-0.5 bg-gradient-to-r from-cyan to-magenta rounded-full shadow-glow-cyan" />
                     )}
 
                     {/* Icon with hover glow */}
-                    <div className={`relative z-10 transition-smooth ${isActive ? 'text-accentFrom' : ''}`}>
+                    <div className={`relative z-10 transition-smooth ${isActive ? 'text-cyan' : ''}`}>
                       <Icon size={20} strokeWidth={2.5} />
                       {isActive && (
-                        <div className="absolute inset-0 bg-accentFrom/30 blur-md rounded-full" />
+                        <div className="absolute inset-0 bg-cyan/30 blur-md rounded-full" />
                       )}
                     </div>
 

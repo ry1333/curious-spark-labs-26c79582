@@ -14,15 +14,28 @@ export default {
     },
     extend: {
       colors: {
-        // Magenta × Black DJ Theme
-        ink: '#000000',        // pure black
-        surface: '#0A0A0A',    // dark graphite
-        card: '#141414',       // card surface
-        line: 'rgba(255,255,255,0.06)',
-        text: '#F5F7FA',
-        muted: 'rgba(255,255,255,0.4)',
-        accentFrom: '#00E5FF', // cyan (keep for gradients)
-        accentTo: '#E11D84',   // magenta primary
+        // Electric Night - DJ Theme
+        ink: '#0A0A0F',        // deep black background
+        surface: '#1A1A24',    // elevated dark purple-black
+        elevated: '#252530',   // card surface
+        line: 'rgba(255,255,255,0.06)',  // subtle borders
+        text: '#F5F7FA',       // primary text
+        muted: 'rgba(255,255,255,0.4)',  // secondary text
+
+        // Accent colors
+        cyan: {
+          DEFAULT: '#00E5FF',
+          50: '#E0F9FF',
+          100: '#B3F0FF',
+          200: '#80E7FF',
+          300: '#4DDDFF',
+          400: '#26D4FF',
+          500: '#00E5FF',
+          600: '#00C2E0',
+          700: '#009FB8',
+          800: '#007C90',
+          900: '#005968',
+        },
         magenta: {
           DEFAULT: '#E11D84',
           50: '#FFF0F7',
@@ -36,6 +49,12 @@ export default {
           800: '#7E0945',
           900: '#5D0330',
         },
+
+        // Status colors
+        success: '#10B981',
+        warning: '#F59E0B',
+        error: '#EF4444',
+        info: '#3B82F6',
 
         // RMXR Theme Colors (legacy)
         bg: "var(--bg)",
@@ -89,48 +108,118 @@ export default {
         'gradient-radial': 'radial-gradient(circle, hsl(var(--gradient-cyan) / 0.2), transparent 70%)',
       },
       boxShadow: {
-        'glow-cyan': '0 0 20px hsl(var(--glow-cyan) / 0.3), 0 0 40px hsl(var(--glow-cyan) / 0.1)',
-        'glow-magenta': '0 0 20px hsl(var(--glow-magenta) / 0.3), 0 0 40px hsl(var(--glow-magenta) / 0.1)',
-        'glow-primary': '0 0 30px hsl(var(--primary) / 0.4)',
+        // Elevation system
+        'elevation-1': '0 2px 8px rgba(0, 0, 0, 0.3)',
+        'elevation-2': '0 4px 16px rgba(0, 0, 0, 0.4)',
+        'elevation-3': '0 8px 32px rgba(0, 0, 0, 0.5)',
+        'elevation-4': '0 16px 64px rgba(0, 0, 0, 0.6)',
+
+        // Glow effects
+        'glow-cyan': '0 0 20px rgba(0, 229, 255, 0.4), 0 0 40px rgba(0, 229, 255, 0.2)',
+        'glow-magenta': '0 0 20px rgba(225, 29, 132, 0.4), 0 0 40px rgba(225, 29, 132, 0.2)',
+        'glow-cyan-strong': '0 0 30px rgba(0, 229, 255, 0.6), 0 0 60px rgba(0, 229, 255, 0.3)',
+        'glow-magenta-strong': '0 0 30px rgba(225, 29, 132, 0.6), 0 0 60px rgba(225, 29, 132, 0.3)',
+
+        // Neon effects
         'neon-cyan': '0 0 20px rgba(0, 229, 255, 0.5), 0 0 40px rgba(0, 229, 255, 0.3)',
-        'neon-magenta': '0 0 20px rgba(255, 45, 149, 0.5), 0 0 40px rgba(255, 45, 149, 0.3)',
+        'neon-magenta': '0 0 20px rgba(225, 29, 132, 0.5), 0 0 40px rgba(225, 29, 132, 0.3)',
         'inner-glow': 'inset 0 0 20px rgba(255, 255, 255, 0.1)',
+        'inner-dark': 'inset 0 2px 8px rgba(0, 0, 0, 0.4)',
       },
       animation: {
+        // Glow & pulse
         'pulse-glow': 'pulse-glow 2s ease-in-out infinite',
-        'float': 'float 3s ease-in-out infinite',
-        'spin-slow': 'spin 8s linear infinite',
-        'shimmer': 'shimmer 1.6s infinite',
-        'vinyl-spin': 'vinyl-spin 3s linear infinite',
+        'pulse-slow': 'pulse 3s ease-in-out infinite',
         'pulse-ring': 'pulse-ring 2s ease-in-out infinite',
+
+        // Movement
+        'float': 'float 3s ease-in-out infinite',
+        'bounce-slow': 'bounce 2s ease-in-out infinite',
+        'spin-slow': 'spin 8s linear infinite',
+        'vinyl-spin': 'vinyl-spin 3s linear infinite',
+
+        // Slide & scale
         'slide-in-left': 'slide-in-left 0.3s ease-out',
+        'slide-in-right': 'slide-in-right 0.3s ease-out',
+        'slide-in-up': 'slide-in-up 0.3s ease-out',
+        'slide-in-down': 'slide-in-down 0.3s ease-out',
+        'scale-up': 'scale-up 0.3s ease-out',
+        'scale-down': 'scale-down 0.3s ease-in',
+        'fade-in': 'fade-in 0.3s ease-out',
+        'fade-out': 'fade-out 0.3s ease-in',
+
+        // Special effects
+        'shimmer': 'shimmer 1.6s infinite',
         'morph': 'morph 8s ease-in-out infinite',
         'heartbeat': 'heartbeat 1s ease-in-out',
+        'burst': 'burst 0.6s ease-out',
+        'wave': 'wave 1s ease-in-out infinite',
+
+        // Accordion (existing)
+        "accordion-down": "accordion-down 0.2s ease-out",
+        "accordion-up": "accordion-up 0.2s ease-out",
       },
       keyframes: {
+        // Glow & pulse
         'pulse-glow': {
-          '0%, 100%': { boxShadow: '0 0 20px hsl(var(--glow-cyan) / 0.3)' },
-          '50%': { boxShadow: '0 0 30px hsl(var(--glow-cyan) / 0.6), 0 0 50px hsl(var(--glow-magenta) / 0.3)' },
-        },
-        'float': {
-          '0%, 100%': { transform: 'translateY(0px)' },
-          '50%': { transform: 'translateY(-10px)' },
-        },
-        'shimmer': {
-          '0%': { transform: 'translateX(-100%)' },
-          '100%': { transform: 'translateX(100%)' },
-        },
-        'vinyl-spin': {
-          '0%': { transform: 'rotate(0deg)' },
-          '100%': { transform: 'rotate(360deg)' },
+          '0%, 100%': { boxShadow: '0 0 20px rgba(0, 229, 255, 0.3)' },
+          '50%': { boxShadow: '0 0 30px rgba(0, 229, 255, 0.6), 0 0 50px rgba(225, 29, 132, 0.3)' },
         },
         'pulse-ring': {
           '0%, 100%': { transform: 'scale(1)', opacity: '0.5' },
           '50%': { transform: 'scale(1.1)', opacity: '0.8' },
         },
+
+        // Movement
+        'float': {
+          '0%, 100%': { transform: 'translateY(0px)' },
+          '50%': { transform: 'translateY(-10px)' },
+        },
+        'vinyl-spin': {
+          '0%': { transform: 'rotate(0deg)' },
+          '100%': { transform: 'rotate(360deg)' },
+        },
+
+        // Slide animations
         'slide-in-left': {
           '0%': { transform: 'translateX(-100%)', opacity: '0' },
           '100%': { transform: 'translateX(0)', opacity: '1' },
+        },
+        'slide-in-right': {
+          '0%': { transform: 'translateX(100%)', opacity: '0' },
+          '100%': { transform: 'translateX(0)', opacity: '1' },
+        },
+        'slide-in-up': {
+          '0%': { transform: 'translateY(100%)', opacity: '0' },
+          '100%': { transform: 'translateY(0)', opacity: '1' },
+        },
+        'slide-in-down': {
+          '0%': { transform: 'translateY(-100%)', opacity: '0' },
+          '100%': { transform: 'translateY(0)', opacity: '1' },
+        },
+
+        // Scale & fade
+        'scale-up': {
+          '0%': { transform: 'scale(0.8)', opacity: '0' },
+          '100%': { transform: 'scale(1)', opacity: '1' },
+        },
+        'scale-down': {
+          '0%': { transform: 'scale(1.2)', opacity: '0' },
+          '100%': { transform: 'scale(1)', opacity: '1' },
+        },
+        'fade-in': {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
+        },
+        'fade-out': {
+          '0%': { opacity: '1' },
+          '100%': { opacity: '0' },
+        },
+
+        // Special effects
+        'shimmer': {
+          '0%': { transform: 'translateX(-100%)' },
+          '100%': { transform: 'translateX(100%)' },
         },
         'morph': {
           '0%, 100%': { borderRadius: '60% 40% 30% 70% / 60% 30% 70% 40%' },
@@ -140,6 +229,15 @@ export default {
           '0%, 100%': { transform: 'scale(1)' },
           '25%': { transform: 'scale(1.2)' },
           '50%': { transform: 'scale(1)' },
+        },
+        'burst': {
+          '0%': { transform: 'scale(0)', opacity: '1' },
+          '50%': { transform: 'scale(1.2)', opacity: '0.8' },
+          '100%': { transform: 'scale(1.5)', opacity: '0' },
+        },
+        'wave': {
+          '0%, 100%': { height: '20%' },
+          '50%': { height: '100%' },
         },
       },
       borderRadius: {

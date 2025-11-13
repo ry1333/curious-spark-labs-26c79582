@@ -23,12 +23,12 @@ export default function BottomTabBar() {
                 {({ isActive }) => (
                   <div className={`relative flex flex-col items-center justify-center py-2.5 px-2 rounded-full transition-all duration-300 ${
                     isActive
-                      ? 'bg-gradient-to-r from-accentFrom/20 to-accentTo/20'
+                      ? 'bg-gradient-to-r from-cyan/20 to-magenta/20'
                       : 'hover:bg-white/5'
                   }`}>
                     {/* Active indicator dot */}
                     {isActive && (
-                      <div className="absolute top-1 w-1 h-1 rounded-full bg-gradient-to-r from-accentFrom to-accentTo animate-pulse" />
+                      <div className="absolute top-1 w-1 h-1 rounded-full bg-gradient-to-r from-cyan to-magenta animate-pulse shadow-glow-cyan" />
                     )}
 
                     {/* Icon with gradient on active */}
@@ -37,14 +37,14 @@ export default function BottomTabBar() {
                         size={20}
                         className={`transition-all duration-300 ${
                           isActive
-                            ? 'text-accentFrom scale-110'
+                            ? 'text-cyan scale-110'
                             : 'text-muted'
                         }`}
                         strokeWidth={isActive ? 2.5 : 2}
                       />
                       {/* Glow effect when active */}
                       {isActive && (
-                        <div className="absolute inset-0 bg-accentFrom/30 blur-md rounded-full" />
+                        <div className="absolute inset-0 bg-cyan/30 blur-md rounded-full" />
                       )}
                     </div>
 

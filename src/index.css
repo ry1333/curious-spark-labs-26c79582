@@ -8,22 +8,35 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* RMXR Dark Theme - Magenta × Black */
-    --bg: #0B0B11;
-    --surface: #12121A;
-    --surface-2: #161624;
-    --border: #26263A;
-    --text: #ECECF1;
-    --muted: #9A9AAF;
+    /* Electric Night - DJ Theme */
+    --bg: #0A0A0F;          /* deep black */
+    --surface: #1A1A24;     /* elevated dark */
+    --surface-2: #252530;   /* card surface */
+    --border: rgba(255,255,255,0.06);
+    --text: #F5F7FA;
+    --muted: rgba(255,255,255,0.4);
 
-    --accent: #E11D84;      /* magenta 600 */
-    --accent-500: #F0168A;
-    --accent-400: #FF4DA7;
-    --accent-300: #FF86C1;
+    /* Accent colors */
+    --accent: #E11D84;      /* magenta primary */
+    --accent-500: #E11D84;
+    --accent-400: #F563A7;
+    --accent-300: #FFA2CF;
+    --cyan: #00E5FF;        /* electric cyan */
 
-    --ok: #21D19F;          /* success */
-    --warn: #F59E0B;
-    --danger: #EF4444;
+    /* Status colors */
+    --ok: #10B981;          /* success green */
+    --warn: #F59E0B;        /* warning amber */
+    --danger: #EF4444;      /* error red */
+    --info: #3B82F6;        /* info blue */
+
+    /* Gradients */
+    --gradient-cyan: 188 100% 50%;     /* cyan for HSL */
+    --gradient-magenta: 330 80% 51%;   /* magenta for HSL */
+    --gradient-primary: linear-gradient(135deg, #00E5FF 0%, #E11D84 100%);
+
+    /* Glow colors */
+    --glow-cyan: 188 100% 50%;
+    --glow-magenta: 330 80% 51%;
 
     /* Shadcn compatibility (HSL) */
     --background: 243 25% 5%;
@@ -57,15 +70,52 @@ All colors MUST be HSL.
 }
 
 @layer utilities {
-  /* Gradient text utility */
+  /* Gradient utilities */
   .gradient-text {
-    background: linear-gradient(135deg, #00E5FF, #FF2D95);
+    background: linear-gradient(135deg, #00E5FF, #E11D84);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
 
-  /* Glass morphism utility */
+  .gradient-text-cyan {
+    background: linear-gradient(135deg, #00E5FF, #26D4FF);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .gradient-text-magenta {
+    background: linear-gradient(135deg, #E11D84, #F563A7);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .gradient-bg {
+    background: linear-gradient(135deg, #00E5FF 0%, #E11D84 100%);
+  }
+
+  .gradient-bg-vertical {
+    background: linear-gradient(180deg, #00E5FF 0%, #E11D84 100%);
+  }
+
+  .gradient-border {
+    position: relative;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+  }
+
+  .gradient-border::before {
+    content: '';
+    position: absolute;
+    top: -2px; right: -2px; bottom: -2px; left: -2px;
+    background: linear-gradient(135deg, #00E5FF, #E11D84);
+    border-radius: inherit;
+    z-index: -1;
+  }
+
+  /* Glass morphism */
   .glass {
     background: rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(10px);
@@ -73,9 +123,91 @@ All colors MUST be HSL.
     border: 1px solid rgba(255, 255, 255, 0.1);
   }
 
-  /* Smooth transitions */
+  .glass-strong {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  /* Transitions */
   .transition-smooth {
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .transition-fast {
+    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .transition-slow {
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Touch targets (minimum 44x44px for accessibility) */
+  .touch-target {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  /* Scrollbar styling */
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: rgba(225, 29, 132, 0.3);
+    border-radius: 10px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background: rgba(225, 29, 132, 0.5);
+  }
+
+  /* Hide scrollbar but keep functionality */
+  .scrollbar-none {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Snap scrolling (for feed) */
+  .snap-y {
+    scroll-snap-type: y mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .snap-start {
+    scroll-snap-align: start;
+  }
+
+  .snap-center {
+    scroll-snap-align: center;
+  }
+
+  /* Safe area insets for mobile */
+  .safe-area-inset-top {
+    padding-top: env(safe-area-inset-top);
+  }
+
+  .safe-area-inset-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .safe-area-inset-left {
+    padding-left: env(safe-area-inset-left);
+  }
+
+  .safe-area-inset-right {
+    padding-right: env(safe-area-inset-right);
   }
 }
 

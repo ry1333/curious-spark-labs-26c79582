@@ -386,7 +386,7 @@ export default function DJ() {
       {/* PERSISTENT TOP CONTROLS BAR */}
       <div className="h-12 bg-surface border-b border-rmxrborder flex items-center justify-between px-8">
         {/* Left: Brand (no link) */}
-        <div className="text-xl font-bold text-accent-400">
+        <div className="text-xl font-bold gradient-text">
           RMXR
         </div>
 
@@ -449,7 +449,7 @@ export default function DJ() {
       <div className="border-t border-rmxrborder bg-surface/50">
         <button onClick={() => setShowAIPanel(!showAIPanel)} className="w-full px-4 py-3 flex items-center justify-between hover:bg-surface/70 transition-colors">
           <div className="flex items-center gap-2">
-            <Sparkles className="w-5 h-5 text-accentFrom" />
+            <Sparkles className="w-5 h-5 text-cyan" />
             <span className="font-semibold text-text">AI Mix Generator</span>
             <span className="text-xs text-muted">{isGenerating ? generationStatus : 'Create automated 30-second mixes'}</span>
           </div>
@@ -484,7 +484,7 @@ export default function DJ() {
                 icon: Moon
               }].map(g => {
                 const GenreIcon = g.icon;
-                return <button key={g.id} onClick={() => setGenre(g.id)} disabled={isGenerating} className={`p-3 rounded-lg border-2 transition-all flex flex-col items-center gap-1 ${genre === g.id ? 'border-accentFrom bg-accentFrom/10 text-text' : 'border-line hover:border-line/50 text-muted'} disabled:opacity-50`}>
+                return <button key={g.id} onClick={() => setGenre(g.id)} disabled={isGenerating} className={`p-3 rounded-lg border-2 transition-all flex flex-col items-center gap-1 ${genre === g.id ? 'border-cyan bg-cyan/10 text-text shadow-glow-cyan' : 'border-line hover:border-line/50 text-muted'} disabled:opacity-50`}>
                         <GenreIcon className="w-5 h-5" />
                         <span className="text-xs font-medium">{g.name}</span>
                       </button>;
@@ -510,7 +510,7 @@ export default function DJ() {
                 icon: Zap
               }].map(e => {
                 const EnergyIcon = e.icon;
-                return <button key={e.id} onClick={() => setEnergy(e.id)} disabled={isGenerating} className={`p-3 rounded-lg border-2 transition-all flex flex-col items-center gap-1 ${energy === e.id ? 'border-accentFrom bg-accentFrom/10 text-text' : 'border-line hover:border-line/50 text-muted'} disabled:opacity-50`}>
+                return <button key={e.id} onClick={() => setEnergy(e.id)} disabled={isGenerating} className={`p-3 rounded-lg border-2 transition-all flex flex-col items-center gap-1 ${energy === e.id ? 'border-magenta bg-magenta/10 text-text shadow-glow-magenta' : 'border-line hover:border-line/50 text-muted'} disabled:opacity-50`}>
                         <EnergyIcon className="w-5 h-5" />
                         <span className="text-xs font-medium">{e.name}</span>
                       </button>;
@@ -521,7 +521,7 @@ export default function DJ() {
 
             {/* Generate Button */}
             <div className="max-w-md mx-auto">
-              <button onClick={handleAIGenerate} disabled={isGenerating} className="w-full rounded-xl bg-gradient-to-r from-accentFrom to-accentTo hover:shadow-neon-cyan text-ink font-bold px-6 py-4 transition-all hover:scale-[1.02] active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2">
+              <button onClick={handleAIGenerate} disabled={isGenerating} className="w-full rounded-xl bg-gradient-to-r from-cyan to-magenta hover:shadow-glow-cyan-strong text-ink font-bold px-6 py-4 transition-all hover:scale-[1.02] active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2">
                 {isGenerating ? <>
                     <div className="w-5 h-5 border-2 border-ink border-t-transparent rounded-full animate-spin" />
                     {generationStatus}
@@ -547,7 +547,7 @@ export default function DJ() {
           <div className="bg-gradient-to-br from-neutral-900 to-black border border-white/10 rounded-2xl p-8 max-w-md w-full space-y-4 shadow-2xl">
             <div className="text-center">
               <div className="flex justify-center mb-4">
-                <Headphones className="w-16 h-16 text-accentFrom" strokeWidth={1.5} />
+                <Headphones className="w-16 h-16 text-cyan" strokeWidth={1.5} />
               </div>
               <h2 className="text-2xl font-bold text-white mb-2">Welcome to the DJ Studio!</h2>
             </div>
@@ -573,7 +573,7 @@ export default function DJ() {
           <div className="bg-gradient-to-br from-neutral-900 to-black border border-white/10 rounded-2xl p-8 max-w-lg w-full space-y-6 shadow-2xl">
             <div className="text-center">
               <div className="flex justify-center mb-4">
-                <Music className="w-16 h-16 text-accentFrom" strokeWidth={1.5} />
+                <Music className="w-16 h-16 text-magenta" strokeWidth={1.5} />
               </div>
               <h2 className="text-2xl font-bold text-white mb-2">Publish Your Mix</h2>
               <p className="text-white/60 text-sm">Share your creation with the community</p>

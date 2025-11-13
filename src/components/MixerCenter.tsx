@@ -141,11 +141,11 @@ export default function MixerCenter({
 
           {/* A/B Labels with percentages */}
           <div className="flex flex-col items-center gap-2 text-[11px] font-mono font-semibold">
-            <span className={`transition-all ${crossfader < 0.5 ? 'text-accent-400 scale-110' : 'text-muted'}`}>
+            <span className={`transition-all ${crossfader < 0.5 ? 'text-cyan scale-110' : 'text-muted'}`}>
               A {Math.round((1-crossfader) * 100)}%
             </span>
             <div className="w-px h-4 bg-white/20" />
-            <span className={`transition-all ${crossfader > 0.5 ? 'text-accent-400 scale-110' : 'text-muted'}`}>
+            <span className={`transition-all ${crossfader > 0.5 ? 'text-magenta scale-110' : 'text-muted'}`}>
               B {Math.round(crossfader * 100)}%
             </span>
           </div>
@@ -221,7 +221,7 @@ export default function MixerCenter({
             height={120}
             accentColor="magenta"
           />
-          <div className="text-xl font-mono font-bold text-accent-400">
+          <div className="text-xl font-mono font-bold gradient-text">
             {Math.round(masterVol * 100)}%
           </div>
         </div>

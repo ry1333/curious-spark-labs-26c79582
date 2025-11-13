@@ -116,14 +116,14 @@ export default function FeedCard({
                 <div className="absolute inset-12 rounded-full border-2 border-white/5" />
 
                 {/* Label */}
-                <div className="absolute inset-16 rounded-full bg-gradient-to-br from-accentFrom to-accentTo flex items-center justify-center shadow-neon-cyan">
+                <div className="absolute inset-16 rounded-full bg-gradient-to-br from-cyan to-magenta flex items-center justify-center shadow-glow-cyan">
                   <div className="text-xs font-bold text-ink text-center">
                     RMXR
                   </div>
                 </div>
 
                 {/* Center dot */}
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-ink border-2 border-accentFrom shadow-neon-cyan" />
+                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-ink border-2 border-cyan shadow-glow-cyan" />
 
                 {/* Reflection effect */}
                 <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-white/10 via-transparent to-transparent" />
@@ -131,7 +131,7 @@ export default function FeedCard({
 
               {/* Glow effect when playing */}
               {isPlaying && (
-                <div className="absolute inset-0 rounded-full bg-accentFrom/20 blur-2xl animate-pulse-ring" />
+                <div className="absolute inset-0 rounded-full bg-cyan/20 blur-2xl animate-pulse-ring" />
               )}
             </div>
 
@@ -140,7 +140,7 @@ export default function FeedCard({
               {waveformHeights.slice(0, 20).map((height, i) => (
                 <div
                   key={i}
-                  className={`w-1 bg-gradient-to-t from-accentFrom to-accentTo rounded-full transition-all duration-150 ${isPlaying ? 'animate-audio-bar' : ''}`}
+                  className={`w-1 bg-gradient-to-t from-cyan to-magenta rounded-full transition-all duration-150 ${isPlaying ? 'animate-wave' : ''}`}
                   style={{
                     height: `${height * 0.5}%`,
                     opacity: i / 20 < progress / 100 ? 1 : 0.3,
@@ -155,7 +155,7 @@ export default function FeedCard({
               onClick={togglePlay}
               className="absolute inset-0 flex items-center justify-center bg-black/0 hover:bg-black/20 transition-colors group"
             >
-              <div className="w-20 h-20 rounded-full bg-gradient-to-r from-accentFrom to-accentTo flex items-center justify-center shadow-neon-cyan group-hover:scale-110 group-active:scale-95 transition-all">
+              <div className="w-20 h-20 rounded-full bg-gradient-to-r from-cyan to-magenta flex items-center justify-center shadow-glow-cyan-strong group-hover:scale-110 group-active:scale-95 transition-all">
                 {hasError ? (
                   <svg className="w-10 h-10 text-ink" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
@@ -218,7 +218,7 @@ export default function FeedCard({
             {/* Progress bar */}
             <div className="relative h-1 bg-line rounded-full overflow-hidden">
               <div
-                className="absolute inset-y-0 left-0 bg-gradient-to-r from-accentFrom to-accentTo rounded-full transition-all"
+                className="absolute inset-y-0 left-0 bg-gradient-to-r from-cyan to-magenta rounded-full transition-all shadow-glow-cyan"
                 style={{ width: `${progress}%` }}
               />
             </div>

@@ -319,7 +319,7 @@ export default function Learn() {
                     ? 'bg-emerald-500 text-white'
                     : isLocked
                     ? 'bg-white/5 text-muted border border-line'
-                    : 'bg-gradient-to-r from-accentFrom to-accentTo text-ink'
+                    : 'bg-gradient-to-r from-cyan to-magenta text-ink shadow-glow-cyan'
                 }`}>
                   {isCompleted ? '✓' : index + 1}
                 </div>
@@ -402,8 +402,8 @@ export default function Learn() {
               <div className="flex items-start justify-between gap-4">
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-3">
-                    <div className="p-3 rounded-xl bg-gradient-to-br from-accentFrom/20 to-accentTo/20">
-                      <selectedLesson.icon size={32} className="text-accentFrom" strokeWidth={2} />
+                    <div className="p-3 rounded-xl bg-gradient-to-br from-cyan/20 to-magenta/20">
+                      <selectedLesson.icon size={32} className="text-cyan" strokeWidth={2} />
                     </div>
                     <div className={`px-3 py-1 rounded-full text-xs font-semibold border ${levelColors[selectedLesson.level]}`}>
                       {selectedLesson.level.charAt(0).toUpperCase() + selectedLesson.level.slice(1)}

@@ -24,7 +24,7 @@ export default function ActionRail({ onRemix, onLike, onShare, onComment, onRepo
       {/* Remix Button - Primary CTA with gradient */}
       <button
         onClick={onRemix}
-        className="group relative flex flex-col items-center gap-1 rounded-full bg-gradient-to-r from-accentFrom to-accentTo p-3 shadow-lg hover:shadow-[0_0_20px_rgba(0,229,255,0.4)] transition-all duration-200 hover:scale-110 active:scale-95"
+        className="group relative flex flex-col items-center gap-1 rounded-full bg-gradient-to-r from-cyan to-magenta p-3 shadow-glow-cyan hover:shadow-glow-cyan-strong transition-all duration-200 hover:scale-110 active:scale-95"
         title="Remix this track"
       >
         <Sparkles className="w-5 h-5 text-ink" strokeWidth={2.5} />
