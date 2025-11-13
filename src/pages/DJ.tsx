@@ -9,7 +9,7 @@ import DeckControls from '../components/DeckControls'
 import MixerCenter from '../components/MixerCenter'
 import LibraryBrowser from '../components/LibraryBrowser'
 import { Headphones, Music, Sparkles, ChevronDown, ChevronUp, Home, Mic, Flame, Moon, Zap, Wind } from 'lucide-react'
-import TopBar from '../components/TopBar'
+// TopBar removed for clean immersive DJ interface
 import { selectLoopsForMix, getTargetBPM, getCrossfaderAutomation, getEQAutomation, type MixPreferences } from '../lib/audio/autoMixGenerator'
 
 export default function DJ() {
@@ -391,14 +391,25 @@ export default function DJ() {
 
   return (
     <div className="h-screen flex flex-col bg-bg text-rmxrtext overflow-hidden">
-      {/* TOP TOOLBAR */}
-      <TopBar
-        isRecording={isRecording}
-        onRecordToggle={handleRecord}
-        masterLevel={masterLevel}
-        recordingTime={recordingTime}
-        maxRecordingTime={MAX_RECORDING_TIME}
-      />
+      {/* RECORDING INDICATOR (only when recording) */}
+      {isRecording && (
+        <div className="h-12 bg-surface border-b border-rmxrborder flex items-center justify-between px-8">
+          {/* Recording Timer */}
+          <div className="flex items-center gap-2 text-danger font-mono font-semibold">
+            <div className="w-2 h-2 rounded-full bg-danger animate-pulse" />
+            <span>{Math.floor(recordingTime / 60)}:{(recordingTime % 60).toString().padStart(2, '0')} / {Math.floor(MAX_RECORDING_TIME / 60)}:{(MAX_RECORDING_TIME % 60).toString().padStart(2, '0')}</span>
+          </div>
+
+          {/* Stop Recording Button */}
+          <button
+            onClick={handleRecord}
+            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-danger text-white font-semibold hover:bg-danger/90 transition-all"
+          >
+            <div className="w-2 h-2 rounded-sm bg-white" />
+            STOP RECORDING
+          </button>
+        </div>
+      )}
 
       {/* WAVEFORM BAND (slim) */}
       <div className="h-32 border-b border-rmxrborder bg-surface">
