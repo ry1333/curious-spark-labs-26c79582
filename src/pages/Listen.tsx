@@ -8,32 +8,52 @@ const posts = [
   {
     id: '1',
     src: '/loops/deep_house_124.wav',
-    user: '@demo1',
-    caption: 'Deep house vibes',
+    user: '@deepvibes',
+    caption: 'Deep house rollers 🎧',
     bpm: 124,
     genre: 'House',
-    loves: 42,
-    comments: 8
+    loves: 342,
+    comments: 28
   },
   {
     id: '2',
     src: '/loops/tech_groove_128.wav',
-    user: '@demo2',
-    caption: 'Tech-house groove',
+    user: '@technoking',
+    caption: 'Late night tech groove',
     bpm: 128,
     genre: 'Techno',
-    loves: 156,
-    comments: 23
+    loves: 856,
+    comments: 93
   },
   {
     id: '3',
+    src: '/loops/lofi_chill_80.wav',
+    user: '@chillbeats',
+    caption: 'Lo-fi study session ☕',
+    bpm: 80,
+    genre: 'Lo-Fi',
+    loves: 1203,
+    comments: 47
+  },
+  {
+    id: '4',
+    src: '/loops/hiphop_beat_90.wav',
+    user: '@beatsbymo',
+    caption: 'Boom bap classic 🔥',
+    bpm: 90,
+    genre: 'Hip-Hop',
+    loves: 567,
+    comments: 81
+  },
+  {
+    id: '5',
     src: '/loops/edm_drop_128.wav',
-    user: '@demo3',
-    caption: 'EDM drop energy',
+    user: '@festivalvibes',
+    caption: 'Festival drop incoming 💥',
     bpm: 128,
     genre: 'EDM',
-    loves: 89,
-    comments: 12
+    loves: 2104,
+    comments: 156
   },
 ]
 
