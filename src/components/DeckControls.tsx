@@ -1,11 +1,12 @@
 import { useState } from 'react'
-import { Play, Pause, SkipBack, FolderOpen, Upload, Library } from 'lucide-react'
+import { Play, Pause, SkipBack, FolderOpen, Upload, Library, Music } from 'lucide-react'
 import { toast } from 'sonner'
 import DeckHeader from './DeckHeader'
 import XYFxPad from './XYFxPad'
 import LoopCluster from './LoopCluster'
 import VerticalFader from './ui/VerticalFader'
 import TrackLibrary from './TrackLibrary'
+import LocalTrackLibrary from './LocalTrackLibrary'
 
 type Props = {
   label: string
@@ -37,7 +38,7 @@ export default function DeckControls({
   const [pitch, setPitch] = useState(0)
   const [loopLength, setLoopLength] = useState(4)
   const [isLoopActive, setIsLoopActive] = useState(false)
-  const [activeTab, setActiveTab] = useState<'upload' | 'library'>('upload')
+  const [activeTab, setActiveTab] = useState<'upload' | 'library' | 'local'>('local')
 
   const handlePitchChange = (value: number) => {
     setPitch(value)
@@ -225,42 +226,55 @@ export default function DeckControls({
           </button>
         </div>
 
-        {/* Tab System for Upload/Library */}
+        {/* Tab System for Local/Upload/Library */}
         <div className="space-y-3">
           {/* Tab Buttons */}
-          <div className="flex gap-2">
+          <div className="grid grid-cols-3 gap-2">
             <button
-              onClick={() => setActiveTab('upload')}
-              className={`flex-1 py-2 px-3 rounded-lg text-sm font-semibold transition-all flex items-center justify-center gap-2 ${
-                activeTab === 'upload'
-                  ? 'bg-accent text-white shadow-[0_0_12px_rgba(225,29,132,0.4)]'
-                  : 'bg-black/40 border border-white/10 text-muted hover:text-rmxrtext hover:border-accent/50'
+              onClick={() => setActiveTab('local')}
+              className={`py-2 px-2 rounded-lg text-xs font-semibold transition-all flex items-center justify-center gap-1 ${
+                activeTab === 'local'
+                  ? 'bg-gradient-to-r from-cyan to-magenta text-ink shadow-glow-cyan'
+                  : 'bg-black/40 border border-white/10 text-muted hover:text-rmxrtext hover:border-cyan/50'
               }`}
             >
-              <Upload className="w-4 h-4" />
+              <Music className="w-3 h-3" />
+              Tracks
+            </button>
+            <button
+              onClick={() => setActiveTab('upload')}
+              className={`py-2 px-2 rounded-lg text-xs font-semibold transition-all flex items-center justify-center gap-1 ${
+                activeTab === 'upload'
+                  ? 'bg-gradient-to-r from-cyan to-magenta text-ink shadow-glow-cyan'
+                  : 'bg-black/40 border border-white/10 text-muted hover:text-rmxrtext hover:border-cyan/50'
+              }`}
+            >
+              <Upload className="w-3 h-3" />
               Upload
             </button>
             <button
               onClick={() => setActiveTab('library')}
-              className={`flex-1 py-2 px-3 rounded-lg text-sm font-semibold transition-all flex items-center justify-center gap-2 ${
+              className={`py-2 px-2 rounded-lg text-xs font-semibold transition-all flex items-center justify-center gap-1 ${
                 activeTab === 'library'
-                  ? 'bg-accent text-white shadow-[0_0_12px_rgba(225,29,132,0.4)]'
-                  : 'bg-black/40 border border-white/10 text-muted hover:text-rmxrtext hover:border-accent/50'
+                  ? 'bg-gradient-to-r from-cyan to-magenta text-ink shadow-glow-cyan'
+                  : 'bg-black/40 border border-white/10 text-muted hover:text-rmxrtext hover:border-cyan/50'
               }`}
             >
-              <Library className="w-4 h-4" />
-              Library
+              <Library className="w-3 h-3" />
+              Feed
             </button>
           </div>
 
           {/* Tab Content */}
-          {activeTab === 'upload' ? (
+          {activeTab === 'local' ? (
+            <LocalTrackLibrary onSelect={handleLibraryTrackSelect} />
+          ) : activeTab === 'upload' ? (
             <label className="block">
               <div className={`
                 w-full border-2
                 ${fileName
-                  ? 'border-accent/50 bg-accent/10 text-accent-400'
-                  : 'border-white/10 bg-black/20 text-rmxrtext hover:border-accent hover:bg-black/40 hover:text-accent-400'
+                  ? 'border-cyan/50 bg-cyan/10 text-cyan'
+                  : 'border-white/10 bg-black/20 text-rmxrtext hover:border-cyan hover:bg-black/40 hover:text-cyan'
                 }
                 font-semibold py-3 rounded-xl transition-all cursor-pointer text-sm
                 shadow-[0_2px_8px_rgba(0,0,0,0.3)]
@@ -270,7 +284,7 @@ export default function DeckControls({
                 <FolderOpen className="w-5 h-5" />
                 <span>{fileName ? 'Change Track' : 'Load Track'}</span>
                 {fileName && (
-                  <div className="w-2 h-2 rounded-full bg-accent animate-pulse" />
+                  <div className="w-2 h-2 rounded-full bg-cyan animate-pulse shadow-glow-cyan" />
                 )}
               </div>
               <input
