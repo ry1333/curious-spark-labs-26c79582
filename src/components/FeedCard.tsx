@@ -32,6 +32,7 @@ export default function FeedCard({
   const [isPlaying, setIsPlaying] = useState(false)
   const [progress, setProgress] = useState(0)
   const [currentTime, setCurrentTime] = useState('0:00')
+  const [hasError, setHasError] = useState(false)
 
   // Generate stable waveform heights
   const waveformHeights = useRef(
@@ -55,18 +56,25 @@ export default function FeedCard({
 
     const handleEnded = () => setIsPlaying(false)
     const handleError = (e: Event) => {
-      console.error('Audio error:', e)
+      console.error('Audio error:', e, 'Source:', src)
       setIsPlaying(false)
+      setHasError(true)
+    }
+
+    const handleLoadedData = () => {
+      setHasError(false)
     }
 
     audio.addEventListener('timeupdate', updateProgress)
     audio.addEventListener('ended', handleEnded)
     audio.addEventListener('error', handleError)
+    audio.addEventListener('loadeddata', handleLoadedData)
 
     return () => {
       audio.removeEventListener('timeupdate', updateProgress)
       audio.removeEventListener('ended', handleEnded)
       audio.removeEventListener('error', handleError)
+      audio.removeEventListener('loadeddata', handleLoadedData)
     }
   }, [src])
 
@@ -118,7 +126,11 @@ export default function FeedCard({
               className="absolute inset-0 flex items-center justify-center bg-black/20 hover:bg-black/40 transition-colors group"
             >
               <div className="w-16 h-16 rounded-full bg-gradient-to-r from-accentFrom to-accentTo flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
-                {isPlaying ? (
+                {hasError ? (
+                  <svg className="w-8 h-8 text-ink" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                  </svg>
+                ) : isPlaying ? (
                   <svg className="w-8 h-8 text-ink" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z" />
                   </svg>
@@ -129,6 +141,13 @@ export default function FeedCard({
                 )}
               </div>
             </button>
+
+            {/* Error message */}
+            {hasError && (
+              <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 px-4 py-2 rounded-full bg-red-500/90 backdrop-blur-sm text-white text-xs font-medium">
+                Audio file not found or corrupted
+              </div>
+            )}
           </div>
 
           {/* Footer with metadata */}
