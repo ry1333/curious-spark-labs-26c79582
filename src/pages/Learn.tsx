@@ -1,6 +1,9 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import InteractiveLessonChallenge from '../components/InteractiveLessonChallenge'
+import LearnHero from '../components/LearnHero'
+import { LessonCard } from '../components/LessonCard'
+import { FilterChips } from '../components/FilterChips'
 
 type ChallengeType = 'bpm-match' | 'key-match' | 'eq-balance' | 'filter-sweep' | 'crossfade-timing' | 'phrase-counting' | 'beatmatching-ear' | 'transition-planning' | 'harmonic-mixing' | null
 
@@ -23,6 +26,15 @@ type Lesson = {
 export default function Learn() {
   const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null)
   const [completedLessons, setCompletedLessons] = useState<Set<string>>(new Set())
+  const [activeFilters, setActiveFilters] = useState<{
+    level: string | null
+    duration: string | null
+    topic: string | null
+  }>({
+    level: null,
+    duration: null,
+    topic: null
+  })
 
   const lessons: Lesson[] = [
     {
@@ -219,6 +231,54 @@ export default function Learn() {
     setSelectedLesson(null)
   }
 
+  const handleFilterChange = (filterType: 'level' | 'duration' | 'topic', value: string | null) => {
+    setActiveFilters(prev => ({
+      ...prev,
+      [filterType]: value
+    }))
+  }
+
+  // Filter lessons based on active filters
+  const filteredLessons = useMemo(() => {
+    return lessons.filter(lesson => {
+      // Level filter
+      if (activeFilters.level && lesson.level !== activeFilters.level.toLowerCase()) {
+        return false
+      }
+
+      // Duration filter
+      if (activeFilters.duration) {
+        const lessonMinutes = parseInt(lesson.duration)
+        if (activeFilters.duration === '2m' && lessonMinutes !== 2) return false
+        if (activeFilters.duration === '3m' && lessonMinutes !== 3) return false
+        if (activeFilters.duration === '5m+' && lessonMinutes < 5) return false
+      }
+
+      // Topic filter
+      if (activeFilters.topic) {
+        const topicMap: Record<string, string[]> = {
+          'BPM': ['bpm-tempo', 'transitions'],
+          'EQ': ['eq-basics', 'transitions'],
+          'Filters': ['filters', 'transitions'],
+          'Keys': ['keys-energy'],
+          'Structure': ['structure', 'transitions']
+        }
+        const relevantLessons = topicMap[activeFilters.topic] || []
+        if (!relevantLessons.includes(lesson.id)) return false
+      }
+
+      return true
+    })
+  }, [lessons, activeFilters])
+
+  // Organize lessons by sections
+  const corePath = lessons.filter(l => ['bpm-tempo', 'keys-energy', 'structure', 'crossfading'].includes(l.id))
+  const quickDrills = lessons.filter(l => l.duration === '2 min' && l.hasChallenge)
+  const intermediateAdvanced = lessons.filter(l => ['intermediate', 'advanced'].includes(l.level))
+
+  // Find the first incomplete lesson for "Continue" feature
+  const nextLesson = lessons.find(l => !completedLessons.has(l.id))
+
   const levelColors = {
     beginner: 'text-green-400 bg-green-500/10 border-green-500/30',
     intermediate: 'text-yellow-400 bg-yellow-500/10 border-yellow-500/30',
@@ -227,117 +287,107 @@ export default function Learn() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-ink via-surface to-ink text-text p-6 md:p-8 lg:p-10 space-y-8">
-      {/* Header */}
-      <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <div>
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-accentFrom to-accentTo bg-clip-text text-transparent">
-            Learn to Mix
-          </h1>
-          <p className="text-base md:text-lg text-muted mt-3">
-            Micro-lessons to master DJing. Quick, actionable, and built for creators.
-          </p>
-        </div>
-        <Link
-          to="/dj"
-          className="rounded-xl bg-gradient-to-r from-accentFrom to-accentTo text-ink font-bold px-6 py-3 transition-all hover:scale-105 active:scale-95 hover:shadow-[0_0_20px_rgba(0,229,255,0.4)] whitespace-nowrap"
-        >
-          Try DJ Studio →
-        </Link>
-      </header>
+      {/* Hero with progress */}
+      <LearnHero
+        completedCount={completedLessons.size}
+        totalCount={lessons.length}
+        currentLesson={nextLesson ? { title: nextLesson.title, progress: 0 } : undefined}
+      />
 
-      {/* Progress Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="rounded-2xl border border-line bg-card/50 backdrop-blur-xl p-4 hover:bg-card transition-all">
-          <div className="text-2xl font-bold text-text">{completedLessons.size}/{lessons.length}</div>
-          <div className="text-sm text-muted mt-1">Lessons Completed</div>
-        </div>
-        <div className="rounded-2xl border border-line bg-card/50 backdrop-blur-xl p-4 hover:bg-card transition-all">
-          <div className="text-2xl font-bold text-text">{lessons.filter(l => l.level === 'beginner').length}</div>
-          <div className="text-sm text-muted mt-1">Beginner</div>
-        </div>
-        <div className="rounded-2xl border border-line bg-card/50 backdrop-blur-xl p-4 hover:bg-card transition-all">
-          <div className="text-2xl font-bold text-text">{lessons.filter(l => l.level === 'intermediate').length}</div>
-          <div className="text-sm text-muted mt-1">Intermediate</div>
-        </div>
-        <div className="rounded-2xl border border-line bg-card/50 backdrop-blur-xl p-4 hover:bg-card transition-all">
-          <div className="text-2xl font-bold text-text">{lessons.filter(l => l.level === 'advanced').length}</div>
-          <div className="text-sm text-muted mt-1">Advanced</div>
-        </div>
+      {/* Filter chips */}
+      <div className="rounded-2xl border border-line bg-card/50 backdrop-blur-xl p-6">
+        <FilterChips activeFilters={activeFilters} onFilterChange={handleFilterChange} />
       </div>
 
-      {/* Lessons Grid */}
-      <div>
-        <h2 className="text-2xl font-bold text-text mb-4">All Lessons</h2>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-          {lessons.map((lesson) => {
+      {/* Core Path - Beginner lessons in order */}
+      <section>
+        <div className="flex items-center gap-3 mb-6">
+          <h2 className="text-2xl md:text-3xl font-bold text-text">Core Path</h2>
+          <span className="text-sm text-muted">Start here • Complete in order</span>
+        </div>
+        <div className="space-y-3">
+          {corePath.map((lesson, index) => {
             const isCompleted = completedLessons.has(lesson.id)
+            const prevCompleted = index === 0 || completedLessons.has(corePath[index - 1].id)
+            const isLocked = !prevCompleted && !isCompleted
+
             return (
-              <div
-                key={lesson.id}
-                onClick={() => setSelectedLesson(lesson)}
-                className="group rounded-2xl border border-line bg-card/50 backdrop-blur-xl p-6 transition-all hover:border-line/50 hover:bg-card hover:scale-[1.02] cursor-pointer relative overflow-hidden"
-              >
-                {isCompleted && (
-                  <div className="absolute top-4 right-4 w-6 h-6 rounded-full bg-green-500 flex items-center justify-center text-white text-xs font-bold">
-                    ✓
-                  </div>
-                )}
-                {!isCompleted && lesson.hasChallenge && (
-                  <div className="absolute top-4 right-4 px-2 py-1 rounded-full bg-purple-500 flex items-center gap-1 text-white text-xs font-bold">
-                    🎮
-                  </div>
-                )}
-                <div className="flex items-start justify-between mb-4">
-                  <div className="text-4xl p-3 rounded-xl bg-surface group-hover:bg-surface/70 transition-all">
-                    {lesson.icon}
-                  </div>
-                  <span className="px-3 py-1 rounded-full text-xs font-medium bg-surface border border-line text-muted">
-                    {lesson.duration}
-                  </span>
+              <div key={lesson.id} className="flex items-center gap-4">
+                <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${
+                  isCompleted
+                    ? 'bg-emerald-500 text-white'
+                    : isLocked
+                    ? 'bg-white/5 text-muted border border-line'
+                    : 'bg-gradient-to-r from-accentFrom to-accentTo text-ink'
+                }`}>
+                  {isCompleted ? '✓' : index + 1}
                 </div>
-                <div className={`inline-block px-2 py-1 rounded text-xs font-semibold mb-2 border ${levelColors[lesson.level]}`}>
-                  {lesson.level.charAt(0).toUpperCase() + lesson.level.slice(1)}
-                </div>
-                <h3 className="font-bold text-lg mb-2 text-text transition-colors">{lesson.title}</h3>
-                <p className="text-muted text-sm leading-relaxed">{lesson.description}</p>
-                <div className="mt-4 flex items-center text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-accentFrom to-accentTo">
-                  Start Lesson →
+                <div className="flex-1">
+                  <LessonCard
+                    title={lesson.title}
+                    minutes={lesson.duration}
+                    level={lesson.level}
+                    outcome={lesson.description}
+                    tags={['Core']}
+                    isCompleted={isCompleted}
+                    hasChallenge={!!lesson.hasChallenge}
+                    onClick={() => !isLocked && setSelectedLesson(lesson)}
+                  />
                 </div>
               </div>
             )
           })}
         </div>
-      </div>
+      </section>
 
-      {/* Learning Paths */}
-      <section className="mt-12">
-        <h2 className="text-2xl md:text-3xl font-bold mb-6 text-text">
-          Quick Wins
-        </h2>
-        <div className="grid md:grid-cols-3 gap-6">
-          <div className="rounded-2xl border border-line bg-card/50 backdrop-blur-xl p-6 hover:bg-card hover:scale-[1.02] transition-all">
-            <div className="text-4xl mb-3">🚀</div>
-            <h3 className="font-bold text-xl text-text mb-2">First Mix</h3>
-            <p className="text-muted text-sm mb-4">
-              Do lessons 1-4 (Beginner). Takes 8 minutes. You'll create your first 30s mix!
-            </p>
-          </div>
-          <div className="rounded-2xl border border-line bg-card/50 backdrop-blur-xl p-6 hover:bg-card hover:scale-[1.02] transition-all">
-            <div className="text-4xl mb-3">🎨</div>
-            <h3 className="font-bold text-xl text-text mb-2">Get Creative</h3>
-            <p className="text-muted text-sm mb-4">
-              Add lessons 5-6 (Intermediate). Master EQ and filters for pro-level control.
-            </p>
-          </div>
-          <div className="rounded-2xl border border-line bg-card/50 backdrop-blur-xl p-6 hover:bg-card hover:scale-[1.02] transition-all">
-            <div className="text-4xl mb-3">⚡</div>
-            <h3 className="font-bold text-xl text-text mb-2">Level Up</h3>
-            <p className="text-muted text-sm mb-4">
-              Complete all 9 lessons. You'll know everything to create viral mixes on RMXR!
-            </p>
-          </div>
+      {/* Quick Drills - horizontal scroll */}
+      <section>
+        <div className="flex items-center gap-3 mb-6">
+          <h2 className="text-2xl md:text-3xl font-bold text-text">Quick Drills</h2>
+          <span className="text-sm text-muted">2-3 min practice challenges</span>
+        </div>
+        <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 -mx-6 px-6 md:-mx-8 md:px-8 lg:-mx-10 lg:px-10">
+          {quickDrills.map((lesson) => (
+            <div key={lesson.id} className="flex-shrink-0 w-[320px] snap-start">
+              <LessonCard
+                title={lesson.title}
+                minutes={lesson.duration}
+                level={lesson.level}
+                outcome={lesson.description}
+                tags={['Challenge']}
+                isCompleted={completedLessons.has(lesson.id)}
+                hasChallenge={!!lesson.hasChallenge}
+                onClick={() => setSelectedLesson(lesson)}
+              />
+            </div>
+          ))}
         </div>
       </section>
+
+      {/* Technique Library - filtered grid */}
+      <section>
+        <div className="flex items-center gap-3 mb-6">
+          <h2 className="text-2xl md:text-3xl font-bold text-text">Technique Library</h2>
+          <span className="text-sm text-muted">{filteredLessons.length} lessons</span>
+        </div>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+          {(activeFilters.level || activeFilters.duration || activeFilters.topic ? filteredLessons : intermediateAdvanced).map((lesson) => (
+            <LessonCard
+              key={lesson.id}
+              title={lesson.title}
+              minutes={lesson.duration}
+              level={lesson.level}
+              outcome={lesson.description}
+              tags={[lesson.level === 'intermediate' ? 'Intermediate' : 'Advanced']}
+              progress={completedLessons.has(lesson.id) ? 1 : 0}
+              isCompleted={completedLessons.has(lesson.id)}
+              hasChallenge={!!lesson.hasChallenge}
+              onClick={() => setSelectedLesson(lesson)}
+            />
+          ))}
+        </div>
+      </section>
+
 
       {/* Lesson Modal */}
       {selectedLesson && (
