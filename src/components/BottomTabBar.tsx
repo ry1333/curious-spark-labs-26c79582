@@ -10,34 +10,59 @@ const tabs = [
 
 export default function BottomTabBar() {
   return (
-    <nav className="md:hidden fixed bottom-0 inset-x-0 z-50 border-t border-line bg-card/95 backdrop-blur-xl supports-[backdrop-filter]:bg-card/90">
-      <ul className="grid grid-cols-4">
-        {tabs.map(({ to, label, Icon }) => (
-          <li key={to}>
-            <NavLink
-              to={to}
-              className={({ isActive }) =>
-                `flex flex-col items-center justify-center py-3 text-xs transition-all ${
-                  isActive
-                    ? 'text-transparent bg-clip-text bg-gradient-to-r from-accentFrom to-accentTo font-bold'
-                    : 'text-muted hover:text-text'
-                }`
-              }
-            >
-              {({ isActive }) => (
-                <>
-                  <Icon
-                    size={22}
-                    className={isActive ? 'mb-1' : 'mb-1'}
-                    strokeWidth={isActive ? 2.5 : 2}
-                  />
-                  <span>{label}</span>
-                </>
-              )}
-            </NavLink>
-          </li>
-        ))}
-      </ul>
+    <nav className="md:hidden fixed bottom-4 inset-x-4 z-50">
+      {/* Floating pill container */}
+      <div className="max-w-md mx-auto rounded-full border border-line glass backdrop-blur-xl shadow-neon-cyan px-2 py-2">
+        <ul className="grid grid-cols-4 gap-1">
+          {tabs.map(({ to, label, Icon }) => (
+            <li key={to}>
+              <NavLink
+                to={to}
+                className="block"
+              >
+                {({ isActive }) => (
+                  <div className={`relative flex flex-col items-center justify-center py-2.5 px-2 rounded-full transition-all duration-300 ${
+                    isActive
+                      ? 'bg-gradient-to-r from-accentFrom/20 to-accentTo/20'
+                      : 'hover:bg-white/5'
+                  }`}>
+                    {/* Active indicator dot */}
+                    {isActive && (
+                      <div className="absolute top-1 w-1 h-1 rounded-full bg-gradient-to-r from-accentFrom to-accentTo animate-pulse" />
+                    )}
+
+                    {/* Icon with gradient on active */}
+                    <div className="relative">
+                      <Icon
+                        size={20}
+                        className={`transition-all duration-300 ${
+                          isActive
+                            ? 'text-accentFrom scale-110'
+                            : 'text-muted'
+                        }`}
+                        strokeWidth={isActive ? 2.5 : 2}
+                      />
+                      {/* Glow effect when active */}
+                      {isActive && (
+                        <div className="absolute inset-0 bg-accentFrom/30 blur-md rounded-full" />
+                      )}
+                    </div>
+
+                    {/* Label */}
+                    <span className={`text-[10px] mt-1 font-medium transition-all duration-300 ${
+                      isActive
+                        ? 'text-text'
+                        : 'text-muted'
+                    }`}>
+                      {label}
+                    </span>
+                  </div>
+                )}
+              </NavLink>
+            </li>
+          ))}
+        </ul>
+      </div>
     </nav>
   )
 }

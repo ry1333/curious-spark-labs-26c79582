@@ -105,46 +105,78 @@ export default function FeedCard({
       <div className="relative w-full max-w-md mx-auto mb-32 md:mb-20 px-4 z-10">
         <div className="rounded-2xl border border-line bg-card/80 backdrop-blur-xl overflow-hidden shadow-2xl">
           {/* Media area - 16:9 aspect */}
-          <div className="relative aspect-video bg-gradient-to-br from-surface to-ink flex items-center justify-center">
-            {/* Waveform visualization */}
-            <div className="flex items-center gap-1 h-24">
-              {waveformHeights.map((height, i) => (
+          <div className="relative aspect-video bg-gradient-to-br from-surface via-ink to-surface flex items-center justify-center overflow-hidden">
+            {/* Vinyl Record */}
+            <div className="relative">
+              {/* Vinyl disc */}
+              <div className={`relative w-48 h-48 rounded-full bg-gradient-to-br from-ink via-surface to-ink shadow-inner-glow ${isPlaying ? 'animate-vinyl-spin' : ''}`}>
+                {/* Grooves */}
+                <div className="absolute inset-4 rounded-full border-2 border-white/5" />
+                <div className="absolute inset-8 rounded-full border-2 border-white/5" />
+                <div className="absolute inset-12 rounded-full border-2 border-white/5" />
+
+                {/* Label */}
+                <div className="absolute inset-16 rounded-full bg-gradient-to-br from-accentFrom to-accentTo flex items-center justify-center shadow-neon-cyan">
+                  <div className="text-xs font-bold text-ink text-center">
+                    RMXR
+                  </div>
+                </div>
+
+                {/* Center dot */}
+                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-ink border-2 border-accentFrom shadow-neon-cyan" />
+
+                {/* Reflection effect */}
+                <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-white/10 via-transparent to-transparent" />
+              </div>
+
+              {/* Glow effect when playing */}
+              {isPlaying && (
+                <div className="absolute inset-0 rounded-full bg-accentFrom/20 blur-2xl animate-pulse-ring" />
+              )}
+            </div>
+
+            {/* Waveform bars around vinyl */}
+            <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex items-end gap-0.5 h-12">
+              {waveformHeights.slice(0, 20).map((height, i) => (
                 <div
                   key={i}
-                  className="w-1 bg-gradient-to-t from-accentFrom to-accentTo rounded-full transition-all duration-150"
+                  className={`w-1 bg-gradient-to-t from-accentFrom to-accentTo rounded-full transition-all duration-150 ${isPlaying ? 'animate-audio-bar' : ''}`}
                   style={{
-                    height: `${height}%`,
-                    opacity: i / 40 < progress / 100 ? 1 : 0.2,
+                    height: `${height * 0.5}%`,
+                    opacity: i / 20 < progress / 100 ? 1 : 0.3,
+                    animationDelay: `${i * 50}ms`
                   }}
                 />
               ))}
             </div>
 
-            {/* Play/Pause Button */}
+            {/* Play/Pause Button - floating over vinyl */}
             <button
               onClick={togglePlay}
-              className="absolute inset-0 flex items-center justify-center bg-black/20 hover:bg-black/40 transition-colors group"
+              className="absolute inset-0 flex items-center justify-center bg-black/0 hover:bg-black/20 transition-colors group"
             >
-              <div className="w-16 h-16 rounded-full bg-gradient-to-r from-accentFrom to-accentTo flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+              <div className="w-20 h-20 rounded-full bg-gradient-to-r from-accentFrom to-accentTo flex items-center justify-center shadow-neon-cyan group-hover:scale-110 group-active:scale-95 transition-all">
                 {hasError ? (
-                  <svg className="w-8 h-8 text-ink" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                  <svg className="w-10 h-10 text-ink" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                   </svg>
                 ) : isPlaying ? (
-                  <svg className="w-8 h-8 text-ink" fill="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-10 h-10 text-ink" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z" />
                   </svg>
                 ) : (
-                  <svg className="w-8 h-8 text-ink ml-1" fill="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-10 h-10 text-ink ml-1" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M8 5v14l11-7z" />
                   </svg>
                 )}
+                {/* Ripple effect on click */}
+                <div className="absolute inset-0 rounded-full bg-white/30 scale-0 group-active:scale-150 opacity-0 group-active:opacity-100 transition-all duration-300" />
               </div>
             </button>
 
             {/* Error message */}
             {hasError && (
-              <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 px-4 py-2 rounded-full bg-red-500/90 backdrop-blur-sm text-white text-xs font-medium">
+              <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 px-4 py-2 rounded-full glass border border-red-500/30 text-red-400 text-xs font-medium shadow-lg">
                 Audio file not found or corrupted
               </div>
             )}

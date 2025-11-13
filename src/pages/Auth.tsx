@@ -89,30 +89,81 @@ export default function AuthPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-6 bg-gradient-to-br from-black via-neutral-900 to-black">
-      <div className="w-full max-w-md">
-        {/* Logo/Header */}
-        <div className="text-center mb-8">
-          <Link to="/">
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-2">
-              RMXR
-            </h1>
-          </Link>
-          <p className="text-white/60 text-sm">
-            {mode === 'signIn' ? 'Welcome back' : 'Create your account'}
-          </p>
-        </div>
+    <div className="min-h-screen grid lg:grid-cols-2 bg-ink">
+      {/* Left Panel - Branding */}
+      <div className="hidden lg:flex flex-col justify-center items-center p-12 bg-gradient-to-br from-surface via-ink to-ink relative overflow-hidden">
+        {/* Animated background orbs */}
+        <div className="absolute top-20 left-20 w-64 h-64 bg-accentFrom/20 rounded-full blur-3xl animate-morph" />
+        <div className="absolute bottom-20 right-20 w-80 h-80 bg-accentTo/20 rounded-full blur-3xl animate-morph" style={{ animationDelay: '4s' }} />
 
-        {/* Auth Form */}
-        <form onSubmit={handleSubmit} className="rounded-2xl border border-white/10 bg-neutral-900/80 backdrop-blur-xl p-8 space-y-5 shadow-2xl">
-          <div>
-            <h2 className="text-2xl font-bold text-white mb-1">
-              {mode === 'signIn' ? 'Sign In' : 'Create Account'}
-            </h2>
-            <p className="text-white/60 text-sm">
-              {mode === 'signIn' ? 'Enter your credentials to continue' : 'Start creating amazing mixes today'}
-            </p>
+        <div className="relative z-10 max-w-md">
+          <Link to="/" className="inline-block mb-8">
+            <div className="flex items-center gap-3">
+              <div className="relative">
+                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-accentFrom to-accentTo flex items-center justify-center">
+                  <svg className="w-10 h-10 text-ink animate-vinyl-spin" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <circle cx="12" cy="12" r="10" strokeWidth="2" />
+                    <circle cx="12" cy="12" r="3" fill="currentColor" />
+                    <path d="M12 2v4M12 18v4M2 12h4M18 12h4" strokeWidth="2" strokeLinecap="round" />
+                  </svg>
+                </div>
+                <div className="absolute inset-0 bg-accentFrom/30 blur-xl rounded-full animate-pulse-ring" />
+              </div>
+              <h1 className="text-5xl font-bold gradient-text">RMXR</h1>
+            </div>
+          </Link>
+
+          <h2 className="text-4xl font-bold text-text mb-4">
+            Mix. Learn. Share.
+          </h2>
+          <p className="text-muted text-lg mb-8">
+            The social platform for DJ creators. Create amazing mixes, learn from the pros, and share with the community.
+          </p>
+
+          {/* Social Proof */}
+          <div className="grid grid-cols-3 gap-6 p-6 rounded-2xl glass">
+            <div>
+              <div className="text-3xl font-bold gradient-text">10K+</div>
+              <div className="text-sm text-muted mt-1">Creators</div>
+            </div>
+            <div>
+              <div className="text-3xl font-bold gradient-text">50K+</div>
+              <div className="text-sm text-muted mt-1">Mixes</div>
+            </div>
+            <div>
+              <div className="text-3xl font-bold gradient-text">1M+</div>
+              <div className="text-sm text-muted mt-1">Plays</div>
+            </div>
           </div>
+        </div>
+      </div>
+
+      {/* Right Panel - Auth Form */}
+      <div className="flex items-center justify-center p-6 lg:p-12">
+        <div className="w-full max-w-md">
+          {/* Mobile Logo */}
+          <div className="lg:hidden text-center mb-8">
+            <Link to="/" className="inline-flex items-center gap-2">
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-accentFrom to-accentTo flex items-center justify-center">
+                <svg className="w-6 h-6 text-ink" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <circle cx="12" cy="12" r="10" strokeWidth="2" />
+                  <circle cx="12" cy="12" r="3" fill="currentColor" />
+                </svg>
+              </div>
+              <span className="text-3xl font-bold gradient-text">RMXR</span>
+            </Link>
+          </div>
+
+          {/* Auth Form */}
+          <form onSubmit={handleSubmit} className="rounded-2xl border border-line glass p-8 space-y-5 shadow-neon-cyan">
+            <div>
+              <h2 className="text-2xl font-bold text-text mb-1">
+                {mode === 'signIn' ? 'Sign In' : 'Create Account'}
+              </h2>
+              <p className="text-muted text-sm">
+                {mode === 'signIn' ? 'Enter your credentials to continue' : 'Start creating amazing mixes today'}
+              </p>
+            </div>
 
           {!hasSupabase && (
             <div className="rounded-xl bg-yellow-500/10 border border-yellow-500/30 text-yellow-400 p-4 text-sm">
@@ -121,31 +172,43 @@ export default function AuthPage() {
             </div>
           )}
 
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-white/80 mb-2">Email</label>
-              <input
-                className="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-white/20 focus:border-white/20 transition-all"
-                value={email}
-                onChange={e=>setEmail(e.target.value)}
-                placeholder="you@example.com"
-                type="email"
-                required
-              />
-            </div>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-text/80 mb-2">Email</label>
+                <input
+                  className="w-full bg-surface border border-line rounded-xl px-4 py-3 text-text placeholder:text-muted/50 focus:outline-none focus:ring-2 focus:ring-accentFrom/50 focus:border-accentFrom/50 transition-smooth hover:border-line/50"
+                  value={email}
+                  onChange={e=>setEmail(e.target.value)}
+                  placeholder="you@example.com"
+                  type="email"
+                  required
+                />
+              </div>
 
-            <div>
-              <label className="block text-sm font-medium text-white/80 mb-2">Password</label>
-              <input
-                className="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-white/20 focus:border-white/20 transition-all"
-                value={password}
-                onChange={e=>setPassword(e.target.value)}
-                placeholder="••••••••"
-                type="password"
-                required
-              />
+              <div>
+                <label className="block text-sm font-medium text-text/80 mb-2">Password</label>
+                <input
+                  className="w-full bg-surface border border-line rounded-xl px-4 py-3 text-text placeholder:text-muted/50 focus:outline-none focus:ring-2 focus:ring-accentFrom/50 focus:border-accentFrom/50 transition-smooth hover:border-line/50"
+                  value={password}
+                  onChange={e=>setPassword(e.target.value)}
+                  placeholder="••••••••"
+                  type="password"
+                  required
+                />
+                {mode === 'signUp' && password && (
+                  <div className="mt-2">
+                    <div className="flex gap-1 h-1">
+                      <div className={`flex-1 rounded-full transition-colors ${password.length >= 2 ? 'bg-red-500' : 'bg-white/10'}`} />
+                      <div className={`flex-1 rounded-full transition-colors ${password.length >= 6 ? 'bg-yellow-500' : 'bg-white/10'}`} />
+                      <div className={`flex-1 rounded-full transition-colors ${password.length >= 8 ? 'bg-emerald-500' : 'bg-white/10'}`} />
+                    </div>
+                    <p className="text-xs text-muted mt-1">
+                      {password.length < 6 ? 'Weak' : password.length < 8 ? 'Good' : 'Strong'}
+                    </p>
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
 
           {error && (
             <div className="rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 p-3 text-sm">
@@ -153,28 +216,43 @@ export default function AuthPage() {
             </div>
           )}
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full rounded-xl bg-white hover:bg-white/90 disabled:opacity-50 disabled:cursor-not-allowed text-black font-bold py-3 transition-all hover:scale-[1.02] active:scale-95"
-          >
-            {loading ? 'Please wait...' : mode==='signIn'?'Sign In':'Create Account'}
-          </button>
+            <button
+              type="submit"
+              disabled={loading}
+              className="relative w-full rounded-xl bg-gradient-to-r from-accentFrom to-accentTo hover:shadow-neon-cyan disabled:opacity-50 disabled:cursor-not-allowed text-ink font-bold py-3 transition-all hover:scale-[1.02] active:scale-95 overflow-hidden group"
+            >
+              <span className="relative z-10">
+                {loading ? (
+                  <span className="flex items-center justify-center gap-2">
+                    <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                    </svg>
+                    Please wait...
+                  </span>
+                ) : mode==='signIn'?'Sign In':'Create Account'}
+              </span>
+              <div className="absolute inset-0 bg-white/20 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
+            </button>
 
-          <button
-            type="button"
-            className="w-full text-sm text-white/60 hover:text-white transition-colors"
-            onClick={()=>setMode(mode==='signIn'?'signUp':'signIn')}
-          >
-            {mode==='signIn'?'Need an account? Sign up':'Already have an account? Sign in'}
-          </button>
-        </form>
+            <button
+              type="button"
+              className="w-full text-sm text-muted hover:text-text transition-smooth"
+              onClick={()=>setMode(mode==='signIn'?'signUp':'signIn')}
+            >
+              {mode==='signIn'?'Need an account? Sign up →':'Already have an account? Sign in →'}
+            </button>
+          </form>
 
-        {/* Additional Links */}
-        <div className="mt-6 text-center">
-          <Link to="/stream" className="text-white/60 hover:text-white text-sm transition-colors">
-            Continue without signing in →
-          </Link>
+          {/* Additional Links */}
+          <div className="mt-6 text-center">
+            <Link to="/stream" className="text-muted hover:text-text text-sm transition-smooth inline-flex items-center gap-1 group">
+              <span>Continue without signing in</span>
+              <svg className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              </svg>
+            </Link>
+          </div>
         </div>
       </div>
     </div>

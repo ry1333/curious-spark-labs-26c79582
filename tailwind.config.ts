@@ -67,6 +67,7 @@ export default {
         },
       },
       fontFamily: {
+        sans: ["'Space Grotesk'", "-apple-system", "BlinkMacSystemFont", "sans-serif"],
         mono: ["ui-monospace", "SFMono-Regular", "Menlo", "monospace"],
       },
       backgroundImage: {
@@ -78,12 +79,20 @@ export default {
         'glow-cyan': '0 0 20px hsl(var(--glow-cyan) / 0.3), 0 0 40px hsl(var(--glow-cyan) / 0.1)',
         'glow-magenta': '0 0 20px hsl(var(--glow-magenta) / 0.3), 0 0 40px hsl(var(--glow-magenta) / 0.1)',
         'glow-primary': '0 0 30px hsl(var(--primary) / 0.4)',
+        'neon-cyan': '0 0 20px rgba(0, 229, 255, 0.5), 0 0 40px rgba(0, 229, 255, 0.3)',
+        'neon-magenta': '0 0 20px rgba(255, 45, 149, 0.5), 0 0 40px rgba(255, 45, 149, 0.3)',
+        'inner-glow': 'inset 0 0 20px rgba(255, 255, 255, 0.1)',
       },
       animation: {
         'pulse-glow': 'pulse-glow 2s ease-in-out infinite',
         'float': 'float 3s ease-in-out infinite',
         'spin-slow': 'spin 8s linear infinite',
         'shimmer': 'shimmer 1.6s infinite',
+        'vinyl-spin': 'vinyl-spin 3s linear infinite',
+        'pulse-ring': 'pulse-ring 2s ease-in-out infinite',
+        'slide-in-left': 'slide-in-left 0.3s ease-out',
+        'morph': 'morph 8s ease-in-out infinite',
+        'heartbeat': 'heartbeat 1s ease-in-out',
       },
       keyframes: {
         'pulse-glow': {
@@ -97,6 +106,27 @@ export default {
         'shimmer': {
           '0%': { transform: 'translateX(-100%)' },
           '100%': { transform: 'translateX(100%)' },
+        },
+        'vinyl-spin': {
+          '0%': { transform: 'rotate(0deg)' },
+          '100%': { transform: 'rotate(360deg)' },
+        },
+        'pulse-ring': {
+          '0%, 100%': { transform: 'scale(1)', opacity: '0.5' },
+          '50%': { transform: 'scale(1.1)', opacity: '0.8' },
+        },
+        'slide-in-left': {
+          '0%': { transform: 'translateX(-100%)', opacity: '0' },
+          '100%': { transform: 'translateX(0)', opacity: '1' },
+        },
+        'morph': {
+          '0%, 100%': { borderRadius: '60% 40% 30% 70% / 60% 30% 70% 40%' },
+          '50%': { borderRadius: '30% 60% 70% 40% / 50% 60% 30% 60%' },
+        },
+        'heartbeat': {
+          '0%, 100%': { transform: 'scale(1)' },
+          '25%': { transform: 'scale(1.2)' },
+          '50%': { transform: 'scale(1)' },
         },
       },
       borderRadius: {
