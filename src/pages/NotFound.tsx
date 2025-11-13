@@ -1,5 +1,6 @@
 import { useLocation, Link } from "react-router-dom";
 import { useEffect } from "react";
+import { Music } from "lucide-react";
 
 const NotFound = () => {
   const location = useLocation();
@@ -17,7 +18,7 @@ const NotFound = () => {
             404
           </h1>
           <div className="absolute inset-0 flex items-center justify-center">
-            <div className="text-8xl">🎵</div>
+            <Music className="w-24 h-24 md:w-32 md:h-32 text-white/80" strokeWidth={1.5} />
           </div>
         </div>
 

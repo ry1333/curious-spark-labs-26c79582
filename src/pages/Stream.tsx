@@ -8,6 +8,7 @@ import ActionRail from '../components/ActionRail'
 import CommentsModal from '../components/CommentsModal'
 import ReportModal from '../components/ReportModal'
 import FeedCard from '../components/FeedCard'
+import { Music } from 'lucide-react'
 import { toast } from 'sonner'
 
 export default function Stream() {
@@ -93,7 +94,9 @@ export default function Stream() {
       {items.length === 0 && !loading ? (
         <div className="h-screen flex items-center justify-center px-6">
           <div className="text-center space-y-6 max-w-md">
-            <div className="text-6xl mb-4">🎵</div>
+            <div className="flex justify-center mb-4">
+              <Music className="w-20 h-20 text-muted" strokeWidth={1.5} />
+            </div>
             <h2 className="text-2xl font-bold text-text">No Posts Yet</h2>
             <p className="text-muted leading-relaxed">
               Be the first to create! Head to the Create page, make a 30-second mix, and publish it to the feed.

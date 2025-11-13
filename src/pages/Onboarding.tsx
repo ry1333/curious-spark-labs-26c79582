@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { createProfile, isUsernameAvailable } from '../lib/supabase/profiles'
 import { toast } from 'sonner'
 import { supabase } from '@/integrations/supabase/client'
+import { Music, RotateCw, BookOpen, Trophy, Upload, Search, Sprout, Headphones, Star } from 'lucide-react'
 
 const GENRES = [
   'House', 'Techno', 'Hip-Hop', 'EDM', 'Trance', 'Dubstep',
@@ -10,12 +11,12 @@ const GENRES = [
 ]
 
 const GOALS = [
-  { id: 'create', label: 'Create original mixes', icon: '🎵' },
-  { id: 'remix', label: 'Remix tracks', icon: '🔄' },
-  { id: 'learn', label: 'Learn DJ skills', icon: '📚' },
-  { id: 'compete', label: 'Join challenges', icon: '🏆' },
-  { id: 'share', label: 'Share my music', icon: '📤' },
-  { id: 'discover', label: 'Discover new music', icon: '🔍' }
+  { id: 'create', label: 'Create original mixes', icon: Music },
+  { id: 'remix', label: 'Remix tracks', icon: RotateCw },
+  { id: 'learn', label: 'Learn DJ skills', icon: BookOpen },
+  { id: 'compete', label: 'Join challenges', icon: Trophy },
+  { id: 'share', label: 'Share my music', icon: Upload },
+  { id: 'discover', label: 'Discover new music', icon: Search }
 ]
 
 export default function Onboarding() {
@@ -336,15 +337,15 @@ export default function Onboarding() {
                       key={level}
                       type="button"
                       onClick={() => setExperienceLevel(level)}
-                      className={`rounded-xl border-2 px-4 py-3 font-semibold transition-all ${
+                      className={`rounded-xl border-2 px-4 py-3 font-semibold transition-all inline-flex items-center justify-center gap-2 ${
                         experienceLevel === level
                           ? 'border-white bg-white text-black'
                           : 'border-white/20 hover:border-white/40'
                       }`}
                     >
-                      {level === 'beginner' && '🌱 Beginner'}
-                      {level === 'intermediate' && '🎧 Intermediate'}
-                      {level === 'pro' && '⭐ Pro'}
+                      {level === 'beginner' && <><Sprout className="w-5 h-5" /> Beginner</>}
+                      {level === 'intermediate' && <><Headphones className="w-5 h-5" /> Intermediate</>}
+                      {level === 'pro' && <><Star className="w-5 h-5" /> Pro</>}
                     </button>
                   ))}
                 </div>
@@ -389,7 +390,9 @@ export default function Onboarding() {
                   What do you want to do? (Select all that apply)
                 </label>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  {GOALS.map((goal) => (
+                  {GOALS.map((goal) => {
+                  const IconComponent = goal.icon
+                  return (
                     <button
                       key={goal.id}
                       type="button"
@@ -400,10 +403,11 @@ export default function Onboarding() {
                           : 'border-white/20 hover:border-white/40'
                       }`}
                     >
-                      <span className="text-2xl">{goal.icon}</span>
+                      <IconComponent className="w-6 h-6" strokeWidth={2} />
                       <span>{goal.label}</span>
                     </button>
-                  ))}
+                  )
+                })}
                 </div>
               </div>
             </div>

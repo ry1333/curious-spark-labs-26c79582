@@ -4,6 +4,7 @@ import { getCurrentUserProfile, getUserStats } from '../lib/supabase/profiles'
 import type { Profile } from '../lib/supabase/profiles'
 import { supabase } from '@/integrations/supabase/client'
 import { toast } from 'sonner'
+import { Sprout, Headphones, Star, Music, Heart, RotateCw } from 'lucide-react'
 
 export default function Profile() {
   const nav = useNavigate()
@@ -116,10 +117,10 @@ export default function Profile() {
           )}
           {profile.experience_level && (
             <div className="mt-3">
-              <span className="px-3 py-1 rounded-full bg-surface border border-line text-text text-xs font-semibold capitalize">
-                {profile.experience_level === 'beginner' && '🌱 '}
-                {profile.experience_level === 'intermediate' && '🎧 '}
-                {profile.experience_level === 'pro' && '⭐ '}
+              <span className="px-3 py-1 rounded-full bg-surface border border-line text-text text-xs font-semibold capitalize inline-flex items-center gap-1.5">
+                {profile.experience_level === 'beginner' && <Sprout className="w-3 h-3" />}
+                {profile.experience_level === 'intermediate' && <Headphones className="w-3 h-3" />}
+                {profile.experience_level === 'pro' && <Star className="w-3 h-3" />}
                 {profile.experience_level}
               </span>
             </div>
@@ -159,7 +160,7 @@ export default function Profile() {
               className="group rounded-2xl border border-line bg-card/50 backdrop-blur-xl p-6 hover:bg-card hover:scale-[1.02] transition-all"
             >
               <div className="aspect-square rounded-xl bg-surface border border-line flex items-center justify-center mb-4 group-hover:bg-surface/80 transition-all">
-                <span className="text-4xl text-muted">🎵</span>
+                <Music className="w-12 h-12 text-muted" strokeWidth={1.5} />
               </div>
               <div className="text-center">
                 <div className="font-semibold text-muted text-sm">Coming soon</div>
@@ -177,15 +178,17 @@ export default function Profile() {
         </h2>
         <div className="space-y-3">
           {[
-            { action: 'Liked', track: 'Midnight Groove', user: '@djmaster', time: '2h ago', icon: '❤️' },
-            { action: 'Remixed', track: 'Summer Vibes', user: '@producer', time: '5h ago', icon: '🔄' },
-            { action: 'Posted', track: 'Your New Mix', user: 'you', time: '1d ago', icon: '🎵' },
-          ].map((activity, i) => (
-            <div
-              key={i}
-              className="rounded-xl border border-line bg-card/50 backdrop-blur-xl p-4 flex items-center gap-4 hover:bg-card transition-all"
-            >
-              <div className="text-2xl text-muted">{activity.icon}</div>
+            { action: 'Liked', track: 'Midnight Groove', user: '@djmaster', time: '2h ago', icon: Heart },
+            { action: 'Remixed', track: 'Summer Vibes', user: '@producer', time: '5h ago', icon: RotateCw },
+            { action: 'Posted', track: 'Your New Mix', user: 'you', time: '1d ago', icon: Music },
+          ].map((activity, i) => {
+            const IconComponent = activity.icon
+            return (
+              <div
+                key={i}
+                className="rounded-xl border border-line bg-card/50 backdrop-blur-xl p-4 flex items-center gap-4 hover:bg-card transition-all"
+              >
+                <IconComponent className="w-6 h-6 text-muted" strokeWidth={2} />
               <div className="flex-1">
                 <div className="font-medium text-text">
                   {activity.action} <span className="text-text">{activity.track}</span>
@@ -193,7 +196,8 @@ export default function Profile() {
                 <div className="text-sm text-muted">by {activity.user} • {activity.time}</div>
               </div>
             </div>
-          ))}
+            )
+          })}
         </div>
       </section>
     </div>

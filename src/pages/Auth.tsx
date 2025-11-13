@@ -3,6 +3,7 @@ import { supabase } from '@/integrations/supabase/client'
 import { useNavigate, useSearchParams, Link } from 'react-router-dom'
 import { hasSupabase } from '../lib/env'
 import { getCurrentUserProfile } from '../lib/supabase/profiles'
+import { AlertTriangle } from 'lucide-react'
 
 export default function AuthPage() {
   const [mode, setMode] = useState<'signIn'|'signUp'>('signIn')
@@ -167,7 +168,10 @@ export default function AuthPage() {
 
           {!hasSupabase && (
             <div className="rounded-xl bg-yellow-500/10 border border-yellow-500/30 text-yellow-400 p-4 text-sm">
-              <div className="font-semibold mb-1">⚠️ Backend not configured</div>
+              <div className="font-semibold mb-1 flex items-center gap-2">
+                <AlertTriangle className="w-4 h-4" />
+                Backend not configured
+              </div>
               <div className="opacity-80">Set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY environment variables.</div>
             </div>
           )}

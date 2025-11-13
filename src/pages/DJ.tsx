@@ -8,6 +8,7 @@ import DualWaveform from '../components/DualWaveform'
 import DeckControls from '../components/DeckControls'
 import MixerCenter from '../components/MixerCenter'
 import LibraryBrowser from '../components/LibraryBrowser'
+import { Headphones, Music } from 'lucide-react'
 import TopBar from '../components/TopBar'
 
 export default function DJ() {
@@ -318,7 +319,9 @@ export default function DJ() {
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
           <div className="bg-gradient-to-br from-neutral-900 to-black border border-white/10 rounded-2xl p-8 max-w-md w-full space-y-4 shadow-2xl">
             <div className="text-center">
-              <div className="text-5xl mb-4">🎧</div>
+              <div className="flex justify-center mb-4">
+                <Headphones className="w-16 h-16 text-accentFrom" strokeWidth={1.5} />
+              </div>
               <h2 className="text-2xl font-bold text-white mb-2">Welcome to the DJ Studio!</h2>
             </div>
 
@@ -347,7 +350,9 @@ export default function DJ() {
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
           <div className="bg-gradient-to-br from-neutral-900 to-black border border-white/10 rounded-2xl p-8 max-w-lg w-full space-y-6 shadow-2xl">
             <div className="text-center">
-              <div className="text-5xl mb-4">🎵</div>
+              <div className="flex justify-center mb-4">
+                <Music className="w-16 h-16 text-accentFrom" strokeWidth={1.5} />
+              </div>
               <h2 className="text-2xl font-bold text-white mb-2">Publish Your Mix</h2>
               <p className="text-white/60 text-sm">Share your creation with the community</p>
             </div>
