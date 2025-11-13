@@ -33,38 +33,59 @@ export default function FeedCard({
   const [progress, setProgress] = useState(0)
   const [currentTime, setCurrentTime] = useState('0:00')
 
+  // Generate stable waveform heights
+  const waveformHeights = useRef(
+    Array.from({ length: 40 }, () => Math.random() * 100)
+  ).current
+
   useEffect(() => {
     const audio = audioRef.current
     if (!audio) return
 
     const updateProgress = () => {
-      const percent = (audio.currentTime / audio.duration) * 100
-      setProgress(percent || 0)
+      if (audio.duration && !isNaN(audio.duration)) {
+        const percent = (audio.currentTime / audio.duration) * 100
+        setProgress(percent || 0)
 
-      const minutes = Math.floor(audio.currentTime / 60)
-      const seconds = Math.floor(audio.currentTime % 60)
-      setCurrentTime(`${minutes}:${seconds.toString().padStart(2, '0')}`)
+        const minutes = Math.floor(audio.currentTime / 60)
+        const seconds = Math.floor(audio.currentTime % 60)
+        setCurrentTime(`${minutes}:${seconds.toString().padStart(2, '0')}`)
+      }
+    }
+
+    const handleEnded = () => setIsPlaying(false)
+    const handleError = (e: Event) => {
+      console.error('Audio error:', e)
+      setIsPlaying(false)
     }
 
     audio.addEventListener('timeupdate', updateProgress)
-    audio.addEventListener('ended', () => setIsPlaying(false))
+    audio.addEventListener('ended', handleEnded)
+    audio.addEventListener('error', handleError)
 
     return () => {
       audio.removeEventListener('timeupdate', updateProgress)
-      audio.removeEventListener('ended', () => setIsPlaying(false))
+      audio.removeEventListener('ended', handleEnded)
+      audio.removeEventListener('error', handleError)
     }
-  }, [])
+  }, [src])
 
-  const togglePlay = () => {
+  const togglePlay = async () => {
     const audio = audioRef.current
     if (!audio) return
 
-    if (isPlaying) {
-      audio.pause()
-    } else {
-      audio.play()
+    try {
+      if (isPlaying) {
+        audio.pause()
+        setIsPlaying(false)
+      } else {
+        await audio.play()
+        setIsPlaying(true)
+      }
+    } catch (error) {
+      console.error('Audio playback error:', error)
+      setIsPlaying(false)
     }
-    setIsPlaying(!isPlaying)
   }
 
   return (
@@ -77,14 +98,14 @@ export default function FeedCard({
         <div className="rounded-2xl border border-line bg-card/80 backdrop-blur-xl overflow-hidden shadow-2xl">
           {/* Media area - 16:9 aspect */}
           <div className="relative aspect-video bg-gradient-to-br from-surface to-ink flex items-center justify-center">
-            {/* Waveform visualization placeholder */}
+            {/* Waveform visualization */}
             <div className="flex items-center gap-1 h-24">
-              {Array.from({ length: 40 }).map((_, i) => (
+              {waveformHeights.map((height, i) => (
                 <div
                   key={i}
-                  className="w-1 bg-gradient-to-t from-accentFrom to-accentTo rounded-full transition-all"
+                  className="w-1 bg-gradient-to-t from-accentFrom to-accentTo rounded-full transition-all duration-150"
                   style={{
-                    height: `${Math.random() * 100}%`,
+                    height: `${height}%`,
                     opacity: i / 40 < progress / 100 ? 1 : 0.2,
                   }}
                 />
