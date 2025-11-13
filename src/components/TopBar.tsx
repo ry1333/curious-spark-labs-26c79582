@@ -22,22 +22,13 @@ export default function TopBar({ isRecording, onRecordToggle, masterLevel, recor
         RMXR
       </Link>
 
-      {/* Center: Navigation + Recording Timer */}
+      {/* Center: Recording Timer (only when recording) */}
       <div className="flex items-center gap-6">
-        {isRecording ? (
+        {isRecording && (
           <div className="flex items-center gap-2 text-danger font-mono font-semibold">
             <div className="w-2 h-2 rounded-full bg-danger animate-pulse" />
             <span>{formatTime(recordingTime)} / {formatTime(maxRecordingTime)}</span>
           </div>
-        ) : (
-          <>
-            <Link to="/learn" className="text-sm text-muted hover:text-rmxrtext transition-colors">
-              Learn
-            </Link>
-            <Link to="/stream" className="text-sm text-muted hover:text-rmxrtext transition-colors">
-              Stream
-            </Link>
-          </>
         )}
       </div>
 
