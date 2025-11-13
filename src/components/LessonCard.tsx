@@ -1,8 +1,11 @@
+import { LucideIcon, Headphones, Gamepad2, Check } from 'lucide-react'
+
 type LessonCardProps = {
   title: string
   minutes: string
   level: 'beginner' | 'intermediate' | 'advanced'
   outcome: string
+  icon?: LucideIcon
   tags?: string[]
   progress?: number
   thumbnailUrl?: string
@@ -23,6 +26,7 @@ export function LessonCard({
   minutes,
   level,
   outcome,
+  icon: Icon = Headphones,
   tags = [],
   progress = 0,
   thumbnailUrl,
@@ -43,18 +47,18 @@ export function LessonCard({
             <img src={thumbnailUrl} alt={title} className="h-full w-full object-cover" />
           ) : (
             <div className="h-full w-full bg-gradient-to-br from-accentFrom/10 to-accentTo/10 flex items-center justify-center">
-              <div className="text-6xl opacity-50">🎧</div>
+              <Icon size={48} className="text-accentFrom opacity-50" strokeWidth={1.5} />
             </div>
           )}
           {/* Top-right badges */}
           {isCompleted && (
-            <div className="absolute top-2 right-2 w-6 h-6 rounded-full bg-emerald-500 flex items-center justify-center text-white text-xs font-bold shadow-lg">
-              ✓
+            <div className="absolute top-2 right-2 w-6 h-6 rounded-full bg-emerald-500 flex items-center justify-center text-white shadow-lg">
+              <Check size={14} strokeWidth={3} />
             </div>
           )}
           {!isCompleted && hasChallenge && (
-            <div className="absolute top-2 right-2 px-2 py-1 rounded-full bg-purple-500/90 backdrop-blur-sm flex items-center gap-1 text-white text-xs font-bold shadow-lg">
-              🎮
+            <div className="absolute top-2 right-2 p-1.5 rounded-full bg-purple-500/90 backdrop-blur-sm flex items-center justify-center shadow-lg">
+              <Gamepad2 size={14} className="text-white" strokeWidth={2.5} />
             </div>
           )}
         </div>

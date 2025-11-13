@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
+import { LucideIcon, Zap, Piano, Building2, Repeat, Sliders, Waves, Volume2, RotateCw, Mic } from 'lucide-react'
 import InteractiveLessonChallenge from '../components/InteractiveLessonChallenge'
 import LearnHero from '../components/LearnHero'
 import { LessonCard } from '../components/LessonCard'
@@ -11,7 +12,7 @@ type Lesson = {
   id: string
   title: string
   duration: string
-  icon: string
+  icon: LucideIcon
   level: 'beginner' | 'intermediate' | 'advanced'
   description: string
   hasChallenge?: ChallengeType
@@ -41,7 +42,7 @@ export default function Learn() {
       id: 'bpm-tempo',
       title: 'BPM & Tempo Matching',
       duration: '2 min',
-      icon: '⚡',
+      icon: Zap,
       level: 'beginner',
       description: 'Master beatmatching - the foundation of smooth mixing',
       hasChallenge: 'bpm-match',
@@ -62,7 +63,7 @@ export default function Learn() {
       id: 'keys-energy',
       title: 'Harmonic Mixing',
       duration: '3 min',
-      icon: '🎹',
+      icon: Piano,
       level: 'beginner',
       description: 'Mix tracks that sound good together using musical keys',
       hasChallenge: 'harmonic-mixing',
@@ -83,7 +84,7 @@ export default function Learn() {
       id: 'structure',
       title: 'Track Structure',
       duration: '2 min',
-      icon: '🏗️',
+      icon: Building2,
       level: 'beginner',
       description: 'Understand how tracks are built and where to mix',
       hasChallenge: 'phrase-counting',
@@ -104,7 +105,7 @@ export default function Learn() {
       id: 'crossfading',
       title: 'Crossfader Technique',
       duration: '2 min',
-      icon: '🔀',
+      icon: Repeat,
       level: 'beginner',
       description: 'Smooth transitions between two tracks using the crossfader',
       hasChallenge: 'crossfade-timing',
@@ -125,7 +126,7 @@ export default function Learn() {
       id: 'eq-basics',
       title: 'EQ Mixing',
       duration: '3 min',
-      icon: '🎛️',
+      icon: Sliders,
       level: 'intermediate',
       description: 'Use EQ to carve space and create clean mixes',
       hasChallenge: 'eq-balance',
@@ -146,7 +147,7 @@ export default function Learn() {
       id: 'filters',
       title: 'Filter Tricks',
       duration: '2 min',
-      icon: '🌊',
+      icon: Waves,
       level: 'intermediate',
       description: 'Use filters to create tension and energy in your mix',
       hasChallenge: 'filter-sweep',
@@ -167,7 +168,7 @@ export default function Learn() {
       id: 'gain-staging',
       title: 'Volume & Gain',
       duration: '2 min',
-      icon: '🎚️',
+      icon: Volume2,
       level: 'intermediate',
       description: 'Keep your levels clean and prevent distortion',
       content: {
@@ -187,7 +188,7 @@ export default function Learn() {
       id: 'transitions',
       title: 'Transition Techniques',
       duration: '3 min',
-      icon: '🔄',
+      icon: RotateCw,
       level: 'advanced',
       description: 'Combine all skills for seamless, creative transitions',
       hasChallenge: 'transition-planning',
@@ -208,7 +209,7 @@ export default function Learn() {
       id: 'recording',
       title: 'Recording Your Mix',
       duration: '2 min',
-      icon: '🎙️',
+      icon: Mic,
       level: 'beginner',
       description: 'Capture your performance and share it with the world',
       content: {
@@ -328,6 +329,7 @@ export default function Learn() {
                     minutes={lesson.duration}
                     level={lesson.level}
                     outcome={lesson.description}
+                    icon={lesson.icon}
                     tags={['Core']}
                     isCompleted={isCompleted}
                     hasChallenge={!!lesson.hasChallenge}
@@ -354,6 +356,7 @@ export default function Learn() {
                 minutes={lesson.duration}
                 level={lesson.level}
                 outcome={lesson.description}
+                icon={lesson.icon}
                 tags={['Challenge']}
                 isCompleted={completedLessons.has(lesson.id)}
                 hasChallenge={!!lesson.hasChallenge}
@@ -378,6 +381,7 @@ export default function Learn() {
               minutes={lesson.duration}
               level={lesson.level}
               outcome={lesson.description}
+              icon={lesson.icon}
               tags={[lesson.level === 'intermediate' ? 'Intermediate' : 'Advanced']}
               progress={completedLessons.has(lesson.id) ? 1 : 0}
               isCompleted={completedLessons.has(lesson.id)}
@@ -398,7 +402,9 @@ export default function Learn() {
               <div className="flex items-start justify-between gap-4">
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-3">
-                    <div className="text-5xl">{selectedLesson.icon}</div>
+                    <div className="p-3 rounded-xl bg-gradient-to-br from-accentFrom/20 to-accentTo/20">
+                      <selectedLesson.icon size={32} className="text-accentFrom" strokeWidth={2} />
+                    </div>
                     <div className={`px-3 py-1 rounded-full text-xs font-semibold border ${levelColors[selectedLesson.level]}`}>
                       {selectedLesson.level.charAt(0).toUpperCase() + selectedLesson.level.slice(1)}
                     </div>
