@@ -652,9 +652,7 @@ export default function DJ() {
 
         {/* Library Tab - Full power user track browser */}
         <TabsContent value="library" className="flex-1 m-0 overflow-hidden">
-          <div className="h-full bg-surface">
-            <LibraryBrowser onLoadA={handleALoad} onLoadB={handleBLoad} />
-          </div>
+          <LibraryBrowser onLoadA={handleALoad} onLoadB={handleBLoad} />
         </TabsContent>
       </Tabs>
 
