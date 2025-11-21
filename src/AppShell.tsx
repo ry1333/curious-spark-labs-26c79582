@@ -7,7 +7,13 @@ import SidebarNav from './components/SidebarNav'
 export default function AppShell() {
   const location = useLocation()
   const isStreamPage = location.pathname === '/stream'
+  const isDJPage = location.pathname === '/dj' || location.pathname === '/dj-new'
   const [sidebarCollapsed, setSidebarCollapsed] = useState(isStreamPage)
+
+  // DJ pages get full-screen treatment without chrome
+  if (isDJPage) {
+    return <Outlet />
+  }
 
   return (
     <div className="min-h-screen bg-neutral-50 text-neutral-900">
