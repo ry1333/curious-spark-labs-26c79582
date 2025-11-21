@@ -507,8 +507,8 @@ export default function DJ() {
         {/* Studio Tab - Primary DJ Interface */}
         <TabsContent value="studio" className="flex-1 flex flex-col m-0 p-0 overflow-hidden h-full">
           {/* DJ STUDIO */}
-          <div className="flex-1 max-w-[1600px] mx-auto w-full px-4 md:px-6 py-4 overflow-y-auto">
-            <div className="grid grid-cols-1 lg:grid-cols-[3fr_2fr_3fr] gap-4 md:gap-6 lg:gap-10 mb-6">
+          <div className="flex-1 w-full px-2 md:px-4 py-2 md:py-4 overflow-y-auto">
+            <div className="grid grid-cols-[1fr_auto_1fr] gap-2 md:gap-4 lg:gap-6 h-full max-w-full">
               {/* Left Deck (A) */}
               <DeckControls label="A" deck={mixer.deckA} playing={aPlaying} fileName={aFileName} bpm={aBpm} progress={aProg} onBpmChange={setABpm} onLoad={handleALoad} onPlay={handleAPlay} onPause={handleAPause} onCue={handleACue} />
 
