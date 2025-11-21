@@ -23,7 +23,14 @@ export type CommentWithProfile = Comment & {
 export async function getComments(postId: string): Promise<CommentWithProfile[]> {
   const { data: comments, error } = await supabase
     .from('comments')
-    .select('*')
+    .select(`
+      id,
+      post_id,
+      user_id,
+      body,
+      created_at,
+      updated_at
+    `)
     .eq('post_id', postId)
     .order('created_at', { ascending: true })
 
@@ -119,7 +126,14 @@ export async function createComment(postId: string, body: string): Promise<Comme
       user_id: user.id,
       body: body.trim()
     })
-    .select()
+    .select(`
+      id,
+      post_id,
+      user_id,
+      body,
+      created_at,
+      updated_at
+    `)
     .single()
 
   if (error) {
@@ -149,7 +163,14 @@ export async function updateComment(commentId: string, body: string): Promise<Co
     .update({ body: body.trim() })
     .eq('id', commentId)
     .eq('user_id', user.id) // Ensure user owns the comment
-    .select()
+    .select(`
+      id,
+      post_id,
+      user_id,
+      body,
+      created_at,
+      updated_at
+    `)
     .single()
 
   if (error) {

@@ -1,6 +1,9 @@
 import { create } from 'zustand'
 import { audioEngine, type DeckID } from './engine/AudioEngine'
 
+// Re-export DeckID for use in other components
+export type { DeckID }
+
 export interface DeckState {
   loaded: boolean
   filename: string | null

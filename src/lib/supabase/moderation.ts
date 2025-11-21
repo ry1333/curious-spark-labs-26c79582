@@ -65,7 +65,20 @@ export async function reportPost(
       reason,
       description: description || null
     })
-    .select()
+    .select(`
+      id,
+      reporter_id,
+      reported_user_id,
+      post_id,
+      comment_id,
+      reason,
+      description,
+      status,
+      moderator_id,
+      moderator_notes,
+      created_at,
+      updated_at
+    `)
     .single()
 
   if (error) {
@@ -98,7 +111,20 @@ export async function reportComment(
       reason,
       description: description || null
     })
-    .select()
+    .select(`
+      id,
+      reporter_id,
+      reported_user_id,
+      post_id,
+      comment_id,
+      reason,
+      description,
+      status,
+      moderator_id,
+      moderator_notes,
+      created_at,
+      updated_at
+    `)
     .single()
 
   if (error) {
@@ -131,7 +157,20 @@ export async function reportUser(
       reason,
       description: description || null
     })
-    .select()
+    .select(`
+      id,
+      reporter_id,
+      reported_user_id,
+      post_id,
+      comment_id,
+      reason,
+      description,
+      status,
+      moderator_id,
+      moderator_notes,
+      created_at,
+      updated_at
+    `)
     .single()
 
   if (error) {
@@ -193,7 +232,20 @@ export async function updateReportStatus(
       moderator_notes: notes || null
     })
     .eq('id', reportId)
-    .select()
+    .select(`
+      id,
+      reporter_id,
+      reported_user_id,
+      post_id,
+      comment_id,
+      reason,
+      description,
+      status,
+      moderator_id,
+      moderator_notes,
+      created_at,
+      updated_at
+    `)
     .single()
 
   if (error) {

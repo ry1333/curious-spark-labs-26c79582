@@ -100,7 +100,7 @@ export default function AICoPilotV2({ suggestions, isActive, onToggle }: AICoPil
   const getSpotlightPosition = (controlId?: string) => {
     if (!controlId) return null
 
-    const spotlights: Record<string, { top: string; left: string; width: string; height: string }> = {
+    const spotlights: Record<string, React.CSSProperties> = {
       // Deck A controls
       'deckA.play': { top: '460px', left: '220px', width: '100px', height: '100px' },
       'deckA.tempo': { top: '200px', left: '420px', width: '80px', height: '200px' },

@@ -298,7 +298,7 @@ export default function AIMixAssistant({ trackAFile, trackBFile, geminiApiKey, t
                 <GradientButton
                   onClick={getSuggestions}
                   disabled={isLoadingSuggestions}
-                  variant="outline"
+                  variant="ghost"
                   className="w-full"
                 >
                   {isLoadingSuggestions ? (
