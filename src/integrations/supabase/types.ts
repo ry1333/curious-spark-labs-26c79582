@@ -14,204 +14,132 @@ export type Database = {
   }
   public: {
     Tables: {
-      profiles: {
+      admin_users: {
         Row: {
+          created_at: string | null
+          created_by: string | null
           id: string
-          username: string | null
-          display_name: string | null
-          avatar_url: string | null
-          bio: string | null
-          location: string | null
-          experience_level: string | null
-          favorite_genres: string[] | null
-          goals: string[] | null
-          social_links: Record<string, string> | null
-          onboarding_completed: boolean
-          created_at: string
-          updated_at: string
+          is_active: boolean | null
+          role: string
+          user_id: string
         }
         Insert: {
-          id: string
-          username?: string | null
-          display_name?: string | null
-          avatar_url?: string | null
-          bio?: string | null
-          location?: string | null
-          experience_level?: string | null
-          favorite_genres?: string[] | null
-          goals?: string[] | null
-          social_links?: Record<string, string> | null
-          onboarding_completed?: boolean
-          created_at?: string
-          updated_at?: string
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          is_active?: boolean | null
+          role?: string
+          user_id: string
         }
         Update: {
+          created_at?: string | null
+          created_by?: string | null
           id?: string
-          username?: string | null
-          display_name?: string | null
-          avatar_url?: string | null
-          bio?: string | null
-          location?: string | null
-          experience_level?: string | null
-          favorite_genres?: string[] | null
-          goals?: string[] | null
-          social_links?: Record<string, string> | null
-          onboarding_completed?: boolean
-          created_at?: string
-          updated_at?: string
-        }
-        Relationships: []
-      }
-      posts: {
-        Row: {
-          id: string
-          user_id: string
-          audio_url: string
-          bpm: number | null
-          style: string
-          key: string | null
-          challenge_id: string | null
-          caption: string | null
-          parent_post_id: string | null
-          created_at: string
-          thumbnail_url: string | null
-        }
-        Insert: {
-          id?: string
-          user_id: string
-          audio_url: string
-          bpm?: number | null
-          style?: string
-          key?: string | null
-          challenge_id?: string | null
-          caption?: string | null
-          parent_post_id?: string | null
-          created_at?: string
-          thumbnail_url?: string | null
-        }
-        Update: {
-          id?: string
+          is_active?: boolean | null
+          role?: string
           user_id?: string
-          audio_url?: string
-          bpm?: number | null
-          style?: string
-          key?: string | null
-          challenge_id?: string | null
-          caption?: string | null
-          parent_post_id?: string | null
-          created_at?: string
-          thumbnail_url?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: "posts_challenge_id_fkey"
-            columns: ["challenge_id"]
-            isOneToOne: false
-            referencedRelation: "challenges"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "posts_user_id_fkey"
-            columns: ["user_id"]
+            foreignKeyName: "admin_users_created_by_fkey"
+            columns: ["created_by"]
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
-          }
+          },
+          {
+            foreignKeyName: "admin_users_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
         ]
       }
-      reactions: {
+      blocked_users: {
         Row: {
+          blocked_id: string
+          blocker_id: string
+          created_at: string | null
           id: string
-          post_id: string
-          user_id: string
-          type: 'love' | 'comment' | 'save' | 'share'
-          created_at: string
         }
         Insert: {
+          blocked_id: string
+          blocker_id: string
+          created_at?: string | null
           id?: string
-          post_id: string
-          user_id: string
-          type: 'love' | 'comment' | 'save' | 'share'
-          created_at?: string
         }
         Update: {
+          blocked_id?: string
+          blocker_id?: string
+          created_at?: string | null
           id?: string
-          post_id?: string
-          user_id?: string
-          type?: 'love' | 'comment' | 'save' | 'share'
-          created_at?: string
         }
         Relationships: [
           {
-            foreignKeyName: "reactions_post_id_fkey"
-            columns: ["post_id"]
-            isOneToOne: false
-            referencedRelation: "posts"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "reactions_user_id_fkey"
-            columns: ["user_id"]
+            foreignKeyName: "blocked_users_blocked_id_fkey"
+            columns: ["blocked_id"]
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
-          }
+          },
+          {
+            foreignKeyName: "blocked_users_blocker_id_fkey"
+            columns: ["blocker_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
         ]
       }
       challenges: {
         Row: {
+          created_at: string | null
+          ends_at: string | null
           id: string
           slug: string
           title: string
-          description: string | null
-          difficulty: string | null
-          ends_at: string | null
-          created_at: string
         }
         Insert: {
+          created_at?: string | null
+          ends_at?: string | null
           id?: string
           slug: string
           title: string
-          description?: string | null
-          difficulty?: string | null
-          ends_at?: string | null
-          created_at?: string
         }
         Update: {
+          created_at?: string | null
+          ends_at?: string | null
           id?: string
           slug?: string
           title?: string
-          description?: string | null
-          difficulty?: string | null
-          ends_at?: string | null
-          created_at?: string
         }
         Relationships: []
       }
       comments: {
         Row: {
+          body: string
+          created_at: string | null
           id: string
           post_id: string
+          updated_at: string | null
           user_id: string
-          content: string
-          created_at: string
-          updated_at: string
         }
         Insert: {
+          body: string
+          created_at?: string | null
           id?: string
           post_id: string
+          updated_at?: string | null
           user_id: string
-          content: string
-          created_at?: string
-          updated_at?: string
         }
         Update: {
+          body?: string
+          created_at?: string | null
           id?: string
           post_id?: string
+          updated_at?: string | null
           user_id?: string
-          content?: string
-          created_at?: string
-          updated_at?: string
         }
         Relationships: [
           {
@@ -227,49 +155,227 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
-          }
+          },
+        ]
+      }
+      posts: {
+        Row: {
+          audio_url: string
+          bpm: number | null
+          caption: string | null
+          challenge_id: string | null
+          created_at: string | null
+          id: string
+          key: string | null
+          parent_post_id: string | null
+          style: string | null
+          user_id: string
+        }
+        Insert: {
+          audio_url: string
+          bpm?: number | null
+          caption?: string | null
+          challenge_id?: string | null
+          created_at?: string | null
+          id?: string
+          key?: string | null
+          parent_post_id?: string | null
+          style?: string | null
+          user_id: string
+        }
+        Update: {
+          audio_url?: string
+          bpm?: number | null
+          caption?: string | null
+          challenge_id?: string | null
+          created_at?: string | null
+          id?: string
+          key?: string | null
+          parent_post_id?: string | null
+          style?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "posts_challenge_id_fkey"
+            columns: ["challenge_id"]
+            isOneToOne: false
+            referencedRelation: "challenges"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "posts_parent_post_id_fkey"
+            columns: ["parent_post_id"]
+            isOneToOne: false
+            referencedRelation: "posts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "posts_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          bio: string | null
+          created_at: string | null
+          display_name: string | null
+          experience_level: string | null
+          favorite_genres: string[] | null
+          goals: string[] | null
+          id: string
+          location: string | null
+          onboarding_completed: boolean | null
+          social_links: Json | null
+          updated_at: string | null
+          username: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string | null
+          display_name?: string | null
+          experience_level?: string | null
+          favorite_genres?: string[] | null
+          goals?: string[] | null
+          id: string
+          location?: string | null
+          onboarding_completed?: boolean | null
+          social_links?: Json | null
+          updated_at?: string | null
+          username?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string | null
+          display_name?: string | null
+          experience_level?: string | null
+          favorite_genres?: string[] | null
+          goals?: string[] | null
+          id?: string
+          location?: string | null
+          onboarding_completed?: boolean | null
+          social_links?: Json | null
+          updated_at?: string | null
+          username?: string | null
+        }
+        Relationships: []
+      }
+      reactions: {
+        Row: {
+          created_at: string | null
+          id: string
+          post_id: string
+          type: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          post_id: string
+          type: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          post_id?: string
+          type?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reactions_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "posts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reactions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
         ]
       }
       reports: {
         Row: {
-          id: string
-          post_id: string
-          reporter_id: string
-          reason: string
+          comment_id: string | null
+          created_at: string | null
           description: string | null
-          status: string
-          reviewed_by: string | null
-          reviewed_at: string | null
-          created_at: string
+          id: string
+          moderator_id: string | null
+          moderator_notes: string | null
+          post_id: string | null
+          reason: string
+          reported_user_id: string | null
+          reporter_id: string
+          status: string | null
+          updated_at: string | null
         }
         Insert: {
-          id?: string
-          post_id: string
-          reporter_id: string
-          reason: string
+          comment_id?: string | null
+          created_at?: string | null
           description?: string | null
-          status?: string
-          reviewed_by?: string | null
-          reviewed_at?: string | null
-          created_at?: string
+          id?: string
+          moderator_id?: string | null
+          moderator_notes?: string | null
+          post_id?: string | null
+          reason: string
+          reported_user_id?: string | null
+          reporter_id: string
+          status?: string | null
+          updated_at?: string | null
         }
         Update: {
-          id?: string
-          post_id?: string
-          reporter_id?: string
-          reason?: string
+          comment_id?: string | null
+          created_at?: string | null
           description?: string | null
-          status?: string
-          reviewed_by?: string | null
-          reviewed_at?: string | null
-          created_at?: string
+          id?: string
+          moderator_id?: string | null
+          moderator_notes?: string | null
+          post_id?: string | null
+          reason?: string
+          reported_user_id?: string | null
+          reporter_id?: string
+          status?: string | null
+          updated_at?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "reports_comment_id_fkey"
+            columns: ["comment_id"]
+            isOneToOne: false
+            referencedRelation: "comments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reports_moderator_id_fkey"
+            columns: ["moderator_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "reports_post_id_fkey"
             columns: ["post_id"]
             isOneToOne: false
             referencedRelation: "posts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reports_reported_user_id_fkey"
+            columns: ["reported_user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
           {
@@ -279,78 +385,6 @@ export type Database = {
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
-          {
-            foreignKeyName: "reports_reviewed_by_fkey"
-            columns: ["reviewed_by"]
-            isOneToOne: false
-            referencedRelation: "admin_users"
-            referencedColumns: ["id"]
-          }
-        ]
-      }
-      blocked_users: {
-        Row: {
-          id: string
-          blocker_id: string
-          blocked_id: string
-          created_at: string
-        }
-        Insert: {
-          id?: string
-          blocker_id: string
-          blocked_id: string
-          created_at?: string
-        }
-        Update: {
-          id?: string
-          blocker_id?: string
-          blocked_id?: string
-          created_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "blocked_users_blocker_id_fkey"
-            columns: ["blocker_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "blocked_users_blocked_id_fkey"
-            columns: ["blocked_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          }
-        ]
-      }
-      admin_users: {
-        Row: {
-          id: string
-          user_id: string
-          role: string
-          created_at: string
-        }
-        Insert: {
-          id?: string
-          user_id: string
-          role?: string
-          created_at?: string
-        }
-        Update: {
-          id?: string
-          user_id?: string
-          role?: string
-          created_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "admin_users_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          }
         ]
       }
     }
