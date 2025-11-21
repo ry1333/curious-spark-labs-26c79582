@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Play, Pause, SkipBack, FolderOpen, Upload, Library, Music, ChevronDown, ChevronUp } from 'lucide-react'
 import { toast } from 'sonner'
 import DeckHeader from './DeckHeader'
-import XYFxPad from './XYFxPad'
+import HotCuePads from './HotCuePads'
 import LoopCluster from './LoopCluster'
 import VerticalFader from './ui/VerticalFader'
 import TrackLibrary from './TrackLibrary'
@@ -66,23 +66,6 @@ export default function DeckControls({
   const handleSeek = (position: number) => {
     const duration = deck.buffer?.duration || 0
     deck.seek(position * duration)
-  }
-
-  const handleXYChange = (x: number, y: number) => {
-    // x = mix/wet (0-1), y = filter frequency (0-1, exponential)
-    // Validate inputs to prevent NaN/Infinity
-    if (!isFinite(x) || !isFinite(y)) return
-
-    // Exponential mapping: 200Hz to 20kHz
-    const MIN_HZ = 200
-    const MAX_HZ = 20000
-    const filterFreq = MIN_HZ * Math.pow(MAX_HZ / MIN_HZ, 1 - y)
-
-    // Ensure filterFreq is finite and within valid range
-    if (isFinite(filterFreq) && filterFreq >= 20 && filterFreq <= 20000) {
-      deck.setFilterHz(filterFreq)
-    }
-    // x parameter reserved for future wet/dry mix control
   }
 
   const handleLoopToggle = () => {
@@ -349,8 +332,19 @@ export default function DeckControls({
           </div>
         </div>
 
-        {/* XY FX Pad */}
-        <XYFxPad onXYChange={handleXYChange} />
+        {/* Hot Cue Pads */}
+        <HotCuePads
+          deck={deck}
+          onCueSet={(cueId, time) => {
+            toast.success(`Cue ${cueId} set at ${Math.floor(time)}s`)
+          }}
+          onCueTrigger={(cueId) => {
+            toast.info(`Jumping to Cue ${cueId}`)
+          }}
+          onCueDelete={(cueId) => {
+            toast.info(`Cue ${cueId} deleted`)
+          }}
+        />
 
         {/* Loop Cluster */}
         <LoopCluster
