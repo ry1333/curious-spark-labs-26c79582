@@ -61,101 +61,119 @@ export default function LibraryBrowser({ onLoadA, onLoadB }: Props) {
     }
   }
 
+  // Genre color mapping
+  const genreColors: Record<string, string> = {
+    'House': 'from-purple-500 to-pink-500',
+    'Techno': 'from-blue-500 to-cyan-500',
+    'Hip-Hop': 'from-orange-500 to-red-500',
+    'Lo-Fi': 'from-green-500 to-teal-500',
+    'EDM': 'from-yellow-500 to-orange-500',
+    'Jazz': 'from-indigo-500 to-purple-500',
+    'Funk': 'from-pink-500 to-rose-500',
+  }
+
+  const getGenreColor = (genre: string) => {
+    return genreColors[genre] || 'from-gray-500 to-gray-600'
+  }
+
   return (
-    <div className="h-full flex flex-col bg-surface">
+    <div className="h-full flex flex-col bg-ink">
       {/* Library Header */}
-      <div className="px-6 py-3 border-b border-rmxrborder flex items-center gap-4">
-        <div className="text-[10px] font-bold text-muted uppercase tracking-widest">Library</div>
+      <div className="px-6 py-4 border-b border-line bg-surface">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-xl font-bold text-text">Library</h2>
+          <span className="text-sm text-muted">{filteredTracks.length} tracks</span>
+        </div>
 
         {/* Search */}
-        <div className="flex-1 max-w-md">
+        <div className="max-w-md">
           <input
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search tracks..."
-            className="w-full bg-bg border border-rmxrborder rounded-lg px-4 py-2 text-sm text-rmxrtext placeholder:text-muted focus:outline-none focus:border-accent transition-colors"
+            className="w-full bg-surface border border-line rounded-xl px-4 py-2.5 text-sm text-text placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-accentFrom/50 focus:border-accentFrom transition-smooth"
           />
         </div>
       </div>
 
-      {/* Content Area */}
-      <div className="flex-1 flex overflow-hidden">
-        {/* Left: Genre Filter - Narrower */}
-        <div className="w-24 border-r border-rmxrborder bg-surface2 p-3 space-y-1 overflow-y-auto">
-          <div className="text-[9px] text-muted uppercase tracking-wider mb-2">Genre</div>
-          {genres.map(genre => (
-            <button
-              key={genre}
-              onClick={() => setSelectedGenre(genre)}
-              className={`w-full text-left px-2 py-1.5 rounded-md text-[11px] transition-all ${
-                selectedGenre === genre
-                  ? 'bg-accent/20 text-accent-400 font-semibold'
-                  : 'text-muted hover:text-rmxrtext hover:bg-surface'
-              }`}
-            >
-              {genre}
-            </button>
-          ))}
-        </div>
-
-        {/* Center: Track List */}
-        <div className="flex-1 overflow-y-auto">
-          <table className="w-full">
-            <thead className="sticky top-0 bg-surface2 border-b border-rmxrborder">
-              <tr className="text-[10px] text-muted uppercase tracking-wider">
-                <th className="text-left px-6 py-3 font-semibold">Track</th>
-                <th className="text-left px-4 py-3 font-semibold">Artist</th>
-                <th className="text-center px-4 py-3 font-semibold">BPM</th>
-                <th className="text-center px-4 py-3 font-semibold">Key</th>
-                <th className="text-center px-6 py-3 font-semibold w-32">Load</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredTracks.length === 0 ? (
-                <tr>
-                  <td colSpan={5} className="text-center py-16 text-muted text-sm">
-                    No tracks found
-                  </td>
-                </tr>
-              ) : (
-                filteredTracks.map(track => (
-                  <tr key={track.id} className="lib-row border-b border-rmxrborder/50 hover:bg-surface2 transition-colors">
-                    <td className="px-6 py-3 text-sm text-rmxrtext">{track.name}</td>
-                    <td className="px-4 py-3 text-sm text-muted">{track.artist}</td>
-                    <td className="px-4 py-3 text-sm text-center font-mono text-muted">{track.bpm}</td>
-                    <td className="px-4 py-3 text-sm text-center font-mono text-muted">{track.key}</td>
-                    <td className="px-6 py-3">
-                      {/* Hover-only action chips */}
-                      <div className="actions flex items-center justify-center gap-2">
-                        <button
-                          onClick={() => handleLoadTrack(track, 'A')}
-                          title="Load to Deck A"
-                          className="px-3 py-1 rounded-md border border-rmxrborder hover:border-accent bg-surface hover:bg-surface2 text-rmxrtext hover:text-accent-400 text-[11px] font-semibold transition-all"
-                        >
-                          → A
-                        </button>
-                        <button
-                          onClick={() => handleLoadTrack(track, 'B')}
-                          title="Load to Deck B"
-                          className="px-3 py-1 rounded-md border border-rmxrborder hover:border-accent bg-surface hover:bg-surface2 text-rmxrtext hover:text-accent-400 text-[11px] font-semibold transition-all"
-                        >
-                          → B
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
+      {/* Genre Filter Pills */}
+      <div className="px-6 py-3 border-b border-line bg-surface flex items-center gap-2 overflow-x-auto">
+        <span className="text-xs text-muted font-semibold uppercase tracking-wider mr-2 shrink-0">
+          Genre:
+        </span>
+        {genres.map(genre => (
+          <button
+            key={genre}
+            onClick={() => setSelectedGenre(genre)}
+            className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all cursor-pointer shrink-0 ${
+              selectedGenre === genre
+                ? 'bg-gradient-to-r from-accentFrom to-accentTo text-ink border-transparent'
+                : 'border border-line text-muted hover:border-line/50 hover:bg-white/5'
+            }`}
+          >
+            {genre}
+          </button>
+        ))}
       </div>
 
-      {/* Info Footer */}
-      <div className="px-6 py-2 border-t border-rmxrborder bg-surface2 text-[10px] text-muted flex items-center justify-between">
-        <span>{filteredTracks.length} tracks</span>
-        <span>Hover row to load</span>
+      {/* Track Cards Grid */}
+      <div className="flex-1 overflow-y-auto p-6">
+        {filteredTracks.length === 0 ? (
+          <div className="text-center py-16 text-muted">
+            No tracks found
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {filteredTracks.map(track => (
+              <div
+                key={track.id}
+                className="rounded-xl border border-line bg-surface p-4 hover:border-line/50 transition-all group"
+              >
+                {/* Genre Badge */}
+                <div className="flex items-center justify-between mb-3">
+                  <span className={`inline-block px-2 py-1 rounded-md text-xs font-bold bg-gradient-to-r ${getGenreColor(track.genre)} text-white`}>
+                    {track.genre}
+                  </span>
+                </div>
+
+                {/* Track Info */}
+                <div className="mb-4">
+                  <h3 className="text-base font-semibold text-text mb-1 truncate">
+                    {track.name}
+                  </h3>
+                  <p className="text-sm text-muted">{track.artist}</p>
+                </div>
+
+                {/* Metadata Pills */}
+                <div className="flex items-center gap-2 mb-4">
+                  <span className="px-2 py-1 rounded-md bg-ink border border-line text-xs font-mono text-text">
+                    {track.bpm} BPM
+                  </span>
+                  <span className="px-2 py-1 rounded-md bg-ink border border-line text-xs font-mono text-text">
+                    {track.key}
+                  </span>
+                </div>
+
+                {/* Always-visible Load Buttons */}
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => handleLoadTrack(track, 'A')}
+                    className="flex-1 px-3 py-2 rounded-lg bg-gradient-to-r from-accentFrom/20 to-accentTo/20 hover:from-accentFrom hover:to-accentTo border border-accentFrom/30 hover:border-transparent text-accentFrom hover:text-ink text-xs font-bold transition-all hover:shadow-neon-cyan"
+                  >
+                    → Deck A
+                  </button>
+                  <button
+                    onClick={() => handleLoadTrack(track, 'B')}
+                    className="flex-1 px-3 py-2 rounded-lg bg-gradient-to-r from-accentFrom/20 to-accentTo/20 hover:from-accentFrom hover:to-accentTo border border-accentFrom/30 hover:border-transparent text-accentFrom hover:text-ink text-xs font-bold transition-all hover:shadow-neon-cyan"
+                  >
+                    → Deck B
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   )
