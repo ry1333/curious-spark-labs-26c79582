@@ -42,7 +42,9 @@ export default function MixerCenter({
   useEffect(() => { mixer.deckB.setFilterHz(bFilter) }, [bFilter, mixer])
 
   return (
-    <div className="rounded-2xl border border-white/5 bg-gradient-to-b from-[#0a0a0f] to-[#1a1a24] shadow-[0_8px_32px_rgba(0,0,0,0.6)] p-8 space-y-6 h-full flex flex-col">
+    <div className="rounded-2xl border border-white/5 bg-gradient-to-b from-[#1a1a1a] to-[#0a0a0f] shadow-[0_12px_48px_rgba(0,0,0,0.8),0_4px_16px_rgba(0,0,0,0.6)] p-8 space-y-6 h-full flex flex-col relative"
+      style={{ transform: 'translateZ(0)', boxShadow: '0 12px 48px rgba(0,0,0,0.8), 0 4px 16px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.05)' }}
+    >
 
       {/* BPM/SYNC Header */}
       <div className="bg-black/40 rounded-xl px-4 py-3 flex items-center justify-center gap-4 border border-white/5 shadow-[inset_0_2px_8px_rgba(0,0,0,0.4)]">
@@ -79,6 +81,7 @@ export default function MixerCenter({
               if (isFinite(v)) setAEQ({ ...aEQ, high: v })
             }}
             size={70}
+            accentColor="blue"
           />
           <RotaryKnob
             label="MID A"
@@ -91,6 +94,7 @@ export default function MixerCenter({
               if (isFinite(v)) setAEQ({ ...aEQ, mid: v })
             }}
             size={70}
+            accentColor="green"
           />
           <RotaryKnob
             label="LOW A"
@@ -103,6 +107,7 @@ export default function MixerCenter({
               if (isFinite(v)) setAEQ({ ...aEQ, low: v })
             }}
             size={70}
+            accentColor="red"
           />
           <RotaryKnob
             label="FILTER A"
@@ -115,6 +120,7 @@ export default function MixerCenter({
               if (isFinite(v)) setAFilter(v)
             }}
             size={70}
+            accentColor="cyan"
           />
         </div>
 
@@ -136,6 +142,7 @@ export default function MixerCenter({
               unit=""
               height={340}
               accentColor="magenta"
+              showMarkers={true}
             />
           </div>
 
@@ -164,6 +171,7 @@ export default function MixerCenter({
               if (isFinite(v)) setBEQ({ ...bEQ, high: v })
             }}
             size={70}
+            accentColor="blue"
           />
           <RotaryKnob
             label="MID B"
@@ -176,6 +184,7 @@ export default function MixerCenter({
               if (isFinite(v)) setBEQ({ ...bEQ, mid: v })
             }}
             size={70}
+            accentColor="green"
           />
           <RotaryKnob
             label="LOW B"
@@ -188,6 +197,7 @@ export default function MixerCenter({
               if (isFinite(v)) setBEQ({ ...bEQ, low: v })
             }}
             size={70}
+            accentColor="red"
           />
           <RotaryKnob
             label="FILTER B"
@@ -200,6 +210,7 @@ export default function MixerCenter({
               if (isFinite(v)) setBFilter(v)
             }}
             size={70}
+            accentColor="magenta"
           />
         </div>
       </div>
