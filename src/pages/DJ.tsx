@@ -12,7 +12,7 @@ import LibraryBrowser from '../components/LibraryBrowser';
 import AIMixAssistant from '../components/AIMixAssistant';
 import AICoPilotV2 from '../components/AICoPilotV2';
 import type { MixingSuggestion } from '../lib/ai/mixingSuggestions';
-import { Headphones, Music, Sparkles, ChevronDown, ChevronUp, Home, Mic, Flame, Moon, Zap, Wind, Circle, Maximize, Radio, BookOpen, Bot } from 'lucide-react';
+import { Headphones, Music, Sparkles, ChevronDown, ChevronUp, Home, Mic, Flame, Moon, Zap, Wind, Circle, Maximize, Radio, BookOpen, Bot, Check, Play, ExternalLink } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
 import { useMixer } from '../contexts/MixerContext';
 // TopBar removed for clean immersive DJ interface
@@ -560,95 +560,222 @@ export default function DJ() {
 
         {/* AI Mix Tab - Beginner-friendly auto-generation */}
         <TabsContent value="aimix" className="flex-1 flex flex-col m-0 p-0 overflow-hidden">
-          <div className="flex-1 flex flex-col items-center justify-center px-4 py-8">
-            {/* Header */}
-            <div className="text-center mb-8">
-              <div className="flex items-center justify-center gap-2 mb-2">
-                <Sparkles className="w-6 h-6 text-cyan" />
-                <h2 className="text-2xl font-bold text-text">AI Mix Generator</h2>
-              </div>
-              <p className="text-muted text-sm">Create automated 30-second mixes</p>
-            </div>
+          <div className="flex-1 flex flex-col items-center px-4 py-8 overflow-y-auto">
+            {/* Main Generator Card */}
+            <div className="w-full max-w-[960px] mx-auto">
+              {/* Card Container */}
+              <div className="rounded-2xl border border-line bg-gradient-to-b from-surface to-ink shadow-[0_8px_32px_rgba(0,0,0,0.4)] p-6 md:p-8 space-y-6">
+                {/* Header Row */}
+                <div className="flex items-center justify-between pb-4 border-b border-line">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-cyan to-magenta flex items-center justify-center">
+                      <Sparkles className="w-5 h-5 text-ink" />
+                    </div>
+                    <div>
+                      <h2 className="text-xl font-bold text-text">Let AI start the mix for you</h2>
+                      <p className="text-xs text-muted">Pick a vibe and we'll build a 30-second mini-mix you can tweak in Studio</p>
+                    </div>
+                  </div>
+                  <div className="hidden md:flex items-center gap-2 text-xs text-muted">
+                    <Music className="w-4 h-4" />
+                    <span>Powered by RMXR loops</span>
+                  </div>
+                </div>
 
-            {/* Generator Content */}
-            <div className="w-full max-w-4xl space-y-6">
-            <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-6">
-              {/* Genre Selection */}
-              <div className="space-y-3">
-                <label className="block text-sm font-medium text-text">Genre</label>
-                <div className="grid grid-cols-3 gap-2">
-                  {[{
-                id: 'house' as const,
-                name: 'House',
-                icon: Home
-              }, {
-                id: 'techno' as const,
-                name: 'Techno',
-                icon: Zap
-              }, {
-                id: 'edm' as const,
-                name: 'EDM',
-                icon: Flame
-              }, {
-                id: 'hip-hop' as const,
-                name: 'Hip-Hop',
-                icon: Mic
-              }, {
-                id: 'lofi' as const,
-                name: 'Lo-Fi',
-                icon: Moon
-              }].map(g => {
-                const GenreIcon = g.icon;
-                return <button key={g.id} onClick={() => setGenre(g.id)} disabled={isGenerating} className={`p-3 rounded-lg border-2 transition-all flex flex-col items-center gap-1 ${genre === g.id ? 'border-cyan bg-cyan/10 text-text shadow-glow-cyan' : 'border-line hover:border-line/50 text-muted'} disabled:opacity-50`}>
-                        <GenreIcon className="w-5 h-5" />
-                        <span className="text-xs font-medium">{g.name}</span>
-                      </button>;
-              })}
+                {/* Dynamic Vibe Summary */}
+                {!isGenerating && (
+                  <div className="px-4 py-3 rounded-lg bg-ink/50 border border-line/50">
+                    <p className="text-sm text-text/80">
+                      You're about to get a <span className="font-semibold text-cyan">{genre.charAt(0).toUpperCase() + genre.slice(1)}</span> • <span className="font-semibold text-magenta">{energy === 'chill' ? 'Chill' : energy === 'medium' ? 'Groove' : 'Club'}</span> • <span className="font-semibold text-text">
+                        {energy === 'chill' ? '80–100' : energy === 'medium' ? '110–120' : '120–130'} BPM
+                      </span> mix. We'll keep it {energy === 'chill' ? 'smooth and laid-back' : energy === 'medium' ? 'punchy but smooth' : 'energetic and club-ready'}.
+                    </p>
+                  </div>
+                )}
+
+                {/* Genre Selection */}
+                <div className="space-y-3">
+                  <div className="flex items-baseline justify-between">
+                    <label className="block text-sm font-semibold text-text">Genre</label>
+                    <span className="text-xs text-muted">Controls drums + sound palette</span>
+                  </div>
+                  <div className="grid grid-cols-3 md:grid-cols-5 gap-3">
+                    {[{
+                      id: 'house' as const,
+                      name: 'House',
+                      icon: Home,
+                      desc: 'Deep grooves'
+                    }, {
+                      id: 'techno' as const,
+                      name: 'Techno',
+                      icon: Zap,
+                      desc: 'Driving beats'
+                    }, {
+                      id: 'edm' as const,
+                      name: 'EDM',
+                      icon: Flame,
+                      desc: 'Big drops'
+                    }, {
+                      id: 'hip-hop' as const,
+                      name: 'Hip-Hop',
+                      icon: Mic,
+                      desc: 'Boom bap'
+                    }, {
+                      id: 'lofi' as const,
+                      name: 'Lo-Fi',
+                      icon: Moon,
+                      desc: 'Chill vibes'
+                    }].map(g => {
+                      const GenreIcon = g.icon;
+                      const isActive = genre === g.id;
+                      return (
+                        <button
+                          key={g.id}
+                          onClick={() => setGenre(g.id)}
+                          disabled={isGenerating}
+                          className={`group relative p-4 rounded-xl border-2 transition-all flex flex-col items-center gap-2 ${
+                            isActive
+                              ? 'border-cyan bg-cyan/10 text-text shadow-glow-cyan'
+                              : 'border-line hover:border-cyan/50 hover:bg-surface text-muted hover:text-text'
+                          } disabled:opacity-50 disabled:cursor-not-allowed`}
+                        >
+                          <GenreIcon className={`w-6 h-6 transition-transform ${isActive ? 'scale-110' : 'group-hover:scale-110'}`} />
+                          <div className="text-center">
+                            <div className="text-sm font-semibold">{g.name}</div>
+                            <div className="text-[10px] opacity-60">{g.desc}</div>
+                          </div>
+                          {isActive && (
+                            <div className="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-cyan shadow-glow-cyan animate-pulse" />
+                          )}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Energy Selection */}
+                <div className="space-y-3">
+                  <div className="flex items-baseline justify-between">
+                    <label className="block text-sm font-semibold text-text">Energy</label>
+                    <span className="text-xs text-muted">Controls tempo + intensity</span>
+                  </div>
+                  <div className="grid grid-cols-3 gap-3">
+                    {[{
+                      id: 'chill' as const,
+                      name: 'Chill',
+                      icon: Wind,
+                      desc: 'Laid-back',
+                      bpm: '80–100 BPM'
+                    }, {
+                      id: 'medium' as const,
+                      name: 'Groove',
+                      icon: Music,
+                      desc: 'Mid-tempo',
+                      bpm: '110–120 BPM'
+                    }, {
+                      id: 'club' as const,
+                      name: 'Club',
+                      icon: Zap,
+                      desc: 'Peak energy',
+                      bpm: '120–130 BPM'
+                    }].map(e => {
+                      const EnergyIcon = e.icon;
+                      const isActive = energy === e.id;
+                      return (
+                        <button
+                          key={e.id}
+                          onClick={() => setEnergy(e.id)}
+                          disabled={isGenerating}
+                          className={`group relative p-4 rounded-xl border-2 transition-all flex flex-col items-center gap-2 ${
+                            isActive
+                              ? 'border-magenta bg-magenta/10 text-text shadow-glow-magenta'
+                              : 'border-line hover:border-magenta/50 hover:bg-surface text-muted hover:text-text'
+                          } disabled:opacity-50 disabled:cursor-not-allowed`}
+                        >
+                          <EnergyIcon className={`w-6 h-6 transition-transform ${isActive ? 'scale-110' : 'group-hover:scale-110'}`} />
+                          <div className="text-center">
+                            <div className="text-sm font-semibold">{e.name}</div>
+                            <div className="text-[10px] opacity-60">{e.desc}</div>
+                            <div className="text-[10px] opacity-50 mt-0.5">{e.bpm}</div>
+                          </div>
+                          {isActive && (
+                            <div className="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-magenta shadow-glow-magenta animate-pulse" />
+                          )}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Generate Button */}
+                <div className="pt-4">
+                  <button
+                    onClick={handleAIGenerate}
+                    disabled={isGenerating}
+                    className="w-full rounded-xl bg-gradient-to-r from-cyan to-magenta hover:shadow-glow-cyan-strong text-ink font-bold px-6 py-4 transition-all hover:scale-[1.02] active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
+                  >
+                    {isGenerating ? (
+                      <>
+                        <div className="w-5 h-5 border-2 border-ink border-t-transparent rounded-full animate-spin" />
+                        <span>{generationStatus}</span>
+                      </>
+                    ) : (
+                      <>
+                        <Sparkles className="w-5 h-5" />
+                        <span>Generate Mix</span>
+                      </>
+                    )}
+                  </button>
                 </div>
               </div>
 
-              {/* Energy Selection */}
-              <div className="space-y-3">
-                <label className="block text-sm font-medium text-text">Energy</label>
-                <div className="grid grid-cols-3 gap-2">
-                  {[{
-                id: 'chill' as const,
-                name: 'Chill',
-                icon: Wind
-              }, {
-                id: 'medium' as const,
-                name: 'Groove',
-                icon: Music
-              }, {
-                id: 'club' as const,
-                name: 'Club',
-                icon: Zap
-              }].map(e => {
-                const EnergyIcon = e.icon;
-                return <button key={e.id} onClick={() => setEnergy(e.id)} disabled={isGenerating} className={`p-3 rounded-lg border-2 transition-all flex flex-col items-center gap-1 ${energy === e.id ? 'border-magenta bg-magenta/10 text-text shadow-glow-magenta' : 'border-line hover:border-line/50 text-muted'} disabled:opacity-50`}>
-                        <EnergyIcon className="w-5 h-5" />
-                        <span className="text-xs font-medium">{e.name}</span>
-                      </button>;
-              })}
-                </div>
-              </div>
-            </div>
+              {/* Result Card - Shows after generation */}
+              {lastRecordingUrl && !isGenerating && (
+                <div className="mt-6 rounded-2xl border border-cyan/30 bg-gradient-to-b from-surface to-ink shadow-[0_8px_32px_rgba(0,230,255,0.15)] p-6 space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-cyan to-magenta flex items-center justify-center">
+                      <Check className="w-5 h-5 text-ink" />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-base font-bold text-text">Mix Ready!</h3>
+                      <p className="text-xs text-muted">
+                        {genre.charAt(0).toUpperCase() + genre.slice(1)} • {energy === 'chill' ? 'Chill' : energy === 'medium' ? 'Groove' : 'Club'} • 30 seconds
+                      </p>
+                    </div>
+                  </div>
 
-            {/* Generate Button */}
-            <div className="max-w-md mx-auto">
-              <button onClick={handleAIGenerate} disabled={isGenerating} className="w-full rounded-xl bg-gradient-to-r from-cyan to-magenta hover:shadow-glow-cyan-strong text-ink font-bold px-6 py-4 transition-all hover:scale-[1.02] active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2">
-                {isGenerating ? <>
-                    <div className="w-5 h-5 border-2 border-ink border-t-transparent rounded-full animate-spin" />
-                    {generationStatus}
-                  </> : <>
-                    <Sparkles className="w-5 h-5" />
-                    Generate 30s Mix
-                  </>}
-              </button>
-              <p className="text-xs text-muted text-center mt-2">
-                AI will select loops, auto-mix, and record a 30-second demo
-              </p>
-            </div>
+                  <div className="flex items-center gap-3 text-xs text-muted">
+                    <div className="flex items-center gap-1.5">
+                      <Music className="w-3.5 h-3.5 text-cyan" />
+                      <span>Tracks: {aFileName && bFileName ? `${aFileName.split('.')[0]}, ${bFileName.split('.')[0]}` : 'Mixed'}</span>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col sm:flex-row gap-3">
+                    <button
+                      onClick={() => {
+                        const audio = new Audio(lastRecordingUrl);
+                        audio.play();
+                        toast.success('Playing preview');
+                      }}
+                      className="flex-1 px-4 py-3 rounded-lg border-2 border-cyan hover:bg-cyan/10 text-cyan font-semibold text-sm transition-all hover:scale-[1.02] flex items-center justify-center gap-2"
+                    >
+                      <Play className="w-4 h-4" />
+                      Play Preview
+                    </button>
+                    <button
+                      onClick={() => {
+                        // Navigate to Studio tab - the mix is already loaded in the decks
+                        toast.success('Mix is already loaded in Studio!');
+                      }}
+                      className="flex-1 px-4 py-3 rounded-lg bg-gradient-to-r from-cyan to-magenta hover:shadow-glow-cyan text-ink font-bold text-sm transition-all hover:scale-[1.02] flex items-center justify-center gap-2"
+                    >
+                      <ExternalLink className="w-4 h-4" />
+                      Open in Studio
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </TabsContent>
