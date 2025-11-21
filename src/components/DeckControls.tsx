@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Play, Pause, SkipBack, FolderOpen, Upload, Library, Music } from 'lucide-react'
+import { Play, Pause, SkipBack, FolderOpen, Upload, Library, Music, ChevronDown, ChevronUp } from 'lucide-react'
 import { toast } from 'sonner'
 import DeckHeader from './DeckHeader'
 import XYFxPad from './XYFxPad'
@@ -39,6 +39,7 @@ export default function DeckControls({
   const [loopLength, setLoopLength] = useState(4)
   const [isLoopActive, setIsLoopActive] = useState(false)
   const [activeTab, setActiveTab] = useState<'upload' | 'library' | 'local'>('local')
+  const [libraryCollapsed, setLibraryCollapsed] = useState(false)
 
   const handlePitchChange = (value: number) => {
     setPitch(value)
@@ -226,76 +227,92 @@ export default function DeckControls({
           </button>
         </div>
 
-        {/* Tab System for Local/Upload/Library */}
+        {/* Tab System for Local/Upload/Library - Collapsible */}
         <div className="space-y-3">
-          {/* Tab Buttons */}
-          <div className="grid grid-cols-3 gap-2">
+          {/* Header with Tab Buttons + Collapse Toggle */}
+          <div className="flex items-center gap-2">
+            {/* Tab Buttons */}
+            <div className="grid grid-cols-3 gap-2 flex-1">
+              <button
+                onClick={() => setActiveTab('local')}
+                className={`py-2 px-2 rounded-lg text-xs font-semibold transition-all flex items-center justify-center gap-1 ${
+                  activeTab === 'local'
+                    ? 'bg-gradient-to-r from-cyan to-magenta text-ink shadow-glow-cyan'
+                    : 'bg-black/40 border border-white/10 text-muted hover:text-rmxrtext hover:border-cyan/50'
+                }`}
+              >
+                <Music className="w-3 h-3" />
+                Tracks
+              </button>
+              <button
+                onClick={() => setActiveTab('upload')}
+                className={`py-2 px-2 rounded-lg text-xs font-semibold transition-all flex items-center justify-center gap-1 ${
+                  activeTab === 'upload'
+                    ? 'bg-gradient-to-r from-cyan to-magenta text-ink shadow-glow-cyan'
+                    : 'bg-black/40 border border-white/10 text-muted hover:text-rmxrtext hover:border-cyan/50'
+                }`}
+              >
+                <Upload className="w-3 h-3" />
+                Upload
+              </button>
+              <button
+                onClick={() => setActiveTab('library')}
+                className={`py-2 px-2 rounded-lg text-xs font-semibold transition-all flex items-center justify-center gap-1 ${
+                  activeTab === 'library'
+                    ? 'bg-gradient-to-r from-cyan to-magenta text-ink shadow-glow-cyan'
+                    : 'bg-black/40 border border-white/10 text-muted hover:text-rmxrtext hover:border-cyan/50'
+                }`}
+              >
+                <Library className="w-3 h-3" />
+                Feed
+              </button>
+            </div>
+
+            {/* Collapse/Expand Button */}
             <button
-              onClick={() => setActiveTab('local')}
-              className={`py-2 px-2 rounded-lg text-xs font-semibold transition-all flex items-center justify-center gap-1 ${
-                activeTab === 'local'
-                  ? 'bg-gradient-to-r from-cyan to-magenta text-ink shadow-glow-cyan'
-                  : 'bg-black/40 border border-white/10 text-muted hover:text-rmxrtext hover:border-cyan/50'
-              }`}
+              onClick={() => setLibraryCollapsed(!libraryCollapsed)}
+              className="shrink-0 w-9 h-9 rounded-lg bg-black/40 border border-white/10 text-muted hover:text-cyan hover:border-cyan/50 flex items-center justify-center transition-all"
+              title={libraryCollapsed ? 'Expand library' : 'Collapse library'}
             >
-              <Music className="w-3 h-3" />
-              Tracks
-            </button>
-            <button
-              onClick={() => setActiveTab('upload')}
-              className={`py-2 px-2 rounded-lg text-xs font-semibold transition-all flex items-center justify-center gap-1 ${
-                activeTab === 'upload'
-                  ? 'bg-gradient-to-r from-cyan to-magenta text-ink shadow-glow-cyan'
-                  : 'bg-black/40 border border-white/10 text-muted hover:text-rmxrtext hover:border-cyan/50'
-              }`}
-            >
-              <Upload className="w-3 h-3" />
-              Upload
-            </button>
-            <button
-              onClick={() => setActiveTab('library')}
-              className={`py-2 px-2 rounded-lg text-xs font-semibold transition-all flex items-center justify-center gap-1 ${
-                activeTab === 'library'
-                  ? 'bg-gradient-to-r from-cyan to-magenta text-ink shadow-glow-cyan'
-                  : 'bg-black/40 border border-white/10 text-muted hover:text-rmxrtext hover:border-cyan/50'
-              }`}
-            >
-              <Library className="w-3 h-3" />
-              Feed
+              {libraryCollapsed ? <ChevronDown className="w-4 h-4" /> : <ChevronUp className="w-4 h-4" />}
             </button>
           </div>
 
-          {/* Tab Content */}
-          {activeTab === 'local' ? (
-            <LocalTrackLibrary onSelect={handleLibraryTrackSelect} />
-          ) : activeTab === 'upload' ? (
-            <label className="block">
-              <div className={`
-                w-full border-2
-                ${fileName
-                  ? 'border-cyan/50 bg-cyan/10 text-cyan'
-                  : 'border-white/10 bg-black/20 text-rmxrtext hover:border-cyan hover:bg-black/40 hover:text-cyan'
-                }
-                font-semibold py-3 rounded-xl transition-all cursor-pointer text-sm
-                shadow-[0_2px_8px_rgba(0,0,0,0.3)]
-                flex items-center justify-center gap-2
-                hover:scale-102 active:scale-98
-              `}>
-                <FolderOpen className="w-5 h-5" />
-                <span>{fileName ? 'Change Track' : 'Load Track'}</span>
-                {fileName && (
-                  <div className="w-2 h-2 rounded-full bg-cyan animate-pulse shadow-glow-cyan" />
-                )}
-              </div>
-              <input
-                type="file"
-                accept="audio/*,video/*"
-                onChange={handleFileChange}
-                className="hidden"
-              />
-            </label>
-          ) : (
-            <TrackLibrary onSelect={handleLibraryTrackSelect} />
+          {/* Tab Content - Collapsible */}
+          {!libraryCollapsed && (
+            <>
+              {activeTab === 'local' ? (
+                <LocalTrackLibrary onSelect={handleLibraryTrackSelect} />
+              ) : activeTab === 'upload' ? (
+                <label className="block">
+                  <div className={`
+                    w-full border-2
+                    ${fileName
+                      ? 'border-cyan/50 bg-cyan/10 text-cyan'
+                      : 'border-white/10 bg-black/20 text-rmxrtext hover:border-cyan hover:bg-black/40 hover:text-cyan'
+                    }
+                    font-semibold py-3 rounded-xl transition-all cursor-pointer text-sm
+                    shadow-[0_2px_8px_rgba(0,0,0,0.3)]
+                    flex items-center justify-center gap-2
+                    hover:scale-102 active:scale-98
+                  `}>
+                    <FolderOpen className="w-5 h-5" />
+                    <span>{fileName ? 'Change Track' : 'Load Track'}</span>
+                    {fileName && (
+                      <div className="w-2 h-2 rounded-full bg-cyan animate-pulse shadow-glow-cyan" />
+                    )}
+                  </div>
+                  <input
+                    type="file"
+                    accept="audio/*,video/*"
+                    onChange={handleFileChange}
+                    className="hidden"
+                  />
+                </label>
+              ) : (
+                <TrackLibrary onSelect={handleLibraryTrackSelect} />
+              )}
+            </>
           )}
         </div>
 
