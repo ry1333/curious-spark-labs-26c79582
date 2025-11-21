@@ -730,7 +730,7 @@ export default function DJ() {
               </div>
 
               {/* Result Card - Shows after generation */}
-              {lastRecordingUrl && !isGenerating && (
+              {recordedBlob && !isGenerating && (
                 <div className="mt-6 rounded-2xl border border-cyan/30 bg-gradient-to-b from-surface to-ink shadow-[0_8px_32px_rgba(0,230,255,0.15)] p-6 space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-cyan to-magenta flex items-center justify-center">
@@ -754,7 +754,8 @@ export default function DJ() {
                   <div className="flex flex-col sm:flex-row gap-3">
                     <button
                       onClick={() => {
-                        const audio = new Audio(lastRecordingUrl);
+                        const audioUrl = URL.createObjectURL(recordedBlob);
+                        const audio = new Audio(audioUrl);
                         audio.play();
                         toast.success('Playing preview');
                       }}
