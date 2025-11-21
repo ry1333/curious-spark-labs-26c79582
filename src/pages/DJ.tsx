@@ -559,18 +559,19 @@ export default function DJ() {
         )}
 
         {/* AI Mix Tab - Beginner-friendly auto-generation */}
-        <TabsContent value="aimix" className="flex-1 flex flex-col m-0 p-0 overflow-y-auto h-full">
-          <div className="border-t border-rmxrborder bg-surface/50">
-        <button onClick={() => setShowAIPanel(!showAIPanel)} className="w-full px-4 py-3 flex items-center justify-between hover:bg-surface/70 transition-colors">
-          <div className="flex items-center gap-2">
-            <Sparkles className="w-5 h-5 text-cyan" />
-            <span className="font-semibold text-text">AI Mix Generator</span>
-            <span className="text-xs text-muted">{isGenerating ? generationStatus : 'Create automated 30-second mixes'}</span>
-          </div>
-          {showAIPanel ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
-        </button>
+        <TabsContent value="aimix" className="flex-1 flex flex-col m-0 p-0 overflow-hidden">
+          <div className="flex-1 flex flex-col items-center justify-center px-4 py-8">
+            {/* Header */}
+            <div className="text-center mb-8">
+              <div className="flex items-center justify-center gap-2 mb-2">
+                <Sparkles className="w-6 h-6 text-cyan" />
+                <h2 className="text-2xl font-bold text-text">AI Mix Generator</h2>
+              </div>
+              <p className="text-muted text-sm">Create automated 30-second mixes</p>
+            </div>
 
-        {showAIPanel && <div className="px-4 py-6 space-y-6 border-t border-rmxrborder bg-card/30">
+            {/* Generator Content */}
+            <div className="w-full max-w-4xl space-y-6">
             <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-6">
               {/* Genre Selection */}
               <div className="space-y-3">
@@ -648,7 +649,7 @@ export default function DJ() {
                 AI will select loops, auto-mix, and record a 30-second demo
               </p>
             </div>
-          </div>}
+            </div>
           </div>
         </TabsContent>
 
