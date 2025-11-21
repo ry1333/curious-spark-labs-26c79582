@@ -508,7 +508,7 @@ export default function DJ() {
         <TabsContent value="studio" className="flex-1 flex flex-col m-0 p-0 overflow-hidden h-full">
           {/* DJ STUDIO */}
           <div className="flex-1 max-w-[1600px] mx-auto w-full px-4 md:px-6 py-4 overflow-y-auto">
-            <div className="h-full grid grid-cols-1 lg:grid-cols-[3fr_2fr_3fr] gap-4 md:gap-6 lg:gap-10">
+            <div className="grid grid-cols-1 lg:grid-cols-[3fr_2fr_3fr] gap-4 md:gap-6 lg:gap-10 mb-6">
               {/* Left Deck (A) */}
               <DeckControls label="A" deck={mixer.deckA} playing={aPlaying} fileName={aFileName} bpm={aBpm} progress={aProg} onBpmChange={setABpm} onLoad={handleALoad} onPlay={handleAPlay} onPause={handleAPause} onCue={handleACue} />
 
@@ -518,18 +518,20 @@ export default function DJ() {
               {/* Right Deck (B) */}
               <DeckControls label="B" deck={mixer.deckB} playing={bPlaying} fileName={bFileName} bpm={bBpm} progress={bProg} onBpmChange={setBBpm} onLoad={handleBLoad} onPlay={handleBPlay} onPause={handleBPause} onCue={handleBCue} />
             </div>
-          </div>
 
-          {/* AI MIX ASSISTANT */}
-          <AIMixAssistant
-            trackAFile={aFile}
-            trackBFile={bFile}
-            geminiApiKey={import.meta.env.VITE_GEMINI_API_KEY}
-            trackADuration={mixer.deckA.buffer?.duration || 0}
-            trackBDuration={mixer.deckB.buffer?.duration || 0}
-            onSuggestionsChange={setAiSuggestions}
-            onCoPilotToggle={setCoPilotActive}
-          />
+            {/* AI MIX ASSISTANT */}
+            <div className="max-w-[1600px]">
+              <AIMixAssistant
+                trackAFile={aFile}
+                trackBFile={bFile}
+                geminiApiKey={import.meta.env.VITE_GEMINI_API_KEY}
+                trackADuration={mixer.deckA.buffer?.duration || 0}
+                trackBDuration={mixer.deckB.buffer?.duration || 0}
+                onSuggestionsChange={setAiSuggestions}
+                onCoPilotToggle={setCoPilotActive}
+              />
+            </div>
+          </div>
         </TabsContent>
 
         {/* Floating Co-Pilot Button - Always visible when suggestions exist (rendered at page level) */}
