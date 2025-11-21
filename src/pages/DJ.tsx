@@ -505,7 +505,7 @@ export default function DJ() {
         </div>
 
         {/* Studio Tab - Primary DJ Interface */}
-        <TabsContent value="studio" className="flex-1 flex flex-col m-0 overflow-hidden">
+        <TabsContent value="studio" className="flex-1 flex flex-col m-0 p-0 overflow-hidden h-full">
           {/* DJ STUDIO */}
           <div className="flex-1 max-w-[1600px] mx-auto w-full px-4 md:px-6 py-4 overflow-y-auto">
             <div className="h-full grid grid-cols-1 lg:grid-cols-[3fr_2fr_3fr] gap-4 md:gap-6 lg:gap-10">
@@ -557,7 +557,7 @@ export default function DJ() {
         )}
 
         {/* AI Mix Tab - Beginner-friendly auto-generation */}
-        <TabsContent value="aimix" className="flex-1 m-0 overflow-y-auto">
+        <TabsContent value="aimix" className="flex-1 flex flex-col m-0 p-0 overflow-y-auto h-full">
           <div className="border-t border-rmxrborder bg-surface/50">
         <button onClick={() => setShowAIPanel(!showAIPanel)} className="w-full px-4 py-3 flex items-center justify-between hover:bg-surface/70 transition-colors">
           <div className="flex items-center gap-2">
@@ -651,7 +651,7 @@ export default function DJ() {
         </TabsContent>
 
         {/* Library Tab - Full power user track browser */}
-        <TabsContent value="library" className="flex-1 m-0 overflow-hidden">
+        <TabsContent value="library" className="flex-1 flex flex-col m-0 p-0 overflow-hidden h-full">
           <LibraryBrowser onLoadA={handleALoad} onLoadB={handleBLoad} />
         </TabsContent>
       </Tabs>
